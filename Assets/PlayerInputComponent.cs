@@ -6,8 +6,9 @@ public class PlayerInputComponent : MonoBehaviour
     /*
      * Public fields
      */
-    [Header("Movement Settings")] public float moveSpeed = 5f; // 5m/s
-    public Transform followCameraTransform;
+    [Header("Movement Settings")]
+    public float moveSpeed = 5f; // 5m/s
+    public Camera followCamera;
 
     /*
      * Private fields
@@ -23,8 +24,8 @@ public class PlayerInputComponent : MonoBehaviour
     private void Start()
     {
         // Calculate camera forward and right vectors
-        cameraForward = followCameraTransform.forward;
-        cameraRight = followCameraTransform.right;
+        cameraForward = followCamera.transform.forward;
+        cameraRight = followCamera.transform.right;
         // Zero out the y components to stay on the same plane
         cameraForward.y = 0f;
         cameraRight.y = 0f;
@@ -37,6 +38,7 @@ public class PlayerInputComponent : MonoBehaviour
     private void Update()
     {
         Move();
+        Look();
     }
 
     private void OnMove(InputValue value)
@@ -49,6 +51,18 @@ public class PlayerInputComponent : MonoBehaviour
         if (moveInput != Vector2.zero) {
             var moveDirection = (moveInput.y * cameraForward + moveInput.x * cameraRight).normalized;
             transform.Translate(moveDirection * (moveSpeed * Time.deltaTime), Space.World);
+        }
+    }
+
+    private void Look()
+    {
+        /*
+         * Code Monkey (2021), 'How to get Mouse Position in 3D and 2D! (Unity Tutorial)', Youtube, 23 March
+         * https://www.youtube.com/watch?v=0jTPKz3ga4w (Accessed 30 May 2024)
+         */
+        Ray ray = followCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Terrain"))) {
+            transform.LookAt(hit.point, Vector3.up);
         }
     }
 }
