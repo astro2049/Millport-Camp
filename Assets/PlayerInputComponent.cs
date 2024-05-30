@@ -62,7 +62,7 @@ public class PlayerInputComponent : MonoBehaviour
          */
         Ray ray = followCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Terrain"))) {
-            transform.LookAt(hit.point, Vector3.up);
+            transform.LookAt(hit.point);
         }
     }
 }
