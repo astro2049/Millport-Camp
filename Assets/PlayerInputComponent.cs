@@ -48,10 +48,11 @@ public class PlayerInputComponent : MonoBehaviour
 
     private void Move()
     {
-        if (moveInput != Vector2.zero) {
-            var moveDirection = (moveInput.y * cameraForward + moveInput.x * cameraRight).normalized;
-            transform.Translate(moveDirection * (moveSpeed * Time.deltaTime), Space.World);
+        if (moveInput == Vector2.zero) {
+            return;
         }
+        var moveDirection = (moveInput.y * cameraForward + moveInput.x * cameraRight).normalized;
+        transform.Translate(moveDirection * (moveSpeed * Time.deltaTime), Space.World);
     }
 
     private void Look()
