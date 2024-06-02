@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PerceptionComponent : MonoBehaviour
+public class PawnStateComponent : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -16,13 +16,8 @@ public class PerceptionComponent : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter(Collider other)
+    public virtual void Die()
     {
-        
-    }
-    
-    private void OnTriggerExit(Collider other)
-    {
-        
+        transform.Rotate(new Vector3(0, 0, 90));
     }
 }

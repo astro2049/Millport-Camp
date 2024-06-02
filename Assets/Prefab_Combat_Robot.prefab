@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 456315082717270112}
   - component: {fileID: 8008690821627063217}
   - component: {fileID: 2503982995199302933}
+  - component: {fileID: 1001842970584237726}
   m_Layer: 8
   m_Name: Prefab_Combat_Robot
   m_TagString: Untagged
@@ -98,3 +99,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   maxHealth: 100
+--- !u!114 &1001842970584237726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3127760416887559192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be2a0c424f1d6c9448b834a24cfa18aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

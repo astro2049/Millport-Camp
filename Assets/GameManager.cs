@@ -10,7 +10,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.Auto);
+        // https://docs.unity3d.com/2022.3/Documentation/ScriptReference/Cursor.SetCursor.html
+        Cursor.SetCursor(cursorTexture, new Vector2(cursorTexture.width / 2f, cursorTexture.height / 2f), CursorMode.Auto);
         
         m_navMeshSurface = GetComponent<NavMeshSurface>();
         

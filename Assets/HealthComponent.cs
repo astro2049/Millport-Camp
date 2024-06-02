@@ -7,11 +7,20 @@ public class HealthComponent : MonoBehaviour
 
     public void changeHealth(float x)
     {
+        // Return if already dead
+        if (health == 0) {
+            return;
+        }
+
         health += x;
         if (health > maxHealth) {
             health = maxHealth;
         } else if (health < 0) {
             health = 0;
+        }
+
+        if (health == 0) {
+            GetComponent<PawnStateComponent>().Die();
         }
     }
 }
