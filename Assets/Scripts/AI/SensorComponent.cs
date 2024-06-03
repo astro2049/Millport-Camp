@@ -2,15 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class SensorComponent : MonoBehaviour
 {
-    private ZombieStateComponent zombieStateComponent;
+    private AIStateComponent aiStateComponent;
 
     // Start is called before the first frame update
     private void Start()
     {
-        zombieStateComponent = transform.parent.GetComponent<ZombieStateComponent>();
+        aiStateComponent = transform.parent.GetComponent<AIStateComponent>();
     }
 
     // Update is called once per frame
@@ -21,11 +20,11 @@ public class SensorComponent : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        zombieStateComponent.OnPerceptionTriggerEnter(other);
+        aiStateComponent.OnPerceptionTriggerEnter(other);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        zombieStateComponent.OnPerceptionTriggerExit(other);
+        aiStateComponent.OnPerceptionTriggerExit(other);
     }
 }

@@ -81,7 +81,7 @@ public class PlayerInputComponent : MonoBehaviour
     private void OnAttack()
     {
         if (gameObjectHit && gameObjectHit.layer == LayerMask.NameToLayer("NPC")) {
-            Debug.Log(gameObjectHit.name);
+            // Debug.Log(gameObjectHit.name);
             GetComponent<DamageDealerComponent>().DealDamage(gameObjectHit, 100f);
         }
     }

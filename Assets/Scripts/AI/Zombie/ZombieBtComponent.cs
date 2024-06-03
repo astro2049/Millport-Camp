@@ -3,14 +3,12 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-public class ZombieBehaviorTreeComponent : MonoBehaviour
+public class ZombieBtComponent : BtComponent
 {
     public float roamSpeed = 2f; // 2m/s
-    public float chaseSpeed = 5f; // 5m/s
+    public float chaseSpeed = 4f; // 4m/s
     public float randomPatrolRadius = 10f; // 10m
     public float attackRange = 2f; // 2m
-
-    private Root bt;
 
     /*
      * Pre-stored components
@@ -36,7 +34,7 @@ public class ZombieBehaviorTreeComponent : MonoBehaviour
         #endif
     }
 
-    private void InitializeBt()
+    protected override void InitializeBt()
     {
         bt = new Root(
             new Selector(
@@ -62,13 +60,6 @@ public class ZombieBehaviorTreeComponent : MonoBehaviour
                 )
             )
         );
-    }
-
-    public void DeactivateBt()
-    {
-        if (bt.CurrentState == Node.State.ACTIVE) {
-            bt.Stop();
-        }
     }
 
     // Update is called once per frame

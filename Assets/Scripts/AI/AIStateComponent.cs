@@ -1,13 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class ZombieStateComponent : PawnStateComponent
+public abstract class AIStateComponent : PawnStateComponent
 {
-    public SortedSet<GameObject> humans = new SortedSet<GameObject>();
-    public bool isEngaging;
-
     // Start is called before the first frame update
     private void Start()
     {
@@ -20,26 +16,14 @@ public class ZombieStateComponent : PawnStateComponent
 
     }
 
-    public void OnPerceptionTriggerEnter(Collider other)
-    {
-        Debug.Log(other.gameObject.name + " Entered");
-        humans.Add(other.gameObject);
-        isEngaging = true;
-    }
+    public abstract void OnPerceptionTriggerEnter(Collider other);
 
-    public void OnPerceptionTriggerExit(Collider other)
-    {
-        Debug.Log(other.gameObject.name + " Exited");
-        humans.Remove(other.gameObject);
-        if (humans.Count == 0) {
-            isEngaging = false;
-        }
-    }
+    public abstract void OnPerceptionTriggerExit(Collider other);
 
     public override void Die()
     {
         base.Die();
-        GetComponent<ZombieBehaviorTreeComponent>().DeactivateBt();
+        GetComponent<BtComponent>().DeactivateBt();
         GetComponent<NavMeshAgent>().enabled = false;
         // StartCoroutine(SinkUnderMap());
     }
