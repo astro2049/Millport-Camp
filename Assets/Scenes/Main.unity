@@ -421,10 +421,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 47830327357764111, guid: c7fa7dfa1e8777949ba7820c9004a6f6, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 4300000, guid: 100202a854990cf458c7260e1df4b08d, type: 3}
     - target: {fileID: 1694827581564511077, guid: c7fa7dfa1e8777949ba7820c9004a6f6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3
@@ -464,10 +460,6 @@ PrefabInstance:
     - target: {fileID: 1694827581564511077, guid: c7fa7dfa1e8777949ba7820c9004a6f6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2285479275254084410, guid: c7fa7dfa1e8777949ba7820c9004a6f6, type: 3}
-      propertyPath: chaseSpeed
-      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3139893984396080896, guid: c7fa7dfa1e8777949ba7820c9004a6f6, type: 3}
       propertyPath: m_Name
@@ -2150,29 +2142,9 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2373704505075530333, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
-      propertyPath: tracerSpeed
-      value: 150
-      objectReference: {fileID: 0}
-    - target: {fileID: 2373704505075530333, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
       propertyPath: followCamera
       value: 
       objectReference: {fileID: 963194227}
-    - target: {fileID: 2373704505075530333, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
-      propertyPath: tracerPrefab
-      value: 
-      objectReference: {fileID: 7439804929337980566, guid: 71d264ba3b99c334cb98e1b0b32f3d45, type: 3}
-    - target: {fileID: 2644393070837275038, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4459066787336026310, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6033591960523556765, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 4300000, guid: 6365d1aa82df06140b327b15b731f494, type: 3}
     - target: {fileID: 6239351062438321205, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
       propertyPath: m_Name
       value: Player

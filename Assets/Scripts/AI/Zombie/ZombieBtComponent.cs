@@ -5,16 +5,11 @@ using Random = UnityEngine.Random;
 
 public class ZombieBtComponent : BtComponent
 {
-    public float roamSpeed = 2f; // 2m/s
-    public float chaseSpeed = 4f; // 4m/s
-    public float randomPatrolRadius = 10f; // 10m
-    public float attackRange = 2f; // 2m
-
     /*
      * Pre-stored components
      */
-    private NavMeshAgent navMeshAgent;
     private ZombieStateComponent zombieStateComponent;
+    private NavMeshAgent navMeshAgent;
     private DamageDealerComponent damageDealerComponent;
 
     // Start is called before the first frame update
@@ -70,10 +65,10 @@ public class ZombieBtComponent : BtComponent
 
     private void GeneratePatrolPoint()
     {
-        navMeshAgent.speed = roamSpeed;
+        navMeshAgent.speed = zombieStateComponent.roamSpeed;
         // Generate a new random location within a range
-        Vector3 randomLocation = transform.position + Random.insideUnitSphere * randomPatrolRadius;
-        NavMesh.SamplePosition(randomLocation, out NavMeshHit hit, randomPatrolRadius, 1);
+        Vector3 randomLocation = transform.position + Random.insideUnitSphere * zombieStateComponent.randomPatrolRadius;
+        NavMesh.SamplePosition(randomLocation, out NavMeshHit hit, zombieStateComponent.randomPatrolRadius, 1);
         navMeshAgent.SetDestination(hit.position);
     }
 
@@ -92,7 +87,7 @@ public class ZombieBtComponent : BtComponent
 
     private void StartChasing()
     {
-        navMeshAgent.speed = chaseSpeed;
+        navMeshAgent.speed = zombieStateComponent.chaseSpeed;
     }
 
     private Action.Result ChaseHuman(bool aborted)
@@ -102,7 +97,7 @@ public class ZombieBtComponent : BtComponent
             return Action.Result.FAILED;
         }
         navMeshAgent.SetDestination(zombieStateComponent.humans.Min.transform.position);
-        if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance <= attackRange) {
+        if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance <= zombieStateComponent.attackRange) {
             return Action.Result.SUCCESS;
         } else {
             return Action.Result.PROGRESS;

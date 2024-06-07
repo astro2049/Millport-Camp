@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4129040761399025510}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Muzzle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6239351062438321205}
-  m_Mesh: {fileID: 4300000, guid: 3f36492df7a9ce647a487eb52aeeda64, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 6365d1aa82df06140b327b15b731f494, type: 3}
 --- !u!23 &4418063164686580331
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -165,6 +165,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   followCamera: {fileID: 0}
+  tracerPrefab: {fileID: 7439804929337980566, guid: 71d264ba3b99c334cb98e1b0b32f3d45, type: 3}
+  tracerSpeed: 150
 --- !u!114 &8168393529080742279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,3 +228,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25640a17728a8314e821220a5c02d16e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentInteractable: {fileID: 0}
