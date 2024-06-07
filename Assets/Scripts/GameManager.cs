@@ -1,3 +1,4 @@
+using System;
 using Cinemachine;
 using Player;
 using TMPro;
@@ -10,6 +11,8 @@ public class GameManager : MonoBehaviour
 {
     public Texture2D cursorTexture;
     public TextMeshProUGUI interactText;
+    public TextMeshProUGUI equippedGunNameText;
+    public TextMeshProUGUI magAmmoText;
     public GameObject player;
     public CinemachineVirtualCamera playerCamera;
     public CinemachineVirtualCamera vehicleCamera;
@@ -85,5 +88,15 @@ public class GameManager : MonoBehaviour
 
         // Detach player from vehicle
         player.transform.parent = null;
+    }
+
+    public void UpdateEquippedGunNameText(string gunName)
+    {
+        equippedGunNameText.text = gunName;
+    }
+
+    public void UpdateMagAmmoText(int magAmmo)
+    {
+        magAmmoText.text = magAmmo.ToString();
     }
 }

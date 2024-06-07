@@ -1,3 +1,4 @@
+using Gun;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,15 +7,25 @@ namespace Player
     public class PlayerStateComponent : PawnStateComponent
     {
         public InteractableComponent currentInteractable;
-    
+        public GunStateComponent equippedGun;
+        public GunStateComponent primaryGun;
+
+        public GameManager gameManager;
+
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
-        
+            EquipGun(primaryGun);
+            gameManager.UpdateEquippedGunNameText(equippedGun.gunName);
+        }
+
+        public void EquipGun(GunStateComponent gun)
+        {
+            equippedGun = gun;
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
 
         }
