@@ -69,7 +69,8 @@ public class PlayerInputComponent : MonoBehaviour
     private void Look()
     {
         /*
-         * Code Monkey (2021), 'How to get Mouse Position in 3D and 2D! (Unity Tutorial)', Youtube, 23 March
+         * Get mouse position in the 3D world, referenced
+         * Code Monkey (2021) 'How to get Mouse Position in 3D and 2D! (Unity Tutorial)', Youtube, 23 March
          * https://www.youtube.com/watch?v=0jTPKz3ga4w (Accessed 30 May 2024)
          */
         Ray ray = followCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
@@ -105,10 +106,10 @@ public class PlayerInputComponent : MonoBehaviour
     }
 
     /*
-     * Tracer Effect
-     * TheKiwiCoder (2020), '[#05] Shooting a weapon using Projectile Raycasts (with effects)', Youtube, 17 May
+     * Tracer Effect, referenced
+     * TheKiwiCoder (2020) '[#05] Shooting a weapon using Projectile Raycasts (with effects)', Youtube, 17 May
      * https://www.youtube.com/watch?v=onpteKMsE84 (Accessed 3 June 2024)
-     * BMo (2022), 'How to Add a TRAIL EFFECT to Anything in Unity', youtube, 2 May
+     * BMo (2022) 'How to Add a TRAIL EFFECT to Anything in Unity', youtube, 2 May
      * https://www.youtube.com/watch?v=nLxvCRPJCKw (Accessed 3 June 2024)
      */
     private IEnumerator SpawnTrail(TrailRenderer tracerTrail, float distance)
@@ -121,5 +122,13 @@ public class PlayerInputComponent : MonoBehaviour
             yield return null;
         }
         Destroy(tracerTrail.gameObject);
+    }
+
+    private void OnInteract()
+    {
+        InteractableComponent currentInteractable = GetComponent<PlayerStateComponent>().currentInteractable;
+        if (currentInteractable) {
+            currentInteractable.Interact();
+        }
     }
 }

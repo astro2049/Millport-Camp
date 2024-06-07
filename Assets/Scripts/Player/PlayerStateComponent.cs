@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerStateComponent : PawnStateComponent
 {
+    public InteractableComponent currentInteractable;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +24,7 @@ public class PlayerStateComponent : PawnStateComponent
         base.Die();
         GetComponent<PlayerInput>().enabled = false;
         GetComponent<PlayerInputComponent>().enabled = false;
+        // TODO: This does not let NPCs un-sense the player
         GetComponent<CapsuleCollider>().enabled = false;
     }
 }
