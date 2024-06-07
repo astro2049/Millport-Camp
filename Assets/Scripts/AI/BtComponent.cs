@@ -1,30 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
 using NPBehave;
 using UnityEngine;
 
-public abstract class BtComponent : MonoBehaviour
+namespace AI
 {
-    protected Root bt;
-
-    // Start is called before the first frame update
-    private void Start()
+    public abstract class BtComponent : MonoBehaviour
     {
+        protected Root bt;
 
-    }
+        // Start is called before the first frame update
+        private void Start()
+        {
 
-    // Update is called once per frame
-    private void Update()
-    {
+        }
 
-    }
+        // Update is called once per frame
+        private void Update()
+        {
 
-    protected abstract void InitializeBt();
+        }
 
-    public void DeactivateBt()
-    {
-        if (bt.CurrentState == Node.State.ACTIVE) {
-            bt.Stop();
+        protected abstract void InitializeBt();
+
+        public void DeactivateBt()
+        {
+            if (bt.CurrentState == Node.State.ACTIVE) {
+                bt.Stop();
+            }
         }
     }
 }

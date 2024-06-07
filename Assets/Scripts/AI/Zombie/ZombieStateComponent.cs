@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using AI;
+using AI.Zombie;
 using UnityEngine;
 
 public class ZombieStateComponent : AIStateComponent

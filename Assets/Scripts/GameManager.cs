@@ -1,4 +1,5 @@
 using Cinemachine;
+using Player;
 using TMPro;
 using Unity.AI.Navigation;
 using UnityEngine;
