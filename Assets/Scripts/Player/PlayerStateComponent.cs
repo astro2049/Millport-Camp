@@ -9,6 +9,7 @@ namespace Player
         public InteractableComponent currentInteractable;
         public GunStateComponent equippedGun;
         public GunStateComponent primaryGun;
+        public bool isReloading;
 
         public GameManager gameManager;
 
@@ -22,6 +23,7 @@ namespace Player
         public void EquipGun(GunStateComponent gun)
         {
             equippedGun = gun;
+            equippedGun.holder = GetComponent<PlayerInputComponent>();
         }
 
         // Update is called once per frame

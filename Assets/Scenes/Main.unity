@@ -753,17 +753,6 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &590199600 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 554847136431267032, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
-  m_PrefabInstance: {fileID: 4463545800310291987}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c7df42d5ac88c7419e0ee7b9f47fbbe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &639825122
 GameObject:
   m_ObjectHideFlags: 3
@@ -2429,13 +2418,33 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 554847136431267032, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
+      propertyPath: fireSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 65201ddabb4144f6a8fb9480120b7656, type: 3}
+    - target: {fileID: 554847136431267032, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
+      propertyPath: reloadTime
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 554847136431267032, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 481963317}
+    - target: {fileID: 554847136431267032, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
+      propertyPath: reloadSound
+      value: 
+      objectReference: {fileID: 8300000, guid: e7632c6401c09437e83de45d33c5858e, type: 3}
+    - target: {fileID: 554847136431267032, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
+      propertyPath: magEmptySound
+      value: 
+      objectReference: {fileID: 8300000, guid: 2dc35d77cfe164a2eab57d08500740e2, type: 3}
     - target: {fileID: 2373704505075530333, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
       propertyPath: followCamera
       value: 
       objectReference: {fileID: 963194227}
+    - target: {fileID: 2373704505075530333, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
+      propertyPath: inputActionAsset
+      value: 
+      objectReference: {fileID: -944628639613478452, guid: 5be916e908262694f9711ca9635beb03, type: 3}
     - target: {fileID: 6239351062438321205, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
       propertyPath: m_Name
       value: Player
@@ -2443,8 +2452,12 @@ PrefabInstance:
     - target: {fileID: 6291882367588290925, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
       propertyPath: primaryGun
       value: 
-      objectReference: {fileID: 590199600}
+      objectReference: {fileID: 4463545800310291988}
     - target: {fileID: 6291882367588290925, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 481963317}
+    - target: {fileID: 6698572973476757335, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 481963317}
@@ -2493,6 +2506,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
+--- !u!114 &4463545800310291988 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6698572973476757335, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
+  m_PrefabInstance: {fileID: 4463545800310291987}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c7df42d5ac88c7419e0ee7b9f47fbbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8524974637645323317
 PrefabInstance:
   m_ObjectHideFlags: 0

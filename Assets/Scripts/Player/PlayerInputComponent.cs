@@ -1,5 +1,4 @@
 using System.Collections;
-using Gun;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Vector2 = UnityEngine.Vector2;
@@ -12,6 +11,7 @@ namespace Player
         /*
          * Public fields
          */
+        public InputActionAsset inputActionAsset;
         [Header("Movement Settings")] public float moveSpeed = 5f; // 5m/s
         public Camera followCamera;
         public Vector3 hitPoint;
@@ -20,6 +20,7 @@ namespace Player
          * Private fields
          */
         private Vector2 moveInput;
+        private Vector2 lookInput;
 
         /*
          * Pre-stored private fields
@@ -43,6 +44,10 @@ namespace Player
             cameraRight.Normalize();
 
             playerStateComponent = GetComponent<PlayerStateComponent>();
+
+            InputAction attackInputAction = inputActionAsset.FindActionMap("Player").FindAction("Attack");
+            attackInputAction.performed += OnStartAttack;
+            attackInputAction.canceled += OnStopAttack;
         }
 
         // Update is called once per frame
@@ -66,6 +71,11 @@ namespace Player
             transform.Translate(moveDirection * (moveSpeed * Time.deltaTime), Space.World);
         }
 
+        private void OnLook(InputValue value)
+        {
+            lookInput = value.Get<Vector2>();
+        }
+
         // Look at where the mouse is, horizontally
         private void Look()
         {
@@ -74,7 +84,7 @@ namespace Player
              * Code Monkey (2021) 'How to get Mouse Position in 3D and 2D! (Unity Tutorial)', Youtube, 23 March
              * https://www.youtube.com/watch?v=0jTPKz3ga4w (Accessed 30 May 2024)
              */
-            Ray ray = followCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+            Ray ray = followCamera.ScreenPointToRay(lookInput);
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Terrain", "Obstacle", "NPC", "Vehicle"))) {
                 // Debug: DrawLine - Green if hit NPC, otherwise red
                 Debug.DrawLine(followCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()), hit.point, hit.collider.gameObject.layer == LayerMask.NameToLayer("NPC") ? Color.green : Color.red);
@@ -87,9 +97,22 @@ namespace Player
             }
         }
 
-        private void OnAttack()
+        private void OnStartAttack(InputAction.CallbackContext context)
         {
-            playerStateComponent.equippedGun.Fire(hitPoint);
+            if (playerStateComponent.isReloading) {
+                return;
+            }
+            playerStateComponent.equippedGun.SetIsTriggerDown(true);
+        }
+
+        public Vector3 LookAtPoint()
+        {
+            return hitPoint;
+        }
+
+        private void OnStopAttack(InputAction.CallbackContext context)
+        {
+            playerStateComponent.equippedGun.SetIsTriggerDown(false);
         }
 
         private void OnInteract()
@@ -102,6 +125,10 @@ namespace Player
 
         private void OnReload()
         {
+            if (playerStateComponent.isReloading) {
+                return;
+            }
+            playerStateComponent.isReloading = true;
             StartCoroutine(WaitForReloadTime(playerStateComponent.equippedGun.reloadTime));
         }
 
@@ -109,6 +136,7 @@ namespace Player
         {
             yield return new WaitForSeconds(reloadTime);
             playerStateComponent.equippedGun.Reload();
+            playerStateComponent.isReloading = false;
         }
     }
 }
