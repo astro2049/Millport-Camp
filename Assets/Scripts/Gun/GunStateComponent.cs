@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Player;
 using UnityEngine;
@@ -18,25 +17,20 @@ namespace Gun
          * Public fields
          */
         // Stats
-        public string gunName;
-        public float damage;
-        public int rpm;
-        private float fireInterval; // 600 rpm = 0.1s between each shot
-        public int currentMagAmmo;
-        public int magSize;
-        public FireMode fireMode;
-        public float reloadTime;
+        public GunData gunData;
+        [HideInInspector] public int currentMagAmmo;
+        // Muzzle
+        private Transform muzzleTransform;
         // Sounds
-        private AudioSource audioPlayer;
         public AudioClip fireSound;
         public AudioClip reloadSound;
         public AudioClip magEmptySound;
         // Tracer
         public GameObject tracerPrefab;
         public float tracerSpeed = 150f; // 150m/s
-        public Transform muzzleTransform;
-        // Game Manager
+        // Game Manager and Audio Manager
         public GameManager gameManager;
+        public AudioSource audioManager;
         // Holder
         public PlayerInputComponent holder;
 
@@ -49,9 +43,10 @@ namespace Gun
         // Start is called before the first frame update
         private void Start()
         {
-            audioPlayer = GetComponent<AudioSource>();
-            SetCurrentMagAmmo(magSize);
-            fireInterval = 60f / rpm;
+            GetComponent<MeshFilter>().mesh = gunData.mesh;
+            GetComponent<MeshRenderer>().material = gunData.material;
+            muzzleTransform = transform.Find("Muzzle").transform;
+            SetCurrentMagAmmo(gunData.magSize);
         }
 
         // Update is called once per frame
@@ -79,12 +74,18 @@ namespace Gun
         private void setIsBoltInPosition(bool status)
         {
             isBoltInPosition = status;
-            if (isBoltInPosition) {
-                if (isTriggerDown) {
-                    FiringPinStruck();
-                }
-            } else {
+            // A shot is fired
+            if (!isBoltInPosition) {
                 StartCoroutine(Cycle());
+            } else {
+                // After shot cycle is completed
+                // If on Auto, the trigger gets reset automatically after cycling,
+                // so a next shot will be fired if trigger is held down 
+                if (gunData.fireMode == FireMode.Auto) {
+                    if (isTriggerDown) {
+                        FiringPinStruck();
+                    }
+                }
             }
         }
 
@@ -94,13 +95,13 @@ namespace Gun
                 Fire(holder.LookAtPoint());
             } else {
                 // Mag empty SFX
-                audioPlayer.PlayOneShot(magEmptySound, 0.5f);
+                audioManager.PlayOneShot(magEmptySound, 0.5f);
             }
         }
 
         private IEnumerator Cycle()
         {
-            yield return new WaitForSeconds(fireInterval);
+            yield return new WaitForSeconds(gunData.fireInterval);
             setIsBoltInPosition(true);
         }
 
@@ -108,7 +109,7 @@ namespace Gun
         private void Fire(Vector3 lookPoint)
         {
             // Fire SFX
-            audioPlayer.PlayOneShot(fireSound, 0.4f);
+            audioManager.PlayOneShot(fireSound, 0.4f);
             // Minus 1 bullet
             SetCurrentMagAmmo(currentMagAmmo - 1);
             setIsBoltInPosition(false);
@@ -131,7 +132,7 @@ namespace Gun
                 StartCoroutine(SpawnTrail(tracerTrail, hit.distance));
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("NPC")) {
                     // Deal damage
-                    GetComponent<DamageDealerComponent>().DealDamage(hit.collider.gameObject, damage);
+                    GetComponent<DamageDealerComponent>().DealDamage(hit.collider.gameObject, gunData.damage);
                 }
             } else {
                 // Tracer effect, endPoint is arbitrary (100m away, out of screen)
@@ -160,8 +161,8 @@ namespace Gun
 
         public void Reload()
         {
-            audioPlayer.PlayOneShot(reloadSound, 0.5f);
-            SetCurrentMagAmmo(magSize);
+            audioManager.PlayOneShot(reloadSound, 0.5f);
+            SetCurrentMagAmmo(gunData.magSize);
         }
     }
 }

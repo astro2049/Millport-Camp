@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a670a02452fc44d43bf2a805c4da854d, type: 3}
+  m_Name: GD_AE-45
+  m_EditorClassIdentifier: 
+  gunName: AE-45
+  mesh: {fileID: -7182689631186222527, guid: e3e075655de3a9d4cb885cccfd042991, type: 3}
+  material: {fileID: -7126193129781715291, guid: e3e075655de3a9d4cb885cccfd042991, type: 3}
+  damage: 12
+  rpm: 780
+  fireInterval: 0.15625
+  magSize: 16
+  fireMode: 0
+  reloadTime: 1.5

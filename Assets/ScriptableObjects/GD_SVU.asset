@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a670a02452fc44d43bf2a805c4da854d, type: 3}
+  m_Name: GD_SVU
+  m_EditorClassIdentifier: 
+  gunName: SVU
+  mesh: {fileID: -6322301886240935113, guid: 1f2bd1c22d3be4c468a13bca7f4a129c, type: 3}
+  material: {fileID: -7126193129781715291, guid: 1f2bd1c22d3be4c468a13bca7f4a129c, type: 3}
+  damage: 55
+  rpm: 78
+  fireInterval: 0.055555556
+  magSize: 6
+  fireMode: 2
+  reloadTime: 0.66

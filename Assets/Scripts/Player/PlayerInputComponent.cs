@@ -129,7 +129,7 @@ namespace Player
                 return;
             }
             playerStateComponent.isReloading = true;
-            StartCoroutine(WaitForReloadTime(playerStateComponent.equippedGun.reloadTime));
+            StartCoroutine(WaitForReloadTime(playerStateComponent.equippedGun.gunData.reloadTime));
         }
 
         private IEnumerator WaitForReloadTime(float reloadTime)

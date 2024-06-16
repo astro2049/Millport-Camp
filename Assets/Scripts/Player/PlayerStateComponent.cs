@@ -17,7 +17,7 @@ namespace Player
         private void Start()
         {
             EquipGun(primaryGun);
-            gameManager.UpdateEquippedGunNameText(equippedGun.gunName);
+            gameManager.UpdateEquippedGunNameText(equippedGun.gunData.gunName);
         }
 
         public void EquipGun(GunStateComponent gun)
