@@ -1,23 +1,37 @@
+using Observer;
+using Player;
 using UnityEngine;
-using Vehicle;
+using EventType = Observer.EventType;
 
 public class InteractableColliderComponent : MonoBehaviour
 {
     private Transform parent;
 
+    private SubjectComponent subjectComponent;
+
     // Start is called before the first frame update
     private void Start()
     {
         parent = transform.parent;
+
+        subjectComponent = parent.GetComponent<SubjectComponent>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        parent.GetComponent<VehicleStateComponent>().gameManager.ShowInteraction(parent.GetComponent<InteractableComponent>());
+        // Set player's current interactable to parent
+        other.gameObject.GetComponent<PlayerStateComponent>().currentInteractable = parent.GetComponent<InteractableComponent>();
+
+        // Broadcast event
+        subjectComponent.NotifyObservers(EventType.InteractionStarted);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        transform.parent.GetComponent<VehicleStateComponent>().gameManager.CloseInteraction();
+        // Clear player's current interactable
+        other.gameObject.GetComponent<PlayerStateComponent>().currentInteractable = null;
+
+        // Broadcast event
+        subjectComponent.NotifyObservers(EventType.InteractionEnded);
     }
 }

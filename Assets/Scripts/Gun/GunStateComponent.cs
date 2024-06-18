@@ -1,6 +1,9 @@
 using System.Collections;
+using Managers;
+using Observer;
 using Player;
 using UnityEngine;
+using EventType = Observer.EventType;
 
 namespace Gun
 {
@@ -18,7 +21,7 @@ namespace Gun
          */
         // Stats
         public GunData gunData;
-        [HideInInspector] public int currentMagAmmo;
+        public int currentMagAmmo;
         // Muzzle
         private Transform muzzleTransform;
         // Sounds
@@ -34,6 +37,8 @@ namespace Gun
         // Holder
         public PlayerInputComponent holder;
 
+        private SubjectComponent subjectComponent;
+
         /*
          * States
          */
@@ -43,6 +48,8 @@ namespace Gun
         // Start is called before the first frame update
         private void Start()
         {
+            subjectComponent = GetComponent<SubjectComponent>();
+
             GetComponent<MeshFilter>().mesh = gunData.mesh;
             GetComponent<MeshRenderer>().material = gunData.material;
             muzzleTransform = transform.Find("Muzzle").transform;
@@ -58,7 +65,9 @@ namespace Gun
         private void SetCurrentMagAmmo(int ammo)
         {
             currentMagAmmo = ammo;
-            gameManager.UpdateMagAmmoText(currentMagAmmo);
+
+            // Broadcast event
+            subjectComponent.NotifyObservers(EventType.AmmoChanged);
         }
 
         public void SetIsTriggerDown(bool status)

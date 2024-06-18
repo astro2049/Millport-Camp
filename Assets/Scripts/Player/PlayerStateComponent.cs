@@ -1,6 +1,8 @@
 using Gun;
+using Observer;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using EventType = Observer.EventType;
 
 namespace Player
 {
@@ -11,19 +13,23 @@ namespace Player
         public GunStateComponent primaryGun;
         public bool isReloading;
 
-        public GameManager gameManager;
+        private SubjectComponent subjectComponent;
 
         // Start is called before the first frame update
         private void Start()
         {
+            subjectComponent = GetComponent<SubjectComponent>();
+
             EquipGun(primaryGun);
-            gameManager.UpdateEquippedGunNameText(equippedGun.gunData.gunName);
         }
 
         public void EquipGun(GunStateComponent gun)
         {
             equippedGun = gun;
             equippedGun.holder = GetComponent<PlayerInputComponent>();
+
+            // Broadcast event
+            subjectComponent.NotifyObservers(EventType.WeaponChanged);
         }
 
         // Update is called once per frame
@@ -35,7 +41,6 @@ namespace Player
         public override void Die()
         {
             base.Die();
-            GetComponent<PlayerInput>().enabled = false;
             GetComponent<PlayerInputComponent>().enabled = false;
             // TODO: This does not let NPCs un-sense the player
             GetComponent<CapsuleCollider>().enabled = false;

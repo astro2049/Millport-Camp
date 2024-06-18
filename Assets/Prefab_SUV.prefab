@@ -99,12 +99,11 @@ GameObject:
   - component: {fileID: 228609745110735449}
   - component: {fileID: 7668840577972705298}
   - component: {fileID: 4260029843836877306}
-  - component: {fileID: 4824059147821734897}
-  - component: {fileID: 4667498796232711903}
   - component: {fileID: 3253308548580997221}
   - component: {fileID: 3176964072189215174}
   - component: {fileID: 6244490815072601007}
   - component: {fileID: 402371923989164298}
+  - component: {fileID: 2572865404244174714}
   m_Layer: 11
   m_Name: Prefab_SUV
   m_TagString: Untagged
@@ -202,49 +201,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 9e3e05b5e4951d64a9412bf0e557e6d3, type: 3}
---- !u!114 &4824059147821734897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 261278061893848929}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7c8ab7550987134cbc1a4ef1870a806, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
---- !u!114 &4667498796232711903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 261278061893848929}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 5be916e908262694f9711ca9635beb03, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Vehicle
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!114 &3253308548580997221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,6 +213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f5179d1912b520438dd61e65cefbbbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputActionAsset: {fileID: -944628639613478452, guid: 5be916e908262694f9711ca9635beb03, type: 3}
   moveInput: {x: 0, y: 0}
 --- !u!114 &3176964072189215174
 MonoBehaviour:
@@ -315,6 +272,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2572865404244174714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261278061893848929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f157a2c798354fc09f7729a27b9bf1e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &734684022703294102
 GameObject:
   m_ObjectHideFlags: 0

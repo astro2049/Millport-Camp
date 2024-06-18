@@ -25,8 +25,38 @@ namespace Player
         /*
          * Pre-stored private fields
          */
+        private InputActionMap playerActionMap;
         private Vector3 cameraForward, cameraRight;
         private PlayerStateComponent playerStateComponent;
+
+        private void Awake()
+        {
+            playerActionMap = inputActionAsset.FindActionMap("Player");
+
+            // Bind input functions
+            // Move
+            playerActionMap.FindAction("Move").performed += OnMove;
+            playerActionMap.FindAction("Move").canceled += OnMove;
+            // Look
+            playerActionMap.FindAction("Look").performed += OnLook;
+            // Interact
+            playerActionMap.FindAction("Interact").performed += OnInteract;
+            // Reload
+            playerActionMap.FindAction("Reload").performed += OnReload;
+            // Attack
+            playerActionMap.FindAction("Attack").performed += OnStartAttack;
+            playerActionMap.FindAction("Attack").canceled += OnStopAttack;
+        }
+
+        private void OnEnable()
+        {
+            playerActionMap.Enable();
+        }
+
+        private void OnDisable()
+        {
+            playerActionMap.Disable();
+        }
 
         // Start is called before the first frame update
         private void Start()
@@ -44,22 +74,17 @@ namespace Player
             cameraRight.Normalize();
 
             playerStateComponent = GetComponent<PlayerStateComponent>();
-
-            InputAction attackInputAction = inputActionAsset.FindActionMap("Player").FindAction("Attack");
-            attackInputAction.performed += OnStartAttack;
-            attackInputAction.canceled += OnStopAttack;
         }
 
         // Update is called once per frame
         private void Update()
         {
             Move();
-            Look();
         }
 
-        private void OnMove(InputValue value)
+        private void OnMove(InputAction.CallbackContext context)
         {
-            moveInput = value.Get<Vector2>();
+            moveInput = context.ReadValue<Vector2>();
         }
 
         private void Move()
@@ -71,14 +96,10 @@ namespace Player
             transform.Translate(moveDirection * (moveSpeed * Time.deltaTime), Space.World);
         }
 
-        private void OnLook(InputValue value)
-        {
-            lookInput = value.Get<Vector2>();
-        }
-
         // Look at where the mouse is, horizontally
-        private void Look()
+        private void OnLook(InputAction.CallbackContext context)
         {
+            lookInput = context.ReadValue<Vector2>();
             /*
              * Get mouse position in the 3D world, referenced
              * Code Monkey (2021) 'How to get Mouse Position in 3D and 2D! (Unity Tutorial)', Youtube, 23 March
@@ -115,7 +136,7 @@ namespace Player
             playerStateComponent.equippedGun.SetIsTriggerDown(false);
         }
 
-        private void OnInteract()
+        private void OnInteract(InputAction.CallbackContext context)
         {
             InteractableComponent currentInteractable = GetComponent<PlayerStateComponent>().currentInteractable;
             if (currentInteractable) {
@@ -123,7 +144,7 @@ namespace Player
             }
         }
 
-        private void OnReload()
+        private void OnReload(InputAction.CallbackContext context)
         {
             if (playerStateComponent.isReloading) {
                 return;
