@@ -11,6 +11,7 @@ namespace Player
         public GunStateComponent equippedGun;
         public GunStateComponent primaryGun;
         public bool isReloading;
+        public bool isInBuildMode = false;
 
         private SubjectComponent subjectComponent;
 

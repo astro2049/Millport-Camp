@@ -16,7 +16,10 @@ namespace Player
         public InputActionAsset inputActionAsset;
         [Header("Movement Settings")] public float moveSpeed = 5f; // 5m/s
         public Camera followCamera;
-        public Vector3 hitPoint;
+        public Vector3 lookPoint;
+        // Build Mode
+        public GameObject turretPrefab;
+        private GameObject turretToPlace;
 
         /*
          * Private fields
@@ -27,37 +30,51 @@ namespace Player
         /*
          * Pre-stored private fields
          */
-        private InputActionMap playerActionMap;
+        private InputActionMap movementActions;
+        private InputActionMap combatActions;
+        private InputActionMap buildingActions;
         private Vector3 cameraForward, cameraRight;
         private PlayerStateComponent playerStateComponent;
 
         private void Awake()
         {
-            playerActionMap = inputActionAsset.FindActionMap("Player");
+            movementActions = inputActionAsset.FindActionMap("Player Movement");
+            combatActions = inputActionAsset.FindActionMap("Player Combat Mode");
+            buildingActions = inputActionAsset.FindActionMap("Player Build Mode");
 
             // Bind input functions
             // Move
-            playerActionMap.FindAction("Move").performed += OnMove;
-            playerActionMap.FindAction("Move").canceled += OnMove;
+            movementActions.FindAction("Move").performed += OnMove;
+            movementActions.FindAction("Move").canceled += OnMove;
             // Look
-            playerActionMap.FindAction("Look").performed += OnLook;
+            movementActions.FindAction("Look").performed += OnLook;
+            // Toggle build mode
+            movementActions.FindAction("Toggle Build Mode").performed += ToggleBuildingMode;
             // Interact
-            playerActionMap.FindAction("Interact").performed += OnInteract;
+            combatActions.FindAction("Interact").performed += OnInteract;
             // Reload
-            playerActionMap.FindAction("Reload").performed += OnReload;
+            combatActions.FindAction("Reload").performed += OnReload;
             // Attack
-            playerActionMap.FindAction("Attack").performed += OnStartAttack;
-            playerActionMap.FindAction("Attack").canceled += OnStopAttack;
+            combatActions.FindAction("Attack").performed += OnStartAttack;
+            combatActions.FindAction("Attack").canceled += OnStopAttack;
+            // Place
+            buildingActions.FindAction("Place").performed += PlaceTurret;
+            // Rotate structure
+            buildingActions.FindAction("Rotate").performed += RotateTurret;
         }
 
         private void OnEnable()
         {
-            playerActionMap.Enable();
+            movementActions.Enable();
+            combatActions.Enable();
+            buildingActions.Disable();
         }
 
         private void OnDisable()
         {
-            playerActionMap.Disable();
+            movementActions.Disable();
+            combatActions.Disable();
+            buildingActions.Disable();
         }
 
         // Start is called before the first frame update
@@ -111,13 +128,13 @@ namespace Player
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Terrain", "Obstacle", "NPC", "Vehicle"))) {
                 // Debug: DrawLine - Green if hit NPC, otherwise red
                 Debug.DrawLine(followCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()), hit.point, hit.collider.gameObject.layer == LayerMask.NameToLayer("NPC") ? Color.green : Color.red);
-                hitPoint = hit.point;
+                lookPoint = hit.point;
                 transform.LookAt(new Vector3(
-                    hitPoint.x,
+                    lookPoint.x,
                     transform.position.y,
-                    hitPoint.z
+                    lookPoint.z
                 ));
-                playerStateComponent.equippedGun.lookPoint = hitPoint;
+                playerStateComponent.equippedGun.lookPoint = lookPoint;
             }
         }
 
@@ -127,11 +144,6 @@ namespace Player
                 return;
             }
             playerStateComponent.equippedGun.SetIsTriggerDown(true);
-        }
-
-        public Vector3 LookAtPoint()
-        {
-            return hitPoint;
         }
 
         private void OnStopAttack(InputAction.CallbackContext context)
@@ -163,6 +175,54 @@ namespace Player
             yield return new WaitForSeconds(reloadTime);
             playerStateComponent.equippedGun.Reload();
             playerStateComponent.isReloading = false;
+        }
+
+        private void ToggleBuildingMode(InputAction.CallbackContext context)
+        {
+            if (!playerStateComponent.isInBuildMode) {
+                /*
+                 * Currently in combat mode
+                 * Enter building mode
+                 */
+                playerStateComponent.isInBuildMode = true;
+                // Instantiate a new turret
+                turretToPlace = Instantiate(turretPrefab);
+                // Register structure follow function
+                movementActions.FindAction("Look").performed += StructureOnCursor;
+
+                // Switch action maps
+                combatActions.Disable();
+                buildingActions.Enable();
+            } else {
+                /*
+                 * Return to combat mode
+                 */
+                playerStateComponent.isInBuildMode = false;
+                // Destroy unplaced turret
+                Destroy(turretToPlace);
+                // Un-register structure follow function
+                movementActions.FindAction("Look").performed -= StructureOnCursor;
+
+                // Switch action maps
+                combatActions.Enable();
+                buildingActions.Disable();
+            }
+        }
+
+        private void StructureOnCursor(InputAction.CallbackContext context)
+        {
+            turretToPlace.transform.position = lookPoint;
+        }
+
+        private void PlaceTurret(InputAction.CallbackContext context)
+        {
+            turretToPlace = Instantiate(turretPrefab, new Vector3(0, -10, 0), Quaternion.identity);
+        }
+
+        private void RotateTurret(InputAction.CallbackContext context)
+        {
+            // Up and Down are on y axis, 120.0/-120.0
+            turretToPlace.transform.Rotate(Vector3.up, -90f * (context.ReadValue<Vector2>().y / 120f));
         }
     }
 }

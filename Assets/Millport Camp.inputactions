@@ -2,7 +2,7 @@
     "name": "Millport Camp",
     "maps": [
         {
-            "name": "Player",
+            "name": "Player Movement",
             "id": "c931ce21-5dd9-49d0-84b7-a7762d5b43f5",
             "actions": [
                 {
@@ -24,27 +24,9 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Attack",
+                    "name": "Toggle Build Mode",
                     "type": "Button",
-                    "id": "e95a7263-0aa2-4f78-8abd-c99da09671b0",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Interact",
-                    "type": "Button",
-                    "id": "3d3ea194-33c5-4cf5-8259-76f594d53065",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Reload",
-                    "type": "Button",
-                    "id": "a7a9f474-b5af-415f-9dfd-8418fe8c129f",
+                    "id": "0d662ca8-c497-4648-b585-2cb8229233c8",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -120,7 +102,53 @@
                 },
                 {
                     "name": "",
-                    "id": "05f6913d-c316-48b2-a6bb-e225f14c7960",
+                    "id": "df52a76d-d24b-4380-a5bd-a72fefde9984",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Toggle Build Mode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Player Combat Mode",
+            "id": "ef506af1-c140-40ad-859a-165507fd5a03",
+            "actions": [
+                {
+                    "name": "Attack",
+                    "type": "Button",
+                    "id": "49c020ad-25dd-4606-aa16-ea5ef35dbe92",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "0523ee3e-377c-4111-b3b7-2ede46144059",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Reload",
+                    "type": "Button",
+                    "id": "dc2f7b5a-4e39-43a6-8700-4266f0bea8ac",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "59bb7be9-3763-4a89-998e-dd9e5d5b44fd",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
@@ -131,7 +159,7 @@
                 },
                 {
                     "name": "",
-                    "id": "6373143c-f2f5-4c55-8810-dbb13fd850cf",
+                    "id": "bc79f3a8-f4ce-46d3-9df4-64bdf373ee22",
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
@@ -142,12 +170,60 @@
                 },
                 {
                     "name": "",
-                    "id": "77a82c25-fb17-4424-9c2b-91fc259d8042",
+                    "id": "e6ce4da9-4a22-4f2e-9107-b513d51d8022",
                     "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Reload",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Player Build Mode",
+            "id": "a84ce338-7a0b-4ce1-892d-709dcc2dd095",
+            "actions": [
+                {
+                    "name": "Place",
+                    "type": "Button",
+                    "id": "9b76322a-19ec-4b42-9f8b-2b7c6baa3f19",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Rotate",
+                    "type": "Value",
+                    "id": "5d1a5f76-9741-4e9c-b558-8d13f2d4bffa",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "8f716113-d8a0-4611-9d26-cead20d6119b",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Place",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5c294819-91de-4ee7-ab29-8d0d8f77f7cf",
+                    "path": "<Mouse>/scroll",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Rotate",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
