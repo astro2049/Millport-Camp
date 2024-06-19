@@ -1,7 +1,6 @@
 using Gun;
 using Observer;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using EventType = Observer.EventType;
 
 namespace Player
@@ -26,7 +25,6 @@ namespace Player
         public void EquipGun(GunStateComponent gun)
         {
             equippedGun = gun;
-            equippedGun.holder = GetComponent<PlayerInputComponent>();
 
             // Broadcast event
             subjectComponent.NotifyObservers(EventType.WeaponChanged);

@@ -3,7 +3,6 @@ using Observer;
 using Player;
 using Unity.AI.Navigation;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Vehicle;
 using EventType = Observer.EventType;
 
@@ -39,8 +38,6 @@ namespace Managers
 
             // Build nav mesh
             // m_navMeshSurface.BuildNavMesh();
-            
-            
         }
 
         private void SubscribeToEntitySubject(GameObject entity)
@@ -80,7 +77,7 @@ namespace Managers
             }
             return true;
         }
-        
+
         private void EnterVehicle()
         {
             // Switch Inputs
@@ -92,12 +89,11 @@ namespace Managers
             playerCamera.Priority = 10;
             vehicleCamera.Priority = 20;
 
+            // Attach player to vehicle
+            player.transform.parent = vehicle.transform;
             // Turn off player's rendering and collision
             player.GetComponent<MeshRenderer>().enabled = false;
             player.GetComponent<CapsuleCollider>().enabled = false;
-
-            // Attach player to vehicle
-            player.transform.parent = vehicle.transform;
         }
 
         private void ExitVehicle()
@@ -110,12 +106,11 @@ namespace Managers
             playerCamera.Priority = 20;
             vehicleCamera.Priority = 10;
 
+            // Detach player from vehicle
+            player.transform.parent = null;
             // Turn on player's rendering and collision
             player.GetComponent<MeshRenderer>().enabled = true;
             player.GetComponent<CapsuleCollider>().enabled = true;
-
-            // Detach player from vehicle
-            player.transform.parent = null;
         }
     }
 }

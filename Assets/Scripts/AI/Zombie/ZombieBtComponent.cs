@@ -8,8 +8,8 @@ namespace AI.Zombie
     public class ZombieBtComponent : BtComponent
     {
         /*
-     * Pre-stored components
-     */
+         * Pre-stored components
+         */
         private ZombieStateComponent zombieStateComponent;
         private NavMeshAgent navMeshAgent;
         private DamageDealerComponent damageDealerComponent;
@@ -25,10 +25,10 @@ namespace AI.Zombie
             // Initialize and start behavior tree
             InitializeBt();
             bt.Start();
-        #if UNITY_EDITOR
+            #if UNITY_EDITOR
             Debugger debugger = (Debugger)gameObject.AddComponent(typeof(Debugger));
             debugger.BehaviorTree = bt;
-        #endif
+            #endif
         }
 
         protected override void InitializeBt()

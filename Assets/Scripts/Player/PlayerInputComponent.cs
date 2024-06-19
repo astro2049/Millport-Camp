@@ -1,6 +1,8 @@
 using System.Collections;
+using Observer;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using EventType = Observer.EventType;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
@@ -115,6 +117,7 @@ namespace Player
                     transform.position.y,
                     hitPoint.z
                 ));
+                playerStateComponent.equippedGun.lookPoint = hitPoint;
             }
         }
 
@@ -150,6 +153,8 @@ namespace Player
                 return;
             }
             playerStateComponent.isReloading = true;
+            // Broadcast event
+            GetComponent<SubjectComponent>().NotifyObservers(EventType.IsReloading);
             StartCoroutine(WaitForReloadTime(playerStateComponent.equippedGun.gunData.reloadTime));
         }
 

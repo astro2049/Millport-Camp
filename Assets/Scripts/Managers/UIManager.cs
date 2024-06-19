@@ -12,6 +12,7 @@ namespace Managers
         [SerializeField] private TextMeshProUGUI interactText;
         [SerializeField] private TextMeshProUGUI equippedGunNameText;
         [SerializeField] private TextMeshProUGUI magAmmoText;
+        [SerializeField] private TextMeshProUGUI reloadText;
 
         [SerializeField] private GameManager gameManager;
 
@@ -42,6 +43,12 @@ namespace Managers
                     break;
                 case EventType.InteractionEnded:
                     interactText.enabled = false;
+                    break;
+                case EventType.MagEmpty:
+                    reloadText.enabled = true;
+                    break;
+                case EventType.IsReloading:
+                    reloadText.enabled = false;
                     break;
             }
             return true;

@@ -8,6 +8,8 @@
         EnteredVehicle = 3,
         ExitedVehicle = 4,
         AmmoChanged = 5,
-        WeaponChanged = 6
+        WeaponChanged = 6,
+        MagEmpty = 7,
+        IsReloading = 8,
     }
 }

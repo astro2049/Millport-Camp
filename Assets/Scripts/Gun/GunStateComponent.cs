@@ -1,7 +1,5 @@
 using System.Collections;
-using Managers;
 using Observer;
-using Player;
 using UnityEngine;
 using EventType = Observer.EventType;
 
@@ -31,11 +29,10 @@ namespace Gun
         // Tracer
         public GameObject tracerPrefab;
         public float tracerSpeed = 150f; // 150m/s
-        // Game Manager and Audio Manager
-        public GameManager gameManager;
+        // Audio Manager
         public AudioSource audioManager;
-        // Holder
-        public PlayerInputComponent holder;
+
+        public Vector3 lookPoint;
 
         private SubjectComponent subjectComponent;
 
@@ -50,8 +47,9 @@ namespace Gun
         {
             subjectComponent = GetComponent<SubjectComponent>();
 
-            GetComponent<MeshFilter>().mesh = gunData.mesh;
-            GetComponent<MeshRenderer>().material = gunData.material;
+            Transform meshTransform = transform.Find("Mesh");
+            meshTransform.GetComponent<MeshFilter>().mesh = gunData.mesh;
+            meshTransform.GetComponent<MeshRenderer>().material = gunData.material;
             muzzleTransform = transform.Find("Muzzle").transform;
             SetCurrentMagAmmo(gunData.magSize);
         }
@@ -101,8 +99,11 @@ namespace Gun
         private void FiringPinStruck()
         {
             if (currentMagAmmo != 0) {
-                Fire(holder.LookAtPoint());
+                Fire();
             } else {
+                // Mag is empty
+                // Broadcast event
+                subjectComponent.NotifyObservers(EventType.MagEmpty);
                 // Mag empty SFX
                 audioManager.PlayOneShot(magEmptySound, 0.5f);
             }
@@ -114,8 +115,8 @@ namespace Gun
             setIsBoltInPosition(true);
         }
 
-        // Shoot a raycast bullet horizontally from muzzle location
-        private void Fire(Vector3 lookPoint)
+        // Shoot a raycast bullet horizontally towards lookPoint from muzzle location
+        private void Fire()
         {
             // Fire SFX
             audioManager.PlayOneShot(fireSound, 0.4f);
@@ -126,11 +127,7 @@ namespace Gun
             Vector3 muzzlePosition = muzzleTransform.position;
             // Align muzzle to lookPoint (on horizontal plane)
             // TODO: This is hacky, because we're only aligning muzzle's rotation, but not the gun
-            muzzleTransform.LookAt(new Vector3(
-                lookPoint.x,
-                muzzlePosition.y,
-                lookPoint.z
-            ));
+            muzzleTransform.LookAt(lookPoint);
             Vector3 muzzleForward = muzzleTransform.forward;
             Ray ray = new Ray(muzzlePosition, muzzleForward);
             TrailRenderer tracerTrail = Instantiate(tracerPrefab, muzzlePosition, Quaternion.LookRotation(muzzleForward)).GetComponent<TrailRenderer>();
