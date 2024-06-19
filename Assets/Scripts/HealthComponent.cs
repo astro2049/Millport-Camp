@@ -36,7 +36,7 @@ public class HealthComponent : MonoBehaviour
 
         // Trigger death if health is 0
         if (health == 0) {
-            GetComponent<PawnStateComponent>().Die();
+            GetComponent<PawnComponent>().Die();
         }
     }
 }

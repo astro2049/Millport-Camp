@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AI.Zombie
+namespace NPC.Zombie
 {
-    public class ZombieStateComponent : AIStateComponent
+    public class ZombieStateComponent : StateComponent
     {
         public float roamSpeed = 2f;
         public float chaseSpeed = 4f;
@@ -25,22 +25,6 @@ namespace AI.Zombie
         private void Update()
         {
 
-        }
-
-        public override void OnPerceptionTriggerEnter(Collider other)
-        {
-            // Debug.Log(other.gameObject.name + " Entered");
-            humans.Add(other.gameObject);
-            isEngaging = true;
-        }
-
-        public override void OnPerceptionTriggerExit(Collider other)
-        {
-            // Debug.Log(other.gameObject.name + " Exited");
-            humans.Remove(other.gameObject);
-            if (humans.Count == 0) {
-                isEngaging = false;
-            }
         }
     }
 }

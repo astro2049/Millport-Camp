@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-namespace AI.Zombie
+namespace NPC.Zombie
 {
     public class ZombieBtComponent : BtComponent
     {

@@ -2,26 +2,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace AI
+namespace NPC
 {
-    public abstract class AIStateComponent : PawnStateComponent
+    public class NPCPawnComponent : PawnComponent
     {
-        // Start is called before the first frame update
-        private void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
-
-        }
-
-        public abstract void OnPerceptionTriggerEnter(Collider other);
-
-        public abstract void OnPerceptionTriggerExit(Collider other);
-
         public override void Die()
         {
             base.Die();

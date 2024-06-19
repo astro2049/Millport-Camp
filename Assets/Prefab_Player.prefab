@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 2373704505075530333}
   - component: {fileID: 8168393529080742279}
   - component: {fileID: 2507564122033281152}
+  - component: {fileID: 1273189440757738412}
   - component: {fileID: 6291882367588290925}
   - component: {fileID: 5531186062356682317}
   m_Layer: 7
@@ -137,7 +138,8 @@ MonoBehaviour:
   inputActionAsset: {fileID: -944628639613478452, guid: 5be916e908262694f9711ca9635beb03, type: 3}
   moveSpeed: 5
   followCamera: {fileID: 0}
-  hitPoint: {x: 0, y: 0, z: 0}
+  lookPoint: {x: 0, y: 0, z: 0}
+  turretPrefab: {fileID: 0}
 --- !u!114 &8168393529080742279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,6 +178,23 @@ CapsuleCollider:
   m_Height: 1.7870202
   m_Direction: 1
   m_Center: {x: -0.019019008, y: 0.9100902, z: 0.03763771}
+--- !u!114 &1273189440757738412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6239351062438321205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d003dd39516f499081a00ac06a3df106, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentInteractable: {fileID: 0}
+  equippedGun: {fileID: 0}
+  primaryGun: {fileID: 1981485115744066147}
+  isReloading: 0
+  isInBuildMode: 0
 --- !u!114 &6291882367588290925
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,10 +207,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25640a17728a8314e821220a5c02d16e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentInteractable: {fileID: 0}
-  equippedGun: {fileID: 0}
-  primaryGun: {fileID: 1981485115744066147}
-  isReloading: 0
 --- !u!114 &5531186062356682317
 MonoBehaviour:
   m_ObjectHideFlags: 0

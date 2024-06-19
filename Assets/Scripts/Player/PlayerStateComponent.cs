@@ -1,11 +1,10 @@
 using Gun;
 using Observer;
-using UnityEngine;
 using EventType = Observer.EventType;
 
 namespace Player
 {
-    public class PlayerStateComponent : PawnStateComponent
+    public class PlayerStateComponent : StateComponent
     {
         public InteractableComponent currentInteractable;
         public GunStateComponent equippedGun;
@@ -29,20 +28,6 @@ namespace Player
 
             // Broadcast event
             subjectComponent.NotifyObservers(EventType.WeaponChanged);
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
-
-        }
-
-        public override void Die()
-        {
-            base.Die();
-            GetComponent<PlayerInputComponent>().enabled = false;
-            // TODO: This does not let NPCs un-sense the player
-            GetComponent<CapsuleCollider>().enabled = false;
         }
     }
 }
