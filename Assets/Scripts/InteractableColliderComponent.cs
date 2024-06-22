@@ -23,7 +23,7 @@ public class InteractableColliderComponent : MonoBehaviour
         other.gameObject.GetComponent<PlayerStateComponent>().currentInteractable = parent.GetComponent<InteractableComponent>();
 
         // Broadcast event
-        subjectComponent.NotifyObservers(EventType.InteractionStarted);
+        subjectComponent.NotifyObservers(new MCEvent(EventType.InteractionStarted));
     }
 
     private void OnTriggerExit(Collider other)
@@ -32,6 +32,6 @@ public class InteractableColliderComponent : MonoBehaviour
         other.gameObject.GetComponent<PlayerStateComponent>().currentInteractable = null;
 
         // Broadcast event
-        subjectComponent.NotifyObservers(EventType.InteractionEnded);
+        subjectComponent.NotifyObservers(new MCEvent(EventType.InteractionEnded));
     }
 }

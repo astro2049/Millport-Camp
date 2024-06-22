@@ -83,6 +83,7 @@ GameObject:
   - component: {fileID: 8064412323141067901}
   - component: {fileID: 5976199100760700302}
   - component: {fileID: 3587049039424454410}
+  - component: {fileID: 6134665599453894456}
   - component: {fileID: 3329866521178244730}
   - component: {fileID: 5374081014778640567}
   - component: {fileID: 164401785996861785}
@@ -216,6 +217,7 @@ MonoBehaviour:
   randomPatrolRadius: 10
   attackRange: 2
   perceptionRadius: 7.5
+  perceptionLayers: []
   isEngaging: 0
 --- !u!114 &5976199100760700302
 MonoBehaviour:
@@ -239,6 +241,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c269f401aa974a1ea36a0f273acfc286, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6134665599453894456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5105231151093237616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f157a2c798354fc09f7729a27b9bf1e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!195 &3329866521178244730

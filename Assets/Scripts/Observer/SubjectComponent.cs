@@ -17,7 +17,7 @@ namespace Observer
             observers.Remove(observer);
         }
 
-        public void NotifyObservers(EventType mcEvent)
+        public void NotifyObservers(MCEvent mcEvent)
         {
             foreach (IObserver observer in observers) {
                 observer.OnNotify(mcEvent);

@@ -29,9 +29,9 @@ namespace Managers
         }
 
         // Handle events
-        public bool OnNotify(EventType mcEvent)
+        public bool OnNotify(MCEvent mcEvent)
         {
-            switch (mcEvent) {
+            switch (mcEvent.type) {
                 case EventType.WeaponChanged:
                     equippedGunNameText.text = gameManager.player.GetComponent<PlayerStateComponent>().equippedGun.gunData.gunName;
                     break;

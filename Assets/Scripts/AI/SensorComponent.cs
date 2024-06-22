@@ -1,17 +1,17 @@
 using UnityEngine;
 
-namespace NPC
+namespace AI
 {
     public class SensorComponent : MonoBehaviour
     {
         private PerceptionComponent perceptionComponent;
 
-        // Start is called before the first frame update
-        private void Start()
+        private void Awake()
         {
             perceptionComponent = transform.parent.GetComponent<PerceptionComponent>();
         }
 
+        // Caveat: OnTriggers() might be called before Start(). So do initialize the members in Awake()
         private void OnTriggerEnter(Collider other)
         {
             perceptionComponent.OnPerceptionTriggerEnter(other);

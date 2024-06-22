@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NPC.Zombie
+namespace AI.NPC.Zombie
 {
     public class ZombieStateComponent : StateComponent
     {
@@ -10,14 +10,18 @@ namespace NPC.Zombie
         public float randomPatrolRadius = 10f;
         public float attackRange = 2f;
         public float perceptionRadius = 7.5f;
-    
+        public LayerMask[] perceptionLayers;
+
         public SortedSet<GameObject> humans = new SortedSet<GameObject>();
         public bool isEngaging;
 
         // Start is called before the first frame update
         private void Start()
         {
-            transform.Find("Perception Collider").gameObject.GetComponent<SphereCollider>().radius = perceptionRadius;
+            // Configure perception
+            GetComponent<PerceptionComponent>().CreateSensorCollider(perceptionRadius, perceptionLayers);
+
+            // Enable behavior tree
             GetComponent<ZombieBtComponent>().enabled = true;
         }
 

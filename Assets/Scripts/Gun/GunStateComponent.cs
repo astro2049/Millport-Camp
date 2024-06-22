@@ -65,7 +65,7 @@ namespace Gun
             currentMagAmmo = ammo;
 
             // Broadcast event
-            subjectComponent.NotifyObservers(EventType.AmmoChanged);
+            subjectComponent.NotifyObservers(new MCEvent(EventType.AmmoChanged));
         }
 
         public void SetIsTriggerDown(bool status)
@@ -103,7 +103,7 @@ namespace Gun
             } else {
                 // Mag is empty
                 // Broadcast event
-                subjectComponent.NotifyObservers(EventType.MagEmpty);
+                subjectComponent.NotifyObservers(new MCEvent(EventType.MagEmpty));
                 // Mag empty SFX
                 audioManager.PlayOneShot(magEmptySound, 0.5f);
             }
@@ -147,11 +147,11 @@ namespace Gun
         }
 
         /*
-         * Tracer Effect, referenced
-         * TheKiwiCoder (2020) '[#05] Shooting a weapon using Projectile Raycasts (with effects)', Youtube, 17 May
-         * https://www.youtube.com/watch?v=onpteKMsE84 (Accessed 3 June 2024)
-         * BMo (2022) 'How to Add a TRAIL EFFECT to Anything in Unity', youtube, 2 May
-         * https://www.youtube.com/watch?v=nLxvCRPJCKw (Accessed 3 June 2024)
+         * Tracer Effect, referenced:
+         * TheKiwiCoder (2020) '[#05] Shooting a weapon using Projectile Raycasts (with effects)', Youtube, 17 May.
+         * Available at: https://www.youtube.com/watch?v=onpteKMsE84 (Accessed 3 June 2024).
+         * BMo (2022) 'How to Add a TRAIL EFFECT to Anything in Unity', youtube, 2 May.
+         * Available at: https://www.youtube.com/watch?v=nLxvCRPJCKw (Accessed 3 June 2024).
          */
         private IEnumerator SpawnTrail(TrailRenderer tracerTrail, float distance)
         {

@@ -120,9 +120,9 @@ namespace Player
         {
             lookInput = context.ReadValue<Vector2>();
             /*
-             * Get mouse position in the 3D world, referenced
-             * Code Monkey (2021) 'How to get Mouse Position in 3D and 2D! (Unity Tutorial)', Youtube, 23 March
-             * https://www.youtube.com/watch?v=0jTPKz3ga4w (Accessed 30 May 2024)
+             * Get mouse position in the 3D world, referenced:
+             * Code Monkey (2021) 'How to get Mouse Position in 3D and 2D! (Unity Tutorial)', Youtube, 23 March.
+             * Available at: https://www.youtube.com/watch?v=0jTPKz3ga4w (Accessed 30 May 2024).
              */
             Ray ray = followCamera.ScreenPointToRay(lookInput);
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Terrain", "Obstacle", "NPC", "Vehicle"))) {
@@ -166,7 +166,7 @@ namespace Player
             }
             playerStateComponent.isReloading = true;
             // Broadcast event
-            GetComponent<SubjectComponent>().NotifyObservers(EventType.IsReloading);
+            GetComponent<SubjectComponent>().NotifyObservers(new MCEvent(EventType.IsReloading));
             StartCoroutine(WaitForReloadTime(playerStateComponent.equippedGun.gunData.reloadTime));
         }
 

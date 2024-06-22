@@ -1,4 +1,6 @@
-﻿namespace Observer
+﻿using UnityEngine;
+
+namespace Observer
 {
     public enum EventType
     {
@@ -11,5 +13,26 @@
         WeaponChanged = 6,
         MagEmpty = 7,
         IsReloading = 8,
+        PawnDead = 9
+    }
+
+    public class MCEvent
+    {
+        public EventType type;
+
+        public MCEvent(EventType type)
+        {
+            this.type = type;
+        }
+    }
+
+    public class PawnDeadEvent : MCEvent
+    {
+        public GameObject pawn;
+
+        public PawnDeadEvent(EventType type, GameObject pawn) : base(type)
+        {
+            this.pawn = pawn;
+        }
     }
 }

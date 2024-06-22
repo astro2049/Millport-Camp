@@ -15,9 +15,9 @@ namespace Vehicle
         public override void Interact()
         {
             // Broadcast events
-            subjectComponent.NotifyObservers(EventType.EnteredVehicle);
+            subjectComponent.NotifyObservers(new MCEvent(EventType.EnteredVehicle));
             // Because OnTriggerExit() won't trigger this time
-            subjectComponent.NotifyObservers(EventType.InteractionEnded);
+            subjectComponent.NotifyObservers(new MCEvent(EventType.InteractionEnded));
         }
     }
 }

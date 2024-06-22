@@ -3,9 +3,9 @@ using UnityEngine;
 namespace Vehicle
 {
     /*
-     * Vehicle Control, modified from
-     * Unity (2024) Create a car with Wheel colliders
-     * https://docs.unity3d.com/Manual/WheelColliderTutorial.html (Accessed: 7 June 2024)
+     * Vehicle Control, modified from:
+     * Unity (2024) Create a car with Wheel colliders.
+     * Available at: https://docs.unity3d.com/Manual/WheelColliderTutorial.html (Accessed: 7 June 2024).
      */
     public class VehicleControlComponent : MonoBehaviour
     {

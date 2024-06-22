@@ -61,9 +61,9 @@ namespace Managers
         }
 
         // Handle events
-        public bool OnNotify(EventType mcEvent)
+        public bool OnNotify(MCEvent mcEvent)
         {
-            switch (mcEvent) {
+            switch (mcEvent.type) {
                 case EventType.WeaponChanged:
                     // TODO: And we also need to unsubscribe from previous weapon, which means an argument will need to be passed through
                     SubscribeToEntitySubject(player.GetComponent<PlayerStateComponent>().equippedGun.gameObject);

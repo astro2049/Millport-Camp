@@ -14,7 +14,7 @@ TagManager:
   - Terrain
   - Player
   - NPC
-  - Perception
+  - 
   - Obstacle
   - Vehicle
   - Interaction

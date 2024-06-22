@@ -49,7 +49,7 @@ namespace Vehicle
         private void OnInteract(InputAction.CallbackContext context)
         {
             // Broadcast event
-            subjectComponent.NotifyObservers(EventType.ExitedVehicle);
+            subjectComponent.NotifyObservers(new MCEvent(EventType.ExitedVehicle));
         }
     }
 }

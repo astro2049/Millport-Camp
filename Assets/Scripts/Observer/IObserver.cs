@@ -2,6 +2,6 @@ namespace Observer
 {
     public interface IObserver
     {
-        public bool OnNotify(EventType mcEvent);
+        public bool OnNotify(MCEvent mcEvent);
     }
 }
