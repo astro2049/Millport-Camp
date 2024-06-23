@@ -1,4 +1,5 @@
 using System.Collections;
+using Managers;
 using Observer;
 using UnityEngine;
 using EventType = Observer.EventType;
@@ -29,8 +30,6 @@ namespace Gun
         // Tracer
         public GameObject tracerPrefab;
         public float tracerSpeed = 150f; // 150m/s
-        // Audio Manager
-        public AudioSource audioManager;
 
         public Vector3 lookPoint;
 
@@ -105,7 +104,7 @@ namespace Gun
                 // Broadcast event
                 subjectComponent.NotifyObservers(new MCEvent(EventType.MagEmpty));
                 // Mag empty SFX
-                audioManager.PlayOneShot(magEmptySound, 0.5f);
+                AudioManager.GetAudioSource().PlayOneShot(magEmptySound, 0.5f);
             }
         }
 
@@ -119,7 +118,7 @@ namespace Gun
         private void Fire()
         {
             // Fire SFX
-            audioManager.PlayOneShot(fireSound, 0.4f);
+            AudioManager.GetAudioSource().PlayOneShot(fireSound, 0.4f);
             // Minus 1 bullet
             SetCurrentMagAmmo(currentMagAmmo - 1);
             setIsBoltInPosition(false);
@@ -167,7 +166,7 @@ namespace Gun
 
         public void Reload()
         {
-            audioManager.PlayOneShot(reloadSound, 0.5f);
+            AudioManager.GetAudioSource().PlayOneShot(reloadSound, 0.5f);
             SetCurrentMagAmmo(gunData.magSize);
         }
     }
