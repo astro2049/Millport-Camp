@@ -7,31 +7,29 @@ public class InteractableColliderComponent : MonoBehaviour
 {
     private Transform parent;
 
-    private SubjectComponent subjectComponent;
-
     // Start is called before the first frame update
     private void Start()
     {
         parent = transform.parent;
-
-        subjectComponent = parent.GetComponent<SubjectComponent>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        GameObject player = other.gameObject;
         // Set player's current interactable to parent
-        other.gameObject.GetComponent<PlayerStateComponent>().currentInteractable = parent.GetComponent<InteractableComponent>();
+        player.GetComponent<PlayerStateComponent>().currentInteractable = parent.GetComponent<InteractableComponent>();
 
         // Broadcast event
-        subjectComponent.NotifyObservers(new MCEvent(EventType.InteractionStarted));
+        player.GetComponent<SubjectComponent>().NotifyObservers(new MCEvent(EventType.InteractionStarted));
     }
 
     private void OnTriggerExit(Collider other)
     {
+        GameObject player = other.gameObject;
         // Clear player's current interactable
-        other.gameObject.GetComponent<PlayerStateComponent>().currentInteractable = null;
+        player.GetComponent<PlayerStateComponent>().currentInteractable = null;
 
         // Broadcast event
-        subjectComponent.NotifyObservers(new MCEvent(EventType.InteractionEnded));
+        player.GetComponent<SubjectComponent>().NotifyObservers(new MCEvent(EventType.InteractionEnded));
     }
 }

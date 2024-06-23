@@ -155,7 +155,7 @@ namespace Player
         {
             InteractableComponent currentInteractable = GetComponent<PlayerStateComponent>().currentInteractable;
             if (currentInteractable) {
-                currentInteractable.Interact();
+                currentInteractable.Interact(gameObject);
             }
         }
 

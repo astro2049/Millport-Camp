@@ -12,8 +12,9 @@ namespace AI.Turret
             turretStateComponent = GetComponent<TurretStateComponent>();
             turretHfsm = GetComponent<TurretHFSMComponent>();
 
-            // Subscribe to gun subject
-            turretStateComponent.gun.GetComponent<SubjectComponent>().AddObserver(this);
+            // Subscribe to gun events:
+            // - AmmoChanged
+            turretStateComponent.gun.GetComponent<SubjectComponent>().AddObserver(this, EventType.AmmoChanged);
         }
 
         public override bool OnNotify(MCEvent mcEvent)
@@ -27,7 +28,7 @@ namespace AI.Turret
                     }
                     break;
                 case EventType.PawnDead:
-                    turretHfsm.RemoveTarget((mcEvent as PawnDeadEvent).pawn);
+                    turretHfsm.RemoveTarget((mcEvent as MCEventWEntity)!.entity);
                     break;
             }
             return true;

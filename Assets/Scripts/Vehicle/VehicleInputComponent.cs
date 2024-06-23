@@ -11,11 +11,12 @@ namespace Vehicle
         public Vector2 moveInput;
 
         private InputActionMap vehicleActionMap;
-        private SubjectComponent subjectComponent;
+        private VehicleStateComponent vehicleStateComponent;
 
         private void Awake()
         {
             vehicleActionMap = inputActionAsset.FindActionMap("Vehicle");
+            vehicleStateComponent = GetComponent<VehicleStateComponent>();
 
             // Bind input functions
             // Move
@@ -35,12 +36,6 @@ namespace Vehicle
             vehicleActionMap.Disable();
         }
 
-        // Start is called before the first frame update
-        private void Start()
-        {
-            subjectComponent = GetComponent<SubjectComponent>();
-        }
-
         private void OnMove(InputAction.CallbackContext context)
         {
             moveInput = context.ReadValue<Vector2>();
@@ -48,8 +43,10 @@ namespace Vehicle
 
         private void OnInteract(InputAction.CallbackContext context)
         {
-            // Broadcast event
-            subjectComponent.NotifyObservers(new MCEvent(EventType.ExitedVehicle));
+            // Broadcast event: Player exits vehicle
+            vehicleStateComponent.driver.GetComponent<SubjectComponent>().NotifyObservers(new MCEventWEntity(EventType.ExitedVehicle, gameObject));
+            // Clear driver reference
+            vehicleStateComponent.driver = null;
         }
     }
 }

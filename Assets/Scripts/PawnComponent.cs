@@ -21,7 +21,7 @@ public abstract class PawnComponent : MonoBehaviour
         // And disable subject
         SubjectComponent subject = GetComponent<SubjectComponent>();
         if (subject) {
-            subject.NotifyObservers(new PawnDeadEvent(EventType.PawnDead, gameObject));
+            subject.NotifyObservers(new MCEventWEntity(EventType.PawnDead, gameObject));
             subject.enabled = false;
         }
     }

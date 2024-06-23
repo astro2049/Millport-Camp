@@ -774,7 +774,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorTexture: {fileID: 2800000, guid: b8e78032f8af0954784d1fe9e5a09187, type: 3}
   player: {fileID: 1080605859}
-  vehicle: {fileID: 1954341312}
   playerCamera: {fileID: 766872915}
   vehicleCamera: {fileID: 5066611}
   uiManager: {fileID: 595848169}
@@ -951,7 +950,6 @@ MonoBehaviour:
   equippedGunNameText: {fileID: 1156058250}
   magAmmoText: {fileID: 1492724813}
   reloadText: {fileID: 1745796870}
-  gameManager: {fileID: 481963317}
 --- !u!1 &639825122
 GameObject:
   m_ObjectHideFlags: 3
@@ -2986,11 +2984,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1923515631}
   m_CullTransparentMesh: 1
---- !u!1 &1954341312 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 261278061893848929, guid: 2179bee3a6ef28b438ac36351c7a7304, type: 3}
-  m_PrefabInstance: {fileID: 3089303584156569741}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1962093955
 GameObject:
   m_ObjectHideFlags: 0
@@ -3328,10 +3321,6 @@ PrefabInstance:
     - target: {fileID: 261278061893848929, guid: 2179bee3a6ef28b438ac36351c7a7304, type: 3}
       propertyPath: m_Name
       value: Prefab_SUV
-      objectReference: {fileID: 0}
-    - target: {fileID: 3253308548580997221, guid: 2179bee3a6ef28b438ac36351c7a7304, type: 3}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

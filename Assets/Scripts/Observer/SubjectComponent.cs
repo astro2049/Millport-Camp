@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,21 +6,48 @@ namespace Observer
 {
     public class SubjectComponent : MonoBehaviour
     {
-        private List<IObserver> observers = new List<IObserver>();
+        private readonly Dictionary<EventType, HashSet<IObserver>> observers = new Dictionary<EventType, HashSet<IObserver>>();
 
-        public void AddObserver(IObserver observer)
+        public SubjectComponent()
         {
-            observers.Add(observer);
+            foreach (EventType eventType in Enum.GetValues(typeof(EventType))) {
+                observers.Add(eventType, new HashSet<IObserver>());
+            }
         }
 
+        // Quick add
+        public void AddObserver(IObserver observer)
+        {
+            foreach (KeyValuePair<EventType, HashSet<IObserver>> kv in observers) {
+                kv.Value.Add(observer);
+            }
+        }
+
+        public void AddObserver(IObserver observer, params EventType[] eventTypes)
+        {
+            foreach (EventType eventType in eventTypes) {
+                observers[eventType].Add(observer);
+            }
+        }
+
+        // Quick removal
         public void RemoveObserver(IObserver observer)
         {
-            observers.Remove(observer);
+            foreach (KeyValuePair<EventType, HashSet<IObserver>> kv in observers) {
+                kv.Value.Remove(observer);
+            }
+        }
+
+        public void RemoveObserver(IObserver observer, params EventType[] eventTypes)
+        {
+            foreach (EventType eventType in eventTypes) {
+                observers[eventType].Remove(observer);
+            }
         }
 
         public void NotifyObservers(MCEvent mcEvent)
         {
-            foreach (IObserver observer in observers) {
+            foreach (IObserver observer in observers[mcEvent.type]) {
                 observer.OnNotify(mcEvent);
             }
         }

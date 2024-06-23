@@ -14,8 +14,6 @@ namespace Managers
         [SerializeField] private TextMeshProUGUI magAmmoText;
         [SerializeField] private TextMeshProUGUI reloadText;
 
-        [SerializeField] private GameManager gameManager;
-
         // Start is called before the first frame update
         private void Start()
         {
@@ -32,11 +30,12 @@ namespace Managers
         public bool OnNotify(MCEvent mcEvent)
         {
             switch (mcEvent.type) {
+                // Player
                 case EventType.WeaponChanged:
-                    equippedGunNameText.text = gameManager.player.GetComponent<PlayerStateComponent>().equippedGun.gunData.gunName;
+                    equippedGunNameText.text = (mcEvent as MCEventWEntity)!.entity.GetComponent<GunStateComponent>().gunData.gunName;
                     break;
-                case EventType.AmmoChanged:
-                    magAmmoText.text = gameManager.player.GetComponent<PlayerStateComponent>().equippedGun.GetComponent<GunStateComponent>().currentMagAmmo.ToString();
+                case EventType.IsReloading:
+                    reloadText.enabled = false;
                     break;
                 case EventType.InteractionStarted:
                     interactText.enabled = true;
@@ -44,11 +43,12 @@ namespace Managers
                 case EventType.InteractionEnded:
                     interactText.enabled = false;
                     break;
+                // Gun
+                case EventType.AmmoChanged:
+                    magAmmoText.text = (mcEvent as MCEventWInt)!.value.ToString();
+                    break;
                 case EventType.MagEmpty:
                     reloadText.enabled = true;
-                    break;
-                case EventType.IsReloading:
-                    reloadText.enabled = false;
                     break;
             }
             return true;

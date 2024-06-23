@@ -12,7 +12,6 @@ namespace Managers
     {
         public Texture2D cursorTexture;
         public GameObject player;
-        public GameObject vehicle;
         public CinemachineVirtualCamera playerCamera;
         public CinemachineVirtualCamera vehicleCamera;
 
@@ -22,10 +21,13 @@ namespace Managers
 
         private void Awake()
         {
-            // TODO: This is very hacky
-            // Subscribe to subjects
-            SubscribeToEntitySubject(player);
-            SubscribeToEntitySubject(vehicle);
+            // Subscribe to player events:
+            // - WeaponChanged, EnteredVehicle, ExitedVehicle
+            // Subscribe UI manager to player events:
+            // - WeaponChanged, IsReloading, InteractionStarted, InteractionEnded
+            SubjectComponent entitySubject = player.GetComponent<SubjectComponent>();
+            entitySubject.AddObserver(this, EventType.WeaponChanged, EventType.EnteredVehicle, EventType.ExitedVehicle);
+            entitySubject.AddObserver(uiManager, EventType.WeaponChanged, EventType.IsReloading, EventType.InteractionStarted, EventType.InteractionEnded);
         }
 
         // Start is called before the first frame update
@@ -40,20 +42,6 @@ namespace Managers
             // m_navMeshSurface.BuildNavMesh();
         }
 
-        private void SubscribeToEntitySubject(GameObject entity)
-        {
-            SubjectComponent entitySubject = entity.GetComponent<SubjectComponent>();
-            entitySubject.AddObserver(this);
-            entitySubject.AddObserver(uiManager);
-        }
-
-        private void UnSubscribeToEntitySubject(GameObject entity)
-        {
-            SubjectComponent entitySubject = entity.GetComponent<SubjectComponent>();
-            entitySubject.RemoveObserver(this);
-            entitySubject.RemoveObserver(uiManager);
-        }
-
         // Update is called once per frame
         private void Update()
         {
@@ -64,21 +52,25 @@ namespace Managers
         public bool OnNotify(MCEvent mcEvent)
         {
             switch (mcEvent.type) {
+                // Player
                 case EventType.WeaponChanged:
-                    // TODO: And we also need to unsubscribe from previous weapon, which means an argument will need to be passed through
-                    SubscribeToEntitySubject(player.GetComponent<PlayerStateComponent>().equippedGun.gameObject);
+                    // TODO: And we also need to unsubscribe from previous weapon
+                    // Do the favor of helping UI Manager to subscribe to (equipped) gun events:
+                    // - AmmoChanged, MagEmpty
+                    (mcEvent as MCEventWEntity)!.entity.GetComponent<SubjectComponent>().AddObserver(uiManager, EventType.AmmoChanged, EventType.MagEmpty);
                     break;
+                // Vehicle
                 case EventType.EnteredVehicle:
-                    EnterVehicle();
+                    EnterVehicle((mcEvent as MCEventWEntity)!.entity);
                     break;
                 case EventType.ExitedVehicle:
-                    ExitVehicle();
+                    ExitVehicle((mcEvent as MCEventWEntity)!.entity);
                     break;
             }
             return true;
         }
 
-        private void EnterVehicle()
+        private void EnterVehicle(GameObject vehicle)
         {
             // Switch Inputs
             player.GetComponent<PlayerInputComponent>().enabled = false;
@@ -96,7 +88,7 @@ namespace Managers
             player.GetComponent<CapsuleCollider>().enabled = false;
         }
 
-        private void ExitVehicle()
+        private void ExitVehicle(GameObject vehicle)
         {
             // Switch Inputs
             player.GetComponent<PlayerInputComponent>().enabled = true;

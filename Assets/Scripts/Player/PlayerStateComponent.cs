@@ -27,7 +27,7 @@ namespace Player
             equippedGun = gun;
 
             // Broadcast event
-            subjectComponent.NotifyObservers(new MCEvent(EventType.WeaponChanged));
+            subjectComponent.NotifyObservers(new MCEventWEntity(EventType.WeaponChanged, equippedGun.gameObject));
         }
     }
 }

@@ -102,8 +102,8 @@ GameObject:
   - component: {fileID: 3253308548580997221}
   - component: {fileID: 3176964072189215174}
   - component: {fileID: 6244490815072601007}
+  - component: {fileID: 8692904920287675312}
   - component: {fileID: 402371923989164298}
-  - component: {fileID: 2572865404244174714}
   m_Layer: 11
   m_Name: Prefab_SUV
   m_TagString: Untagged
@@ -245,6 +245,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 844259c96bf823a4baadc1e0287f5e95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8692904920287675312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261278061893848929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7c8ab7550987134cbc1a4ef1870a806, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  driver: {fileID: 0}
 --- !u!54 &402371923989164298
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -272,18 +285,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2572865404244174714
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 261278061893848929}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f157a2c798354fc09f7729a27b9bf1e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &734684022703294102
 GameObject:
   m_ObjectHideFlags: 0

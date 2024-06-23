@@ -65,7 +65,7 @@ namespace Gun
             currentMagAmmo = ammo;
 
             // Broadcast event
-            subjectComponent.NotifyObservers(new MCEvent(EventType.AmmoChanged));
+            subjectComponent.NotifyObservers(new MCEventWInt(EventType.AmmoChanged, currentMagAmmo));
         }
 
         public void SetIsTriggerDown(bool status)

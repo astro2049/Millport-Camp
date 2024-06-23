@@ -1,23 +1,27 @@
 using Observer;
+using UnityEngine;
+using EventType = Observer.EventType;
 
 namespace Vehicle
 {
     public class VehicleInteractableComponent : InteractableComponent
     {
-        private SubjectComponent subjectComponent;
+        private VehicleStateComponent vehicleStateComponent;
 
-        // Start is called before the first frame update
-        private void Start()
+        private void Awake()
         {
-            subjectComponent = GetComponent<SubjectComponent>();
+            vehicleStateComponent = GetComponent<VehicleStateComponent>();
         }
 
-        public override void Interact()
+        // Player enters vehicle here
+        public override void Interact(GameObject initiator)
         {
+            // Set player as driver
+            vehicleStateComponent.driver = initiator;
             // Broadcast events
-            subjectComponent.NotifyObservers(new MCEvent(EventType.EnteredVehicle));
+            initiator.GetComponent<SubjectComponent>().NotifyObservers(new MCEventWEntity(EventType.EnteredVehicle, gameObject));
             // Because OnTriggerExit() won't trigger this time
-            subjectComponent.NotifyObservers(new MCEvent(EventType.InteractionEnded));
+            initiator.GetComponent<SubjectComponent>().NotifyObservers(new MCEvent(EventType.InteractionEnded));
         }
     }
 }

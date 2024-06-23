@@ -4,6 +4,7 @@ using System.Linq;
 using AI.Turret.States;
 using Observer;
 using UnityEngine;
+using EventType = Observer.EventType;
 
 namespace AI.Turret
 {
@@ -40,9 +41,10 @@ namespace AI.Turret
                 target = enemy;
             }
 
-            // Add enemy to targets list (set), and subscribe to its events
+            // Add enemy to targets list (set),
+            // and subscribe to its event: PawnDead
             targets.Add(enemy);
-            enemy.GetComponent<SubjectComponent>().AddObserver(turretObserverComponent);
+            enemy.GetComponent<SubjectComponent>().AddObserver(turretObserverComponent, EventType.PawnDead);
 
             // Possible transition: Idle -> Track
             if (baseFsm.current.name == "Idle") {
