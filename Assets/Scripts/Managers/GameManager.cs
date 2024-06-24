@@ -95,8 +95,10 @@ namespace Managers
             playerCamera.Priority = 10;
             vehicleCamera.Priority = 20;
 
-            // Attach player to vehicle
+            // Set player's rigidbody to kinematic, and attach the player to vehicle
+            player.GetComponent<Rigidbody>().isKinematic = true;
             player.transform.parent = vehicle.transform;
+
             // Turn off player's rendering and collision
             player.GetComponent<MeshRenderer>().enabled = false;
             player.GetComponent<CapsuleCollider>().enabled = false;
@@ -112,11 +114,14 @@ namespace Managers
             playerCamera.Priority = 20;
             vehicleCamera.Priority = 10;
 
-            // Detach player from vehicle
+            // Detach player from vehicle, and set its rigidbody back to dynamic
             player.transform.parent = null;
+            player.GetComponent<Rigidbody>().isKinematic = false;
+
             // Turn on player's rendering and collision
             player.GetComponent<MeshRenderer>().enabled = true;
             player.GetComponent<CapsuleCollider>().enabled = true;
+            player.GetComponent<Rigidbody>().isKinematic = false;
         }
     }
 }

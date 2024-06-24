@@ -24,7 +24,9 @@ namespace Player
         /*
          * Private fields
          */
+        private Rigidbody rb;
         private Vector2 moveInput;
+        private Vector3 velocity;
         private Vector2 lookInput;
 
         /*
@@ -38,6 +40,9 @@ namespace Player
 
         private void Awake()
         {
+            rb = GetComponent<Rigidbody>();
+
+            // Get action maps
             movementActions = inputActionAsset.FindActionMap("Player Movement");
             combatActions = inputActionAsset.FindActionMap("Player Combat Mode");
             buildActions = inputActionAsset.FindActionMap("Player Build Mode");
@@ -95,8 +100,7 @@ namespace Player
             playerStateComponent = GetComponent<PlayerStateComponent>();
         }
 
-        // Update is called once per frame
-        private void Update()
+        private void FixedUpdate()
         {
             Move();
         }
@@ -104,15 +108,22 @@ namespace Player
         private void OnMove(InputAction.CallbackContext context)
         {
             moveInput = context.ReadValue<Vector2>();
+            Vector3 moveDirection = (moveInput.y * cameraForward + moveInput.x * cameraRight).normalized;
+            velocity = moveDirection * moveSpeed;
         }
 
+        /*
+         * Note:
+         * We're setting rigidbody's velocity in Move() every physics frame instead of in OnMove(), because it is necessary:
+         * - Although rigidbody's drag is 0, we've turned on Use Gravity
+         * - And, colliders have a default friction coefficient of 0.6 (see https://docs.unity3d.com/Manual/collider-surface-friction.html)
+         * Because of this, the gravity will enforce friction between player and terrain, causing drag.
+         * So, if we don't do this, and just assign rigidbody's velocity in OnMove(), the player will move a short distance and quickly stop after a keypress(es), like we're applying impulses.
+         * On the other hand, assigning rigidbody's velocity in FixedUpdate() guarantees a constant move speed.
+         */
         private void Move()
         {
-            if (moveInput == Vector2.zero) {
-                return;
-            }
-            Vector3 moveDirection = (moveInput.y * cameraForward + moveInput.x * cameraRight).normalized;
-            transform.Translate(moveDirection * (moveSpeed * Time.deltaTime), Space.World);
+            rb.velocity = velocity;
         }
 
         // Look at where the mouse is, horizontally
