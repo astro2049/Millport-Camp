@@ -26,8 +26,18 @@ namespace Managers
             // Subscribe UI manager to player events:
             // - WeaponChanged, IsReloading, InteractionStarted, InteractionEnded
             SubjectComponent entitySubject = player.GetComponent<SubjectComponent>();
-            entitySubject.AddObserver(this, EventType.WeaponChanged, EventType.EnteredVehicle, EventType.ExitedVehicle);
-            entitySubject.AddObserver(uiManager, EventType.WeaponChanged, EventType.IsReloading, EventType.InteractionStarted, EventType.InteractionEnded);
+            entitySubject.AddObserver(this,
+                EventType.WeaponChanged,
+                EventType.EnteredVehicle,
+                EventType.ExitedVehicle);
+            entitySubject.AddObserver(uiManager,
+                EventType.WeaponChanged,
+                EventType.IsReloading,
+                EventType.InteractionStarted,
+                EventType.InteractionEnded,
+                EventType.EnteredBuildMode,
+                EventType.ExitedBuildMode
+            );
         }
 
         // Start is called before the first frame update
@@ -49,6 +59,7 @@ namespace Managers
         }
 
         // Handle events
+        // Player events, subscribed in Awake()
         public bool OnNotify(MCEvent mcEvent)
         {
             switch (mcEvent.type) {
@@ -57,7 +68,10 @@ namespace Managers
                     // TODO: And we also need to unsubscribe from previous weapon
                     // Do the favor of helping UI Manager to subscribe to (equipped) gun events:
                     // - AmmoChanged, MagEmpty
-                    (mcEvent as MCEventWEntity)!.entity.GetComponent<SubjectComponent>().AddObserver(uiManager, EventType.AmmoChanged, EventType.MagEmpty);
+                    (mcEvent as MCEventWEntity)!.entity.GetComponent<SubjectComponent>().AddObserver(uiManager,
+                        EventType.AmmoChanged,
+                        EventType.MagEmpty
+                    );
                     break;
                 // Vehicle
                 case EventType.EnteredVehicle:

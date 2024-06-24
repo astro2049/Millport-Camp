@@ -1,7 +1,5 @@
-using Observer;
 using Player;
 using UnityEngine;
-using EventType = Observer.EventType;
 
 public class InteractableColliderComponent : MonoBehaviour
 {
@@ -15,21 +13,14 @@ public class InteractableColliderComponent : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        GameObject player = other.gameObject;
-        // Set player's current interactable to parent
-        player.GetComponent<PlayerStateComponent>().currentInteractable = parent.GetComponent<InteractableComponent>();
-
-        // Broadcast event
-        player.GetComponent<SubjectComponent>().NotifyObservers(new MCEvent(EventType.InteractionStarted));
+        // Call player's OnInteractionStarted()
+        other.gameObject.GetComponent<PlayerStateComponent>().OnInteractionStarted(parent.GetComponent<InteractableComponent>());
     }
 
     private void OnTriggerExit(Collider other)
     {
-        GameObject player = other.gameObject;
-        // Clear player's current interactable
-        player.GetComponent<PlayerStateComponent>().currentInteractable = null;
-
-        // Broadcast event
-        player.GetComponent<SubjectComponent>().NotifyObservers(new MCEvent(EventType.InteractionEnded));
+        // Call player's OnInteractionEnded()
+        // TODO: Caveat - Probably won't do very well with multiple interactables activated. Possible redesign.
+        other.gameObject.GetComponent<PlayerStateComponent>().OnInteractionEnded();
     }
 }

@@ -32,7 +32,7 @@ namespace Player
          */
         private InputActionMap movementActions;
         private InputActionMap combatActions;
-        private InputActionMap buildingActions;
+        private InputActionMap buildActions;
         private Vector3 cameraForward, cameraRight;
         private PlayerStateComponent playerStateComponent;
 
@@ -40,7 +40,7 @@ namespace Player
         {
             movementActions = inputActionAsset.FindActionMap("Player Movement");
             combatActions = inputActionAsset.FindActionMap("Player Combat Mode");
-            buildingActions = inputActionAsset.FindActionMap("Player Build Mode");
+            buildActions = inputActionAsset.FindActionMap("Player Build Mode");
 
             // Bind input functions
             // Move
@@ -49,7 +49,7 @@ namespace Player
             // Look
             movementActions.FindAction("Look").performed += OnLook;
             // Toggle build mode
-            movementActions.FindAction("Toggle Build Mode").performed += ToggleBuildingMode;
+            movementActions.FindAction("Toggle Build Mode").performed += ToggleBuildMode;
             // Interact
             combatActions.FindAction("Interact").performed += OnInteract;
             // Reload
@@ -58,23 +58,23 @@ namespace Player
             combatActions.FindAction("Attack").performed += OnStartAttack;
             combatActions.FindAction("Attack").canceled += OnStopAttack;
             // Place
-            buildingActions.FindAction("Place").performed += PlaceTurret;
+            buildActions.FindAction("Place").performed += PlaceTurret;
             // Rotate structure
-            buildingActions.FindAction("Rotate").performed += RotateTurret;
+            buildActions.FindAction("Rotate").performed += RotateTurret;
         }
 
         private void OnEnable()
         {
             movementActions.Enable();
             combatActions.Enable();
-            buildingActions.Disable();
+            buildActions.Disable();
         }
 
         private void OnDisable()
         {
             movementActions.Disable();
             combatActions.Disable();
-            buildingActions.Disable();
+            buildActions.Disable();
         }
 
         // Start is called before the first frame update
@@ -177,27 +177,32 @@ namespace Player
             playerStateComponent.isReloading = false;
         }
 
-        private void ToggleBuildingMode(InputAction.CallbackContext context)
+        private void ToggleBuildMode(InputAction.CallbackContext context)
         {
             if (!playerStateComponent.isInBuildMode) {
                 /*
                  * Currently in combat mode
-                 * Enter building mode
+                 * Enter build mode
                  */
                 playerStateComponent.isInBuildMode = true;
+                // Tell UI manager about the event
+                GetComponent<SubjectComponent>().NotifyObservers(new MCEvent(EventType.EnteredBuildMode));
                 // Instantiate a new turret
                 turretToPlace = Instantiate(turretPrefab);
+                turretToPlace.GetComponent<BuildableComponent>().EnterBuildMode();
                 // Register structure follow function
                 movementActions.FindAction("Look").performed += StructureOnCursor;
 
                 // Switch action maps
                 combatActions.Disable();
-                buildingActions.Enable();
+                buildActions.Enable();
             } else {
                 /*
                  * Return to combat mode
                  */
                 playerStateComponent.isInBuildMode = false;
+                // Tell UI manager about the event
+                GetComponent<SubjectComponent>().NotifyObservers(new MCEvent(EventType.ExitedBuildMode));
                 // Destroy unplaced turret
                 Destroy(turretToPlace);
                 // Un-register structure follow function
@@ -205,7 +210,7 @@ namespace Player
 
                 // Switch action maps
                 combatActions.Enable();
-                buildingActions.Disable();
+                buildActions.Disable();
             }
         }
 
@@ -216,7 +221,9 @@ namespace Player
 
         private void PlaceTurret(InputAction.CallbackContext context)
         {
+            turretToPlace.GetComponent<BuildableComponent>().Place();
             turretToPlace = Instantiate(turretPrefab, new Vector3(0, -10, 0), Quaternion.identity);
+            turretToPlace.GetComponent<BuildableComponent>().EnterBuildMode();
         }
 
         private void RotateTurret(InputAction.CallbackContext context)

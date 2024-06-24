@@ -29,5 +29,27 @@ namespace Player
             // Broadcast event
             subjectComponent.NotifyObservers(new MCEventWEntity(EventType.WeaponChanged, equippedGun.gameObject));
         }
+
+        public void OnInteractionStarted(InteractableComponent interactableComponent)
+        {
+            if (isInBuildMode) {
+                return;
+            }
+            // Set current interactable
+            currentInteractable = interactableComponent;
+            // Tell UI manager about the event
+            subjectComponent.NotifyObservers(new MCEvent(EventType.InteractionStarted));
+        }
+
+        public void OnInteractionEnded()
+        {
+            if (isInBuildMode) {
+                return;
+            }
+            // Clear current interactable
+            currentInteractable = null;
+            // Tell UI manager about the event
+            subjectComponent.NotifyObservers(new MCEvent(EventType.InteractionEnded));
+        }
     }
 }

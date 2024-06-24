@@ -13,13 +13,15 @@ namespace Observer
         InteractionEnded = 4,
         EnteredVehicle = 5,
         ExitedVehicle = 6,
+        EnteredBuildMode = 7,
+        ExitedBuildMode = 8,
 
         // Pawn (Player, Zombie, Combat Robot)
-        PawnDead = 7,
+        PawnDead = 9,
 
         // Gun
-        AmmoChanged = 8,
-        MagEmpty = 9,
+        AmmoChanged = 10,
+        MagEmpty = 11
     }
 
     public class MCEvent
