@@ -141,6 +141,12 @@ MonoBehaviour:
   followCamera: {fileID: 0}
   lookPoint: {x: 0, y: 0, z: 0}
   turretPrefab: {fileID: 1665573947308029565, guid: bd2b48b6b8b6789449a226f02452d3e4, type: 3}
+  lookAtCombatModeLayers:
+    serializedVersion: 2
+    m_Bits: 3392
+  lookAtBuildModeLayers:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &8168393529080742279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,7 +248,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112

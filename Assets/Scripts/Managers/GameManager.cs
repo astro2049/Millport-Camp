@@ -24,19 +24,20 @@ namespace Managers
             // Subscribe to player events:
             // - WeaponChanged, EnteredVehicle, ExitedVehicle
             // Subscribe UI manager to player events:
-            // - WeaponChanged, IsReloading, InteractionStarted, InteractionEnded
-            SubjectComponent entitySubject = player.GetComponent<SubjectComponent>();
-            entitySubject.AddObserver(this,
+            // - WeaponChanged, IsReloading, InteractionStarted, InteractionEnded, PlacingStructure
+            SubjectComponent playerSubject = player.GetComponent<SubjectComponent>();
+            playerSubject.AddObserver(this,
                 EventType.WeaponChanged,
                 EventType.EnteredVehicle,
                 EventType.ExitedVehicle);
-            entitySubject.AddObserver(uiManager,
+            playerSubject.AddObserver(uiManager,
                 EventType.WeaponChanged,
                 EventType.IsReloading,
                 EventType.InteractionStarted,
                 EventType.InteractionEnded,
                 EventType.EnteredBuildMode,
-                EventType.ExitedBuildMode
+                EventType.ExitedBuildMode,
+                EventType.PlacingStructure
             );
         }
 

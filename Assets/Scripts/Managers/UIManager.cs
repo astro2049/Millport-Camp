@@ -2,7 +2,6 @@ using Gun;
 using Observer;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using EventType = Observer.EventType;
 
 namespace Managers
@@ -12,20 +11,9 @@ namespace Managers
         [SerializeField] private Canvas combatModeCanvas, buildModeCanvas;
         [SerializeField] private GameObject interactPrompt;
         [SerializeField] private GameObject reloadPrompt;
-        [SerializeField] private TextMeshProUGUI equippedGunNameText;
         [SerializeField] private TextMeshProUGUI magAmmoText;
-
-        // Start is called before the first frame update
-        private void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
-
-        }
+        [SerializeField] private TextMeshProUGUI equippedGunNameText;
+        [SerializeField] private GameObject overlappingObjectsText;
 
         // Handle events
         // Player events are subscribed in GameManager.Awake(), and
@@ -35,7 +23,9 @@ namespace Managers
             switch (mcEvent.type) {
                 // Player
                 case EventType.WeaponChanged:
-                    equippedGunNameText.text = (mcEvent as MCEventWEntity)!.entity.GetComponent<GunStateComponent>().gunData.gunName;
+                    GunStateComponent gun = (mcEvent as MCEventWEntity)!.entity.GetComponent<GunStateComponent>();
+                    equippedGunNameText.text = gun.gunData.gunName;
+                    magAmmoText.text = gun.currentMagAmmo.ToString();
                     break;
                 case EventType.IsReloading:
                     reloadPrompt.SetActive(false);
@@ -50,6 +40,12 @@ namespace Managers
                     combatModeCanvas.enabled = false;
                     buildModeCanvas.enabled = true;
                     break;
+                case EventType.PlacingStructure:
+                    (mcEvent as MCEventWEntity)!.entity.GetComponent<SubjectComponent>().AddObserver(this,
+                        EventType.CanPlace,
+                        EventType.CannotPlace
+                    );
+                    break;
                 case EventType.ExitedBuildMode:
                     combatModeCanvas.enabled = true;
                     buildModeCanvas.enabled = false;
@@ -60,6 +56,13 @@ namespace Managers
                     break;
                 case EventType.MagEmpty:
                     reloadPrompt.SetActive(true);
+                    break;
+                // Structures
+                case EventType.CanPlace:
+                    overlappingObjectsText.SetActive(false);
+                    break;
+                case EventType.CannotPlace:
+                    overlappingObjectsText.SetActive(true);
                     break;
             }
             return true;

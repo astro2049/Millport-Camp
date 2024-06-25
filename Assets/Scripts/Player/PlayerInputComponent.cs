@@ -20,11 +20,14 @@ namespace Player
         // Build Mode
         public GameObject turretPrefab;
         private GameObject turretToPlace;
+        // Mouse Look at - Layer Masks
+        public LayerMask lookAtCombatModeLayers;
+        public LayerMask lookAtBuildModeLayers;
+        private LayerMask lookAtCurrentLayers;
 
         /*
          * Private fields
          */
-        private Rigidbody rb;
         private Vector2 moveInput;
         private Vector3 velocity;
         private Vector2 lookInput;
@@ -36,11 +39,13 @@ namespace Player
         private InputActionMap combatActions;
         private InputActionMap buildActions;
         private Vector3 cameraForward, cameraRight;
+        private Rigidbody rb;
         private PlayerStateComponent playerStateComponent;
+        private SubjectComponent subjectComponent;
 
         private void Awake()
         {
-            rb = GetComponent<Rigidbody>();
+            lookAtCurrentLayers = lookAtCombatModeLayers;
 
             // Get action maps
             movementActions = inputActionAsset.FindActionMap("Player Movement");
@@ -66,6 +71,23 @@ namespace Player
             buildActions.FindAction("Place").performed += PlaceTurret;
             // Rotate structure
             buildActions.FindAction("Rotate").performed += RotateTurret;
+
+            /*
+             * Precalculate camera forward and right vectors
+             */
+            cameraForward = followCamera.transform.forward;
+            cameraRight = followCamera.transform.right;
+            // Zero out the y components to stay on the same plane
+            cameraForward.y = 0f;
+            cameraRight.y = 0f;
+            // Normalize the vectors
+            cameraForward.Normalize();
+            cameraRight.Normalize();
+
+            rb = GetComponent<Rigidbody>();
+            // Components
+            playerStateComponent = GetComponent<PlayerStateComponent>();
+            subjectComponent = GetComponent<SubjectComponent>();
         }
 
         private void OnEnable()
@@ -80,24 +102,6 @@ namespace Player
             movementActions.Disable();
             combatActions.Disable();
             buildActions.Disable();
-        }
-
-        // Start is called before the first frame update
-        private void Start()
-        {
-            /*
-             * Precalculate camera forward and right vectors
-             */
-            cameraForward = followCamera.transform.forward;
-            cameraRight = followCamera.transform.right;
-            // Zero out the y components to stay on the same plane
-            cameraForward.y = 0f;
-            cameraRight.y = 0f;
-            // Normalize the vectors
-            cameraForward.Normalize();
-            cameraRight.Normalize();
-
-            playerStateComponent = GetComponent<PlayerStateComponent>();
         }
 
         private void FixedUpdate()
@@ -136,7 +140,7 @@ namespace Player
              * Available at: https://www.youtube.com/watch?v=0jTPKz3ga4w (Accessed 30 May 2024).
              */
             Ray ray = followCamera.ScreenPointToRay(lookInput);
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Terrain", "Obstacle", "NPC", "Vehicle"))) {
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, lookAtCurrentLayers)) {
                 // Debug: DrawLine - Green if hit NPC, otherwise red
                 Debug.DrawLine(followCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()), hit.point, hit.collider.gameObject.layer == LayerMask.NameToLayer("NPC") ? Color.green : Color.red);
                 lookPoint = hit.point;
@@ -177,7 +181,7 @@ namespace Player
             }
             playerStateComponent.isReloading = true;
             // Broadcast event
-            GetComponent<SubjectComponent>().NotifyObservers(new MCEvent(EventType.IsReloading));
+            subjectComponent.NotifyObservers(new MCEvent(EventType.IsReloading));
             StartCoroutine(WaitForReloadTime(playerStateComponent.equippedGun.gunData.reloadTime));
         }
 
@@ -197,10 +201,11 @@ namespace Player
                  */
                 playerStateComponent.isInBuildMode = true;
                 // Tell UI manager about the event
-                GetComponent<SubjectComponent>().NotifyObservers(new MCEvent(EventType.EnteredBuildMode));
+                subjectComponent.NotifyObservers(new MCEvent(EventType.EnteredBuildMode));
+                // Switch mouse look at layers
+                lookAtCurrentLayers = lookAtBuildModeLayers;
                 // Instantiate a new turret
-                turretToPlace = Instantiate(turretPrefab);
-                turretToPlace.GetComponent<BuildableComponent>().EnterBuildMode();
+                CreateTurret();
                 // Register structure follow function
                 movementActions.FindAction("Look").performed += StructureOnCursor;
 
@@ -213,7 +218,9 @@ namespace Player
                  */
                 playerStateComponent.isInBuildMode = false;
                 // Tell UI manager about the event
-                GetComponent<SubjectComponent>().NotifyObservers(new MCEvent(EventType.ExitedBuildMode));
+                subjectComponent.NotifyObservers(new MCEvent(EventType.ExitedBuildMode));
+                // Switch mouse look at layers
+                lookAtCurrentLayers = lookAtCombatModeLayers;
                 // Destroy unplaced turret
                 Destroy(turretToPlace);
                 // Un-register structure follow function
@@ -230,11 +237,22 @@ namespace Player
             turretToPlace.transform.position = lookPoint;
         }
 
+        private void CreateTurret()
+        {
+            turretToPlace = Instantiate(turretPrefab);
+            turretToPlace.GetComponent<BuildableComponent>().EnterBuildMode();
+            // Tell UI manager about the turret
+            subjectComponent.NotifyObservers(new MCEventWEntity(EventType.PlacingStructure, turretToPlace));
+        }
+
         private void PlaceTurret(InputAction.CallbackContext context)
         {
-            turretToPlace.GetComponent<BuildableComponent>().Place();
-            turretToPlace = Instantiate(turretPrefab, new Vector3(0, -10, 0), Quaternion.identity);
-            turretToPlace.GetComponent<BuildableComponent>().EnterBuildMode();
+            BuildableComponent buildableComponent = turretToPlace.GetComponent<BuildableComponent>();
+            if (buildableComponent.isOkToPlace) {
+                buildableComponent.Place();
+                // Instantiate a new turret
+                CreateTurret();
+            }
         }
 
         private void RotateTurret(InputAction.CallbackContext context)

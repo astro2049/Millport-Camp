@@ -32,9 +32,6 @@ namespace Player
 
         public void OnInteractionStarted(InteractableComponent interactableComponent)
         {
-            if (isInBuildMode) {
-                return;
-            }
             // Set current interactable
             currentInteractable = interactableComponent;
             // Tell UI manager about the event
@@ -43,9 +40,6 @@ namespace Player
 
         public void OnInteractionEnded()
         {
-            if (isInBuildMode) {
-                return;
-            }
             // Clear current interactable
             currentInteractable = null;
             // Tell UI manager about the event

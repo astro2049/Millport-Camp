@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4122488242861203387}
   - component: {fileID: 379452273965386575}
   - component: {fileID: 3765138068621865438}
+  - component: {fileID: 7120647612540745660}
   m_Layer: 0
   m_Name: Prefab_Turret
   m_TagString: Untagged
@@ -108,7 +109,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e395ff7eeaf4564b0b7d076e05eb505, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildModeMaterial: {fileID: 2100000, guid: 9bde8e5b788042747b8d290317ab6220, type: 2}
+  placeholderMaterial: {fileID: 2100000, guid: 9bde8e5b788042747b8d290317ab6220, type: 2}
+  invalidPositionMaterial: {fileID: 2100000, guid: da0740ed61163bf4ba86083fe387e446, type: 2}
+  bodyCollider: {fileID: 2347186398901496915}
+  isOkToPlace: 1
+--- !u!114 &7120647612540745660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1665573947308029565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f157a2c798354fc09f7729a27b9bf1e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1823418047816434695
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,6 +508,7 @@ GameObject:
   - component: {fileID: 5709493303042748481}
   - component: {fileID: 6698714056229893757}
   - component: {fileID: 2347186398901496915}
+  - component: {fileID: 6688844107020782232}
   m_Layer: 10
   m_Name: Body
   m_TagString: Untagged
@@ -587,6 +604,33 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!54 &6688844107020782232
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7653280128390621663}
+  serializedVersion: 4
+  m_Mass: 20
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &7076917372778633919
 PrefabInstance:
   m_ObjectHideFlags: 0
