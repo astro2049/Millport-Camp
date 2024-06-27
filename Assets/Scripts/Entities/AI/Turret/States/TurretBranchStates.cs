@@ -11,6 +11,12 @@
             subStates.Add(fireState.name, fireState);
             current = subStates["Idle"];
         }
+
+        protected override void Exit()
+        {
+            // Upon leaving trigger state (to reload), release trigger
+            ChangeState("Idle");
+        }
     }
 
     public class TurretGunHfsm : HFSMState<TurretStateComponent>

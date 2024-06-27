@@ -64,8 +64,12 @@ namespace Entities.Gun
         {
             currentMagAmmo = ammo;
 
-            // Broadcast event
+            // Broadcast event(s)
             subjectComponent.NotifyObservers(new MCEventWInt(EventType.AmmoChanged, currentMagAmmo));
+            if (ammo == 0) {
+                // Magazine is empty
+                subjectComponent.NotifyObservers(new MCEvent(EventType.MagEmpty));
+            }
         }
 
         public void SetIsTriggerDown(bool status)
@@ -101,9 +105,6 @@ namespace Entities.Gun
             if (currentMagAmmo != 0) {
                 Fire();
             } else {
-                // Mag is empty
-                // Broadcast event
-                subjectComponent.NotifyObservers(new MCEvent(EventType.MagEmpty));
                 // Mag empty SFX
                 AudioManager.GetAudioSource().PlayOneShot(magEmptySound, 0.5f);
             }

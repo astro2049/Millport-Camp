@@ -1,4 +1,5 @@
 ﻿using Abilities.Observer;
+using EventType = Abilities.Observer.EventType;
 
 namespace Entities.AI.Turret
 {

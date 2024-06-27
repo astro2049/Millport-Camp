@@ -75,6 +75,5 @@ namespace Entities.AI.Turret.States
             Quaternion targetRotation = Quaternion.LookRotation(owner.target.transform.position - owner.baseTransform.position);
             owner.baseTransform.rotation = Quaternion.RotateTowards(owner.baseTransform.rotation, targetRotation, owner.turnSpeed * Time.deltaTime);
         }
-
     }
 }
