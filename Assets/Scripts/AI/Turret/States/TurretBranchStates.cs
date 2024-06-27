@@ -1,40 +1,42 @@
 ﻿using AI.HFSM;
-using UnityEngine;
 
 namespace AI.Turret.States
 {
-    public class TurretTriggerFsm : HFSMBranchState
+    public class TurretTriggerFsm : HFSMState<TurretStateComponent>
     {
-        public TurretTriggerFsm(GameObject owner, string name, HFSMBranchState parentState) : base(owner, name, parentState)
+        public TurretTriggerFsm(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState)
+            : base(owner, type, name, parentState)
         {
-            TurretTriggerIdleState idleState = new TurretTriggerIdleState(owner, "Idle", this);
-            TurretFireState fireState = new TurretFireState(owner, "Fire", this);
+            TurretTriggerIdleState idleState = new TurretTriggerIdleState(owner, HFSMStateType.Leaf, "Idle", this);
+            TurretFireState fireState = new TurretFireState(owner, HFSMStateType.Leaf, "Fire", this);
             subStates.Add(idleState.name, idleState);
             subStates.Add(fireState.name, fireState);
             current = subStates["Idle"];
         }
     }
 
-    public class TurretGunHfsm : HFSMBranchState
+    public class TurretGunHfsm : HFSMState<TurretStateComponent>
     {
         public readonly TurretTriggerFsm triggerFsm;
-        
-        public TurretGunHfsm(GameObject owner, string name, HFSMBranchState parentState) : base(owner, name, parentState)
+
+        public TurretGunHfsm(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState)
+            : base(owner, type, name, parentState)
         {
-            triggerFsm = new TurretTriggerFsm(owner, "Trigger", this);
-            TurretReloadState reloadState = new TurretReloadState(owner, "Reload", this);
+            triggerFsm = new TurretTriggerFsm(owner, HFSMStateType.Branch, "Trigger", this);
+            TurretReloadState reloadState = new TurretReloadState(owner, HFSMStateType.Leaf, "Reload", this);
             subStates.Add(triggerFsm.name, triggerFsm);
             subStates.Add(reloadState.name, reloadState);
             current = subStates["Trigger"];
         }
     }
 
-    public class TurretBaseFsm : HFSMBranchState
+    public class TurretBaseFsm : HFSMState<TurretStateComponent>
     {
-        public TurretBaseFsm(GameObject owner, string name, HFSMBranchState parentState) : base(owner, name, parentState)
+        public TurretBaseFsm(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState)
+            : base(owner, type, name, parentState)
         {
-            TurretBaseIdleState idleState = new TurretBaseIdleState(owner, "Idle", this);
-            TurretTrackState trackState = new TurretTrackState(owner, "Track", this);
+            TurretBaseIdleState idleState = new TurretBaseIdleState(owner, HFSMStateType.Leaf, "Idle", this);
+            TurretTrackState trackState = new TurretTrackState(owner, HFSMStateType.Leaf, "Track", this);
             subStates.Add(idleState.name, idleState);
             subStates.Add(trackState.name, trackState);
             current = subStates["Idle"];

@@ -136,7 +136,7 @@ namespace Player
             lookInput = context.ReadValue<Vector2>();
             /*
              * Get mouse position in the 3D world, referenced:
-             * Code Monkey (2021) 'How to get Mouse Position in 3D and 2D! (Unity Tutorial)', Youtube, 23 March.
+             * Code Monkey (2021) 'How to get Mouse Position in 3D and 2D! (Unity Tutorial)', YouTube, 23 March.
              * Available at: https://www.youtube.com/watch?v=0jTPKz3ga4w (Accessed 30 May 2024).
              */
             Ray ray = followCamera.ScreenPointToRay(lookInput);

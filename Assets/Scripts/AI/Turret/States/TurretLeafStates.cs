@@ -7,66 +7,53 @@ namespace AI.Turret.States
      * Turret gun HFSM leaf/action states
      */
     // Idle
-    public class TurretTriggerIdleState : HFSMLeafState
+    public class TurretTriggerIdleState : HFSMState<TurretStateComponent>
     {
-        // TODO: There has to be a way to not assign this for every leaf state
-        private readonly TurretHFSMComponent turretHfsm;
+        public TurretTriggerIdleState(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState) : base(owner, type, name, parentState) { }
 
-        public TurretTriggerIdleState(GameObject owner, string name, HFSMBranchState parentState) : base(owner, name, parentState)
+        protected override void Execute(float deltaTime)
         {
-            turretHfsm = owner.GetComponent<TurretHFSMComponent>();
-        }
-
-        public override void Execute(float deltaTime)
-        {
-            if (turretHfsm.TargetIsAligned()) {
-                turretHfsm.gunHfsm.triggerFsm.ChangeState("Fire");
+            if (owner.TargetIsAligned()) {
+                parentState.ChangeState("Fire");
             }
         }
     }
 
     // Fire
     // TODO: Currently the turret only works with AUTO mode guns
-    public class TurretFireState : HFSMLeafState
+    public class TurretFireState : HFSMState<TurretStateComponent>
     {
-        private readonly TurretStateComponent turret;
-        private readonly TurretHFSMComponent turretHfsm;
+        public TurretFireState(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState) : base(owner, type, name, parentState) { }
 
-        public TurretFireState(GameObject owner, string name, HFSMBranchState parentState) : base(owner, name, parentState)
+        protected override void Enter()
         {
-            turret = owner.GetComponent<TurretStateComponent>();
-            turretHfsm = owner.GetComponent<TurretHFSMComponent>();
+            owner.TriggerDown();
         }
 
-        public override void Enter()
+        protected override void Execute(float deltaTime)
         {
-            turretHfsm.TriggerDown();
-        }
-
-        public override void Execute(float deltaTime)
-        {
-            if (!turretHfsm.TargetIsAligned()) {
-                turretHfsm.gunHfsm.triggerFsm.ChangeState("Idle");
+            if (!owner.TargetIsAligned()) {
+                parentState.ChangeState("Idle");
                 return;
             }
             // Set gun look point to target's chest center
-            turret.gun.lookPoint = turretHfsm.target.transform.position + new Vector3(0, 1, 0);
+            owner.gun.lookPoint = owner.target.transform.position + new Vector3(0, 1, 0);
         }
 
-        public override void Exit()
+        protected override void Exit()
         {
-            turretHfsm.TriggerUp();
+            owner.TriggerUp();
         }
     }
 
     // Reload
-    public class TurretReloadState : HFSMLeafState
+    public class TurretReloadState : HFSMState<TurretStateComponent>
     {
-        public TurretReloadState(GameObject owner, string name, HFSMBranchState parentState) : base(owner, name, parentState) { }
+        public TurretReloadState(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState) : base(owner, type, name, parentState) { }
 
-        public override void Enter()
+        protected override void Enter()
         {
-            owner.GetComponent<TurretHFSMComponent>().Reload();
+            owner.Reload();
         }
     }
 
@@ -74,27 +61,21 @@ namespace AI.Turret.States
      * Turret base FSM leaf/action states
      */
     // Idle
-    public class TurretBaseIdleState : HFSMLeafState
+    public class TurretBaseIdleState : HFSMState<TurretStateComponent>
     {
-        public TurretBaseIdleState(GameObject owner, string name, HFSMBranchState parentState) : base(owner, name, parentState) { }
+        public TurretBaseIdleState(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState) : base(owner, type, name, parentState) { }
     }
 
     // Track target
-    public class TurretTrackState : HFSMLeafState
+    public class TurretTrackState : HFSMState<TurretStateComponent>
     {
-        private readonly TurretStateComponent turret;
-        private readonly TurretHFSMComponent turretHfsm;
+        public TurretTrackState(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState) : base(owner, type, name, parentState) { }
 
-        public TurretTrackState(GameObject owner, string name, HFSMBranchState parentState) : base(owner, name, parentState)
+        protected override void Execute(float deltaTime)
         {
-            turret = owner.GetComponent<TurretStateComponent>();
-            turretHfsm = owner.GetComponent<TurretHFSMComponent>();
+            Quaternion targetRotation = Quaternion.LookRotation(owner.target.transform.position - owner.baseTransform.position);
+            owner.baseTransform.rotation = Quaternion.RotateTowards(owner.baseTransform.rotation, targetRotation, owner.turnSpeed * Time.deltaTime);
         }
 
-        public override void Execute(float deltaTime)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(turretHfsm.target.transform.position - turret.baseTransform.position);
-            turret.baseTransform.rotation = Quaternion.RotateTowards(turret.baseTransform.rotation, targetRotation, turret.turnSpeed * Time.deltaTime);
-        }
     }
 }
