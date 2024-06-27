@@ -1,7 +1,6 @@
-﻿using AI.HFSM;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace AI.Turret.States
+namespace Entities.AI.Turret.States
 {
     /*
      * Turret gun HFSM leaf/action states

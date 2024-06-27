@@ -1,6 +1,4 @@
-﻿using AI.HFSM;
-
-namespace AI.Turret.States
+﻿namespace Entities.AI.Turret.States
 {
     public class TurretTriggerFsm : HFSMState<TurretStateComponent>
     {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace AI.NPC.Zombie
+namespace Entities.AI.NPC.Zombie
 {
     public class ZombiePerceptionComponent : PerceptionComponent
     {

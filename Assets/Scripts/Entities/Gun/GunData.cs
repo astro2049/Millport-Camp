@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Gun
+namespace Entities.Gun
 {
     [CreateAssetMenu(fileName = "GunData", menuName = "ScriptableObjects/GunData", order = 1)]
     public class GunData : ScriptableObject

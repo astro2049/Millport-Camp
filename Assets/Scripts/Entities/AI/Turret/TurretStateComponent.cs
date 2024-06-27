@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Gun;
-using Observer;
+using Abilities.Observer;
+using Entities.Gun;
 using TMPro;
 using UnityEngine;
-using EventType = Observer.EventType;
+using EventType = Abilities.Observer.EventType;
 
-namespace AI.Turret
+namespace Entities.AI.Turret
 {
     public class TurretStateComponent : StateComponent
     {

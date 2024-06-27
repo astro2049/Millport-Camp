@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public abstract class InteractableComponent : MonoBehaviour
+namespace Abilities.Interactable
 {
-    public abstract void Interact(GameObject initiator);
+    public abstract class InteractableComponent : MonoBehaviour
+    {
+        public abstract void Interact(GameObject initiator);
+    }
 }

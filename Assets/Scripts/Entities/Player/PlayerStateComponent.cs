@@ -1,8 +1,9 @@
-using Gun;
-using Observer;
-using EventType = Observer.EventType;
+using Abilities.Interactable;
+using Abilities.Observer;
+using Entities.Gun;
+using EventType = Abilities.Observer.EventType;
 
-namespace Player
+namespace Entities.Player
 {
     public class PlayerStateComponent : StateComponent
     {

@@ -1,8 +1,7 @@
-﻿using AI.HFSM;
-using AI.Turret.States;
+﻿using Entities.AI.Turret.States;
 using UnityEngine;
 
-namespace AI.Turret
+namespace Entities.AI.Turret
 {
     public class TurretHFSMComponent : MonoBehaviour
     {

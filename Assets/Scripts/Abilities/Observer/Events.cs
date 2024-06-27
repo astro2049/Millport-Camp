@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Observer
+namespace Abilities.Observer
 {
     public enum EventType
     {

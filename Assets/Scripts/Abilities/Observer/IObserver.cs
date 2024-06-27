@@ -1,4 +1,4 @@
-namespace Observer
+namespace Abilities.Observer
 {
     public interface IObserver
     {

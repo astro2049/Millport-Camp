@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace AI.Turret
+namespace Entities.AI.Turret
 {
     public class TurretPerceptionComponent : PerceptionComponent
     {

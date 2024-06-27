@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Vehicle
+namespace Entities.Vehicle
 {
     public class VehicleStateComponent : MonoBehaviour
     {

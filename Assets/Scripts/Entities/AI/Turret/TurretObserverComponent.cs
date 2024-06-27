@@ -1,6 +1,6 @@
-﻿using Observer;
+﻿using Abilities.Observer;
 
-namespace AI.Turret
+namespace Entities.AI.Turret
 {
     public class TurretObserverComponent : ObserverComponent
     {

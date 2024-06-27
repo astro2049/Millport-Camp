@@ -1,8 +1,8 @@
-using Gun;
-using Observer;
+using Abilities.Observer;
+using Entities.Gun;
 using TMPro;
 using UnityEngine;
-using EventType = Observer.EventType;
+using EventType = Abilities.Observer.EventType;
 
 namespace Managers
 {

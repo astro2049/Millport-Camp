@@ -1,26 +1,29 @@
-using Player;
+using Entities.Player;
 using UnityEngine;
 
-public class InteractableColliderComponent : MonoBehaviour
+namespace Abilities.Interactable
 {
-    private Transform parent;
-
-    // Start is called before the first frame update
-    private void Start()
+    public class InteractableColliderComponent : MonoBehaviour
     {
-        parent = transform.parent;
-    }
+        private Transform parent;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        // Call player's OnInteractionStarted()
-        other.gameObject.GetComponent<PlayerStateComponent>().OnInteractionStarted(parent.GetComponent<InteractableComponent>());
-    }
+        // Start is called before the first frame update
+        private void Start()
+        {
+            parent = transform.parent;
+        }
 
-    private void OnTriggerExit(Collider other)
-    {
-        // Call player's OnInteractionEnded()
-        // TODO: Caveat - Probably won't do very well with multiple interactables activated. Possible redesign.
-        other.gameObject.GetComponent<PlayerStateComponent>().OnInteractionEnded();
+        private void OnTriggerEnter(Collider other)
+        {
+            // Call player's OnInteractionStarted()
+            other.gameObject.GetComponent<PlayerStateComponent>().OnInteractionStarted(parent.GetComponent<InteractableComponent>());
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            // Call player's OnInteractionEnded()
+            // TODO: Caveat - Probably won't do very well with multiple interactables activated. Possible redesign.
+            other.gameObject.GetComponent<PlayerStateComponent>().OnInteractionEnded();
+        }
     }
 }

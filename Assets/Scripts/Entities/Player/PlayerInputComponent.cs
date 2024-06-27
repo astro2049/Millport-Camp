@@ -1,12 +1,14 @@
 using System.Collections;
-using Observer;
+using Abilities.Buildable;
+using Abilities.Interactable;
+using Abilities.Observer;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using EventType = Observer.EventType;
+using EventType = Abilities.Observer.EventType;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
-namespace Player
+namespace Entities.Player
 {
     public class PlayerInputComponent : MonoBehaviour
     {

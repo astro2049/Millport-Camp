@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Observer
+namespace Abilities.Observer
 {
     public class SubjectComponent : MonoBehaviour
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Vehicle
+namespace Entities.Vehicle
 {
     /*
      * Vehicle Control, modified from:

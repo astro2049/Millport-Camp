@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public abstract class StateComponent : MonoBehaviour
+namespace Entities
 {
+    public abstract class StateComponent : MonoBehaviour
+    {
 
+    }
 }

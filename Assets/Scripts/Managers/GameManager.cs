@@ -1,10 +1,10 @@
+using Abilities.Observer;
 using Cinemachine;
-using Observer;
-using Player;
+using Entities.Player;
+using Entities.Vehicle;
 using Unity.AI.Navigation;
 using UnityEngine;
-using Vehicle;
-using EventType = Observer.EventType;
+using EventType = Abilities.Observer.EventType;
 
 namespace Managers
 {

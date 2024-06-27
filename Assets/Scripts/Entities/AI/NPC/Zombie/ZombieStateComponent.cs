@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AI.NPC.Zombie
+namespace Entities.AI.NPC.Zombie
 {
     public class ZombieStateComponent : StateComponent
     {

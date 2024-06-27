@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace AI.NPC
+namespace Entities.AI.NPC
 {
     public class NPCPawnComponent : PawnComponent
     {

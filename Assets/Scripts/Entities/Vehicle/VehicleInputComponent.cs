@@ -1,9 +1,9 @@
-using Observer;
+using Abilities.Observer;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using EventType = Observer.EventType;
+using EventType = Abilities.Observer.EventType;
 
-namespace Vehicle
+namespace Entities.Vehicle
 {
     public class VehicleInputComponent : MonoBehaviour
     {

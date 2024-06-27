@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace AI
+namespace Entities.AI
 {
     public abstract class PerceptionComponent : MonoBehaviour
     {

@@ -1,7 +1,7 @@
 using NPBehave;
 using UnityEngine;
 
-namespace AI.NPC
+namespace Entities.AI.NPC
 {
     public abstract class BtComponent : MonoBehaviour
     {

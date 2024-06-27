@@ -1,10 +1,11 @@
 using System.Collections;
+using Abilities.Health;
+using Abilities.Observer;
 using Managers;
-using Observer;
 using UnityEngine;
-using EventType = Observer.EventType;
+using EventType = Abilities.Observer.EventType;
 
-namespace Gun
+namespace Entities.Gun
 {
     public enum FireMode
     {
