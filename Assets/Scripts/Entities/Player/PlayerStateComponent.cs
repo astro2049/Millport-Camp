@@ -13,11 +13,13 @@ namespace Entities.Player
         public bool isReloading;
         public bool isInBuildMode = false;
 
+        private PlayerObserverComponent playerObserverComponent;
         private SubjectComponent subjectComponent;
 
         // Start is called before the first frame update
         private void Start()
         {
+            playerObserverComponent = GetComponent<PlayerObserverComponent>();
             subjectComponent = GetComponent<SubjectComponent>();
 
             EquipGun(primaryGun);
@@ -27,7 +29,11 @@ namespace Entities.Player
         {
             equippedGun = gun;
 
-            // Broadcast event
+            // Subscribe to equipped gun's events: Reloaded
+            equippedGun.GetComponent<SubjectComponent>().AddObserver(playerObserverComponent,
+                EventType.Reloaded
+            );
+            // Tell UI manager about the equipped gun
             subjectComponent.NotifyObservers(new MCEventWEntity(EventType.WeaponChanged, equippedGun.gameObject));
         }
 

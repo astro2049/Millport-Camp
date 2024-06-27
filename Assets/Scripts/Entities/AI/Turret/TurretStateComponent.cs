@@ -31,6 +31,9 @@ namespace Entities.AI.Turret
 
             turretHfsm = GetComponent<TurretHFSMComponent>();
             turretObserverComponent = GetComponent<TurretObserverComponent>();
+
+            // Subscribe to gun events: Reloaded
+            gun.GetComponent<SubjectComponent>().AddObserver(turretObserverComponent, EventType.Reloaded);
         }
 
         // HFSM Context
@@ -97,14 +100,7 @@ namespace Entities.AI.Turret
 
         public void Reload()
         {
-            StartCoroutine(WaitForReloadTime(gun.gunData.reloadTime));
-        }
-
-        private IEnumerator WaitForReloadTime(float reloadTime)
-        {
-            yield return new WaitForSeconds(reloadTime);
-            gun.Reload();
-            turretHfsm.gunHfsm.ChangeState("Trigger");
+            StartCoroutine(gun.StartReloading());
         }
     }
 }

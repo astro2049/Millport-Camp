@@ -60,6 +60,7 @@ MonoBehaviour:
   baseTransform: {fileID: 6438648072855754948}
   gun: {fileID: 7680547139637212936}
   ammoText: {fileID: 5846849647842283152}
+  target: {fileID: 0}
 --- !u!114 &4127214083572701800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,7 +85,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7907fa1b010e4882af9afb9b627676af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
 --- !u!114 &379452273965386575
 MonoBehaviour:
   m_ObjectHideFlags: 0

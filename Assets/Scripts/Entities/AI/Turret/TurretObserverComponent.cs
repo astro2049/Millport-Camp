@@ -24,15 +24,20 @@ namespace Entities.AI.Turret
         public override bool OnNotify(MCEvent mcEvent)
         {
             switch (mcEvent.type) {
+                // Pawn
+                case EventType.PawnDead:
+                    turretStateComponent.RemoveTarget((mcEvent as MCEventWEntity)!.entity);
+                    break;
+                // Gun
                 case EventType.AmmoChanged:
-                    int ammo = turretStateComponent.gun.currentMagAmmo;
+                    int ammo = turretStateComponent.gun.magAmmo;
                     turretStateComponent.ammoText.text = ammo.ToString();
                     break;
                 case EventType.MagEmpty:
                     turretHfsm.gunHfsm.ChangeState("Reload");
                     break;
-                case EventType.PawnDead:
-                    turretStateComponent.RemoveTarget((mcEvent as MCEventWEntity)!.entity);
+                case EventType.Reloaded:
+                    turretHfsm.gunHfsm.ChangeState("Trigger");
                     break;
             }
             return true;

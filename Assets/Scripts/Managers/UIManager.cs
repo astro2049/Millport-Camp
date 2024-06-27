@@ -25,7 +25,7 @@ namespace Managers
                 case EventType.WeaponChanged:
                     GunStateComponent gun = (mcEvent as MCEventWEntity)!.entity.GetComponent<GunStateComponent>();
                     equippedGunNameText.text = gun.gunData.gunName;
-                    magAmmoText.text = gun.currentMagAmmo.ToString();
+                    magAmmoText.text = gun.magAmmo.ToString();
                     break;
                 case EventType.IsReloading:
                     reloadPrompt.SetActive(false);

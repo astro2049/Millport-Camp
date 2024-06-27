@@ -16,17 +16,19 @@ namespace Entities.Gun
 
     public class GunStateComponent : MonoBehaviour
     {
-        /*
-         * Public fields
-         */
+        // Components
+        private SubjectComponent subjectComponent;
+
         // Stats
         public GunData gunData;
-        public int currentMagAmmo;
+        public int magAmmo;
         // Muzzle
         private Transform muzzleTransform;
         // Sounds
         public AudioClip fireSound;
-        public AudioClip reloadSound;
+        public AudioClip releaseMagSound;
+        public AudioClip chargingBoltSound;
+        private float chargingBoltSoundPlayTimestamp;
         public AudioClip magEmptySound;
         // Tracer
         public GameObject tracerPrefab;
@@ -34,24 +36,32 @@ namespace Entities.Gun
 
         public Vector3 lookPoint;
 
-        private SubjectComponent subjectComponent;
-
         /*
          * States
          */
         private bool isTriggerDown = false;
         private bool isBoltInPosition = true;
 
-        // Start is called before the first frame update
-        private void Start()
+        private void Awake()
         {
             subjectComponent = GetComponent<SubjectComponent>();
 
+            // Initialize appearance (mesh and material) according to gunData (scriptable object)
             Transform meshTransform = transform.Find("Mesh");
             meshTransform.GetComponent<MeshFilter>().mesh = gunData.mesh;
             meshTransform.GetComponent<MeshRenderer>().material = gunData.material;
+            // Initialize fields
             muzzleTransform = transform.Find("Muzzle").transform;
-            SetCurrentMagAmmo(gunData.magSize);
+            SetMagAmmo(gunData.magSize);
+
+            // Calculate when to play chargingBoltSound
+            chargingBoltSoundPlayTimestamp = gunData.reloadTime - chargingBoltSound.length;
+        }
+
+        // Start is called before the first frame update
+        private void Start()
+        {
+
         }
 
         // Update is called once per frame
@@ -60,70 +70,79 @@ namespace Entities.Gun
 
         }
 
-        private void SetCurrentMagAmmo(int ammo)
+        private void SetMagAmmo(int ammo)
         {
-            currentMagAmmo = ammo;
+            magAmmo = ammo;
 
-            // Broadcast event(s)
-            subjectComponent.NotifyObservers(new MCEventWInt(EventType.AmmoChanged, currentMagAmmo));
-            if (ammo == 0) {
-                // Magazine is empty
-                subjectComponent.NotifyObservers(new MCEvent(EventType.MagEmpty));
-            }
+            // Tell UI manager / turret that ammo count has changes
+            subjectComponent.NotifyObservers(new MCEventWInt(EventType.AmmoChanged, magAmmo));
         }
 
         public void SetIsTriggerDown(bool status)
         {
             isTriggerDown = status;
+            // If the trigger is down, we'll have to see if a shot will be triggered
             if (isTriggerDown) {
-                if (isBoltInPosition) {
-                    FiringPinStruck();
+                if (magAmmo > 0) {
+                    if (isBoltInPosition) {
+                        Fire();
+                    } else {
+                        // nothing happens, currently in cycle
+                    }
+                } else {
+                    // Mag empty SFX
+                    AudioManager.GetAudioSource().PlayOneShot(magEmptySound, 0.65f);
                 }
             }
         }
 
-        private void setIsBoltInPosition(bool status)
+        private void SetIsBoltInPosition(bool status)
         {
             isBoltInPosition = status;
             // A shot is fired
-            if (!isBoltInPosition) {
-                StartCoroutine(Cycle());
-            } else {
-                // After shot cycle is completed
-                // If on Auto, the trigger gets reset automatically after cycling,
+            if (isBoltInPosition) {
+                // If on Auto, after shot cycle is completed, the trigger gets reset automatically after cycling,
                 // so a next shot will be fired if trigger is held down 
                 if (gunData.fireMode == FireMode.Auto) {
                     if (isTriggerDown) {
-                        FiringPinStruck();
+                        Fire();
                     }
                 }
-            }
-        }
-
-        private void FiringPinStruck()
-        {
-            if (currentMagAmmo != 0) {
-                Fire();
             } else {
-                // Mag empty SFX
-                AudioManager.GetAudioSource().PlayOneShot(magEmptySound, 0.5f);
+                // Just fired a shot
+                // If there's still ammo, start cycle
+                // When cycle is complete, the bolt return to ready position
+                if (magAmmo > 0) {
+                    StartCoroutine(Cycle());
+                }
             }
         }
 
         private IEnumerator Cycle()
         {
             yield return new WaitForSeconds(gunData.fireInterval);
-            setIsBoltInPosition(true);
+            SetIsBoltInPosition(true);
         }
 
         // Shoot a raycast bullet horizontally towards lookPoint from muzzle location
         private void Fire()
         {
-            // Fire SFX
-            AudioManager.GetAudioSource().PlayOneShot(fireSound, 0.4f);
             // Minus 1 bullet
-            SetCurrentMagAmmo(currentMagAmmo - 1);
-            setIsBoltInPosition(false);
+            SetMagAmmo(magAmmo - 1);
+            // Bolt backing
+            SetIsBoltInPosition(false);
+
+            // SFX
+            if (magAmmo > 0) {
+                // Normal shot SFX
+                AudioManager.GetAudioSource().PlayOneShot(fireSound, 0.4f);
+            }
+            if (magAmmo == 0) {
+                // Mag empty SFX
+                AudioManager.GetAudioSource().PlayOneShot(magEmptySound, 0.65f);
+                // Additionally, tell UI manager / turret that mag is empty
+                subjectComponent.NotifyObservers(new MCEvent(EventType.MagEmpty));
+            }
 
             Vector3 muzzlePosition = muzzleTransform.position;
             // Align muzzle to lookPoint (on horizontal plane)
@@ -166,10 +185,33 @@ namespace Entities.Gun
             Destroy(tracerTrail.gameObject);
         }
 
-        public void Reload()
+        // In other approaches, playing audios might be handled within the animation. But in this project, it's handled here.
+        // TODO: At the moment, this is uninterruptible
+        public IEnumerator StartReloading()
         {
-            AudioManager.GetAudioSource().PlayOneShot(reloadSound, 0.5f);
-            SetCurrentMagAmmo(gunData.magSize);
+            // SFX
+            AudioManager.GetAudioSource().PlayOneShot(releaseMagSound, 0.45f);
+            yield return new WaitForSeconds(gunData.reloadTime);
+            // TODO: Use this. However, need to trim down the audio length first...
+            // yield return new WaitForSeconds(chargingBoltSoundPlayTimestamp);
+            StartCoroutine(StartChargingBolt());
+        }
+
+        private IEnumerator StartChargingBolt()
+        {
+            AudioManager.GetAudioSource().PlayOneShot(chargingBoltSound, 0.5f);
+            yield return new WaitForSeconds(0f);
+            // TODO: Use this. However, need to trim down the audio length first...
+            // yield return new WaitForSeconds(chargingBoltSound.length);
+            Reload();
+        }
+
+        private void Reload()
+        {
+            SetMagAmmo(gunData.magSize);
+            SetIsBoltInPosition(true);
+            // Tell observers that the gun is reloaded
+            subjectComponent.NotifyObservers(new MCEvent(EventType.Reloaded));
         }
     }
 }

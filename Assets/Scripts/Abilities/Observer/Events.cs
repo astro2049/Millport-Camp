@@ -23,10 +23,11 @@ namespace Abilities.Observer
         // Gun
         AmmoChanged = 11,
         MagEmpty = 12,
+        Reloaded = 13,
 
         // Structures
-        CanPlace = 13,
-        CannotPlace = 14
+        CanPlace = 14,
+        CannotPlace = 15
     }
 
     public class MCEvent

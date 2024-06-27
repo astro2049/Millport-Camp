@@ -80,13 +80,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunData: {fileID: 11400000, guid: 3a3a94d55b8030942b3296461f0d332d, type: 2}
-  currentMagAmmo: 0
+  magAmmo: 0
   fireSound: {fileID: 8300000, guid: 65201ddabb4144f6a8fb9480120b7656, type: 3}
-  reloadSound: {fileID: 8300000, guid: cef0fa03af5b747f0abe82cde0b2bccc, type: 3}
-  magEmptySound: {fileID: 8300000, guid: e7632c6401c09437e83de45d33c5858e, type: 3}
+  releaseMagSound: {fileID: 8300000, guid: e7632c6401c09437e83de45d33c5858e, type: 3}
+  chargingBoltSound: {fileID: 8300000, guid: cef0fa03af5b747f0abe82cde0b2bccc, type: 3}
+  magEmptySound: {fileID: 8300000, guid: 2dc35d77cfe164a2eab57d08500740e2, type: 3}
   tracerPrefab: {fileID: 7439804929337980566, guid: 71d264ba3b99c334cb98e1b0b32f3d45, type: 3}
   tracerSpeed: 150
-  audioManager: {fileID: 0}
   lookPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &7751684674275516655
 MonoBehaviour:

@@ -184,14 +184,7 @@ namespace Entities.Player
             playerStateComponent.isReloading = true;
             // Broadcast event
             subjectComponent.NotifyObservers(new MCEvent(EventType.IsReloading));
-            StartCoroutine(WaitForReloadTime(playerStateComponent.equippedGun.gunData.reloadTime));
-        }
-
-        private IEnumerator WaitForReloadTime(float reloadTime)
-        {
-            yield return new WaitForSeconds(reloadTime);
-            playerStateComponent.equippedGun.Reload();
-            playerStateComponent.isReloading = false;
+            StartCoroutine(playerStateComponent.equippedGun.StartReloading());
         }
 
         private void ToggleBuildMode(InputAction.CallbackContext context)
