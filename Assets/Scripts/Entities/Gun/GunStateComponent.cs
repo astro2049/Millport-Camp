@@ -19,26 +19,25 @@ namespace Entities.Gun
         // Components
         private SubjectComponent subjectComponent;
 
-        // Stats
+        // Stats & Configuration
         public GunData gunData;
         public int magAmmo;
+        [SerializeField] private LayerMask raycastLayers;
         // Muzzle
         private Transform muzzleTransform;
         // Sounds
-        public AudioClip fireSound;
-        public AudioClip releaseMagSound;
-        public AudioClip chargingBoltSound;
+        [SerializeField] private AudioClip fireSound;
+        [SerializeField] private AudioClip releaseMagSound;
+        [SerializeField] private AudioClip chargingBoltSound;
         private float chargingBoltSoundPlayTimestamp;
-        public AudioClip magEmptySound;
+        [SerializeField] private AudioClip magEmptySound;
         // Tracer
         public GameObject tracerPrefab;
         public float tracerSpeed = 150f; // 150m/s
 
         public Vector3 lookPoint;
 
-        /*
-         * States
-         */
+        // Part states
         private bool isTriggerDown = false;
         private bool isBoltInPosition = true;
 
@@ -50,9 +49,11 @@ namespace Entities.Gun
             Transform meshTransform = transform.Find("Mesh");
             meshTransform.GetComponent<MeshFilter>().mesh = gunData.mesh;
             meshTransform.GetComponent<MeshRenderer>().material = gunData.material;
+
             // Initialize fields
-            muzzleTransform = transform.Find("Muzzle").transform;
+            // magAmmo, muzzleTransform
             SetMagAmmo(gunData.magSize);
+            muzzleTransform = transform.Find("Muzzle").transform;
 
             // Calculate when to play chargingBoltSound
             chargingBoltSoundPlayTimestamp = gunData.reloadTime - chargingBoltSound.length;
@@ -151,7 +152,7 @@ namespace Entities.Gun
             Vector3 muzzleForward = muzzleTransform.forward;
             Ray ray = new Ray(muzzlePosition, muzzleForward);
             TrailRenderer tracerTrail = Instantiate(tracerPrefab, muzzlePosition, Quaternion.LookRotation(muzzleForward)).GetComponent<TrailRenderer>();
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Obstacle", "NPC", "Vehicle"))) {
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, raycastLayers)) {
                 // Debug: DrawLine - Green if hit NPC, otherwise cyan
                 Debug.DrawLine(muzzlePosition, hit.point, hit.collider.gameObject.layer == LayerMask.NameToLayer("NPC") ? Color.green : Color.cyan, 5f);
                 // Tracer effect
