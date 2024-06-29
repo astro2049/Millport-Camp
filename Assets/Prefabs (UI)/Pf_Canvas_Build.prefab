@@ -430,7 +430,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1937322583905239501, guid: 0108aee1ebf58134e856cde9c55f7fd2, type: 3}
       propertyPath: m_Name
-      value: Prefab_Canvas_BuildMode
+      value: Pf_Canvas_Build
       objectReference: {fileID: 0}
     - target: {fileID: 4004479291434838027, guid: 0108aee1ebf58134e856cde9c55f7fd2, type: 3}
       propertyPath: m_Pivot.x
@@ -510,6 +510,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4004479291434838027, guid: 0108aee1ebf58134e856cde9c55f7fd2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6920505299605813954, guid: 0108aee1ebf58134e856cde9c55f7fd2, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
