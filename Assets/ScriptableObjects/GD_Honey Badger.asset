@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a670a02452fc44d43bf2a805c4da854d, type: 3}
   m_Name: GD_Honey Badger
   m_EditorClassIdentifier: 
-  gunName: Honey Badger
+  name: Honey Badger
   mesh: {fileID: 2780561208381049054, guid: b672a68cb6327b44793c1fd4ca756460, type: 3}
   material: {fileID: -7126193129781715291, guid: b672a68cb6327b44793c1fd4ca756460, type: 3}
   damage: 15
   rpm: 627
-  fireInterval: 0.75
+  fireInterval: 0.09569378
   magSize: 20
   fireMode: 0
   reloadTime: 2

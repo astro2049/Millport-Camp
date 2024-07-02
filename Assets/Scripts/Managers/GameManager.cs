@@ -10,7 +10,7 @@ namespace Managers
 {
     public class GameManager : MonoBehaviour, IObserver
     {
-        public Texture2D cursorTexture;
+        [SerializeField] private Texture2D combatCursorTexture, UICursorTecture;
         public GameObject player;
         public CinemachineVirtualCamera playerCamera;
         public CinemachineVirtualCamera vehicleCamera;
@@ -23,34 +23,53 @@ namespace Managers
         {
             // Subscribe to player events:
             // - WeaponChanged, EnteredVehicle, ExitedVehicle
+            // - OpenedInventory, ClosedInventory
             // Subscribe UI manager to player events:
-            // - WeaponChanged, IsReloading, InteractionStarted, InteractionEnded, PlacingStructure
+            // - WeaponChanged, IsReloading, InteractionStarted, InteractionEnded,
+            // - EnteredBuildMode, PlacingStructure, ExitedBuildMode,
+            // - OpenedInventory, ClosedInventory
             SubjectComponent playerSubject = player.GetComponent<SubjectComponent>();
             playerSubject.AddObserver(this,
                 EventType.WeaponChanged,
                 EventType.EnteredVehicle,
-                EventType.ExitedVehicle);
+                EventType.ExitedVehicle,
+                EventType.OpenedInventory,
+                EventType.ClosedInventory
+            );
             playerSubject.AddObserver(uiManager,
                 EventType.WeaponChanged,
                 EventType.IsReloading,
                 EventType.InteractionStarted,
                 EventType.InteractionEnded,
                 EventType.EnteredBuildMode,
+                EventType.PlacingStructure,
                 EventType.ExitedBuildMode,
-                EventType.PlacingStructure
+                EventType.OpenedInventory,
+                EventType.ClosedInventory
             );
         }
 
         // Start is called before the first frame update
         private void Start()
         {
-            // https://docs.unity3d.com/2022.3/Documentation/ScriptReference/Cursor.SetCursor.html
-            Cursor.SetCursor(cursorTexture, new Vector2(cursorTexture.width / 2f, cursorTexture.height / 2f), CursorMode.Auto);
+            SetCursor(combatCursorTexture);
 
             m_navMeshSurface = GetComponent<NavMeshSurface>();
 
             // Build nav mesh
             // m_navMeshSurface.BuildNavMesh();
+        }
+
+        // https://docs.unity3d.com/2022.3/Documentation/ScriptReference/Cursor.SetCursor.html
+        private void SetCursor(Texture2D texture)
+        {
+            if (texture == combatCursorTexture) {
+                // Crosshair center
+                Cursor.SetCursor(texture, new Vector2(texture.width / 2f, texture.height / 2f), CursorMode.Auto);
+            } else if (texture == UICursorTecture) {
+                // Mouse tip on top left
+                Cursor.SetCursor(texture, Vector2.zero, CursorMode.Auto);
+            }
         }
 
         // Update is called once per frame
@@ -74,12 +93,17 @@ namespace Managers
                         EventType.MagEmpty
                     );
                     break;
-                // Vehicle
                 case EventType.EnteredVehicle:
                     EnterVehicle((mcEvent as MCEventWEntity)!.entity);
                     break;
                 case EventType.ExitedVehicle:
                     ExitVehicle((mcEvent as MCEventWEntity)!.entity);
+                    break;
+                case EventType.OpenedInventory:
+                    SetCursor(UICursorTecture);
+                    break;
+                case EventType.ClosedInventory:
+                    SetCursor(combatCursorTexture);
                     break;
             }
             return true;

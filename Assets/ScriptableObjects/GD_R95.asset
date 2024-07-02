@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a670a02452fc44d43bf2a805c4da854d, type: 3}
   m_Name: GD_R95
   m_EditorClassIdentifier: 
-  gunName: R95
+  name: R95
   mesh: {fileID: 6947228980677361493, guid: 9dc5517fd53dccb40b195e1098d5ebb4, type: 3}
   material: {fileID: -7126193129781715291, guid: 9dc5517fd53dccb40b195e1098d5ebb4, type: 3}
   damage: 11
   rpm: 1080
-  fireInterval: 0.07692308
+  fireInterval: 0.055555556
   magSize: 17
   fireMode: 0
   reloadTime: 1.8

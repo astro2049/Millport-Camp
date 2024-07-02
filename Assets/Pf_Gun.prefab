@@ -79,7 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c7df42d5ac88c7419e0ee7b9f47fbbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gunData: {fileID: 11400000, guid: 3a3a94d55b8030942b3296461f0d332d, type: 2}
+  stats: {fileID: 11400000, guid: 3a3a94d55b8030942b3296461f0d332d, type: 2}
   magAmmo: 0
   raycastLayers:
     serializedVersion: 2

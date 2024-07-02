@@ -16,18 +16,21 @@ namespace Abilities.Observer
         EnteredBuildMode = 7,
         PlacingStructure = 8,
         ExitedBuildMode = 9,
+        InventoryReady = 10,
+        OpenedInventory = 11,
+        ClosedInventory = 12,
 
         // Pawn (Player, Zombie, Combat Robot)
-        PawnDead = 10,
+        PawnDead = 13,
 
         // Gun
-        AmmoChanged = 11,
-        MagEmpty = 12,
-        Reloaded = 13,
+        AmmoChanged = 14,
+        MagEmpty = 15,
+        Reloaded = 16,
 
         // Structures
-        CanPlace = 14,
-        CannotPlace = 15
+        CanPlace = 17,
+        CannotPlace = 18
     }
 
     public class MCEvent

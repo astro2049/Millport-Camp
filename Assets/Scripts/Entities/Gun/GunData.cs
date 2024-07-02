@@ -2,10 +2,10 @@ using UnityEngine;
 
 namespace Entities.Gun
 {
-    [CreateAssetMenu(fileName = "GunData", menuName = "ScriptableObjects/GunData", order = 1)]
+    [CreateAssetMenu(fileName = "GunData", menuName = "Scriptable Objects/GunData", order = 1)]
     public class GunData : ScriptableObject
     {
-        public string gunName;
+        public new string name;
         public Mesh mesh;
         public Material material;
         public float damage;

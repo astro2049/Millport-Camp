@@ -2,7 +2,7 @@
     "name": "Millport Camp",
     "maps": [
         {
-            "name": "Player Movement",
+            "name": "Movement",
             "id": "c931ce21-5dd9-49d0-84b7-a7762d5b43f5",
             "actions": [
                 {
@@ -13,24 +13,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "Look",
-                    "type": "Value",
-                    "id": "bfb5de91-4745-48d5-b298-86b5d28016e3",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Toggle Build Mode",
-                    "type": "Button",
-                    "id": "0d662ca8-c497-4648-b585-2cb8229233c8",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -88,39 +70,35 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "8c8e490b-c610-4785-884f-f04217b23ca4",
-                    "path": "<Mouse>/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "df52a76d-d24b-4380-a5bd-a72fefde9984",
-                    "path": "<Keyboard>/q",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Toggle Build Mode",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 }
             ]
         },
         {
-            "name": "Player Combat Mode",
+            "name": "Combat",
             "id": "ef506af1-c140-40ad-859a-165507fd5a03",
             "actions": [
+                {
+                    "name": "Look",
+                    "type": "Value",
+                    "id": "ebb2daef-21c9-4b99-8668-acd18a4a9190",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
                 {
                     "name": "Attack",
                     "type": "Button",
                     "id": "49c020ad-25dd-4606-aa16-ea5ef35dbe92",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Reload",
+                    "type": "Button",
+                    "id": "dc2f7b5a-4e39-43a6-8700-4266f0bea8ac",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -136,9 +114,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Reload",
+                    "name": "Build",
                     "type": "Button",
-                    "id": "dc2f7b5a-4e39-43a6-8700-4266f0bea8ac",
+                    "id": "5e2b96ef-9b44-4290-9eb2-44ad97eebac5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Inventory",
+                    "type": "Button",
+                    "id": "76302b60-6e4f-45f8-884b-c0e61625e737",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -146,17 +133,6 @@
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "59bb7be9-3763-4a89-998e-dd9e5d5b44fd",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "",
                     "id": "bc79f3a8-f4ce-46d3-9df4-64bdf373ee22",
@@ -170,6 +146,28 @@
                 },
                 {
                     "name": "",
+                    "id": "40e898e9-5d57-444b-8a8d-f17c5574b98d",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Build",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bbf0a547-6f01-4e0b-9a66-8aa76fe72bfd",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "e6ce4da9-4a22-4f2e-9107-b513d51d8022",
                     "path": "<Keyboard>/r",
                     "interactions": "",
@@ -178,13 +176,44 @@
                     "action": "Reload",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "caed888a-72be-45b2-bbd6-363b505319c7",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "59bb7be9-3763-4a89-998e-dd9e5d5b44fd",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
         {
-            "name": "Player Build Mode",
+            "name": "Build",
             "id": "a84ce338-7a0b-4ce1-892d-709dcc2dd095",
             "actions": [
+                {
+                    "name": "Look",
+                    "type": "Value",
+                    "id": "e270238a-5c2a-45a6-bc20-7488ee092ce6",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
                 {
                     "name": "Place",
                     "type": "Button",
@@ -202,20 +231,18 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Quit Build",
+                    "type": "Button",
+                    "id": "2135dbb7-aa2b-4201-a551-78bb0836617c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "8f716113-d8a0-4611-9d26-cead20d6119b",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Place",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "",
                     "id": "5c294819-91de-4ee7-ab29-8d0d8f77f7cf",
@@ -224,6 +251,107 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "58d66746-3bec-4693-8221-247f43fd2801",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Quit Build",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0f348844-a7ca-47f6-bd93-fab7e44de90e",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8f716113-d8a0-4611-9d26-cead20d6119b",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Place",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Inventory",
+            "id": "a3f8f283-14b7-49cb-a35e-e5f084b396b3",
+            "actions": [
+                {
+                    "name": "Look",
+                    "type": "Value",
+                    "id": "aadde05a-edb5-44db-9b27-056015fb88aa",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Equip",
+                    "type": "Button",
+                    "id": "bb5a5581-d3ce-4c1f-813c-3bf7f1ffd0cc",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Close Inventory",
+                    "type": "Button",
+                    "id": "e153d216-0b65-4227-8543-be9288577a72",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "8719d847-9e4b-49c3-9ccc-3377e163dc72",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1f09c5b5-bf22-460f-997a-5b2b7433a1c9",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Close Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "19a23d3d-8028-4c9a-b792-09d24cc31bd0",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Equip",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

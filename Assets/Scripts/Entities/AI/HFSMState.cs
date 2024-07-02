@@ -12,7 +12,7 @@ namespace Entities.AI
      * Available at: https://www.gameaipro.com/GameAIPro3/GameAIPro3_Chapter12_A_Reusable_Light-Weight_Finite-State_Machine.pdf (Accessed: 19 June 2024).
      * Reference (HFSM):
      * AdamCYounis (2024) 'Code Class - Hierarchical State Machines', YouTube, 18 March.
-     * Available at: https://www.youtube.com/watch?v=Z0fmGAQSQG8 (Accessed 27 June 2024)
+     * Available at: https://www.youtube.com/watch?v=Z0fmGAQSQG8 (Accessed 27 June 2024).
      */
     public enum HFSMStateType
     {

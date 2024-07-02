@@ -20,7 +20,7 @@ namespace Entities.Gun
         private SubjectComponent subjectComponent;
 
         // Stats & Configuration
-        public GunData gunData;
+        public GunData stats;
         public int magAmmo;
         [SerializeField] private LayerMask raycastLayers;
         // Muzzle
@@ -45,18 +45,23 @@ namespace Entities.Gun
         {
             subjectComponent = GetComponent<SubjectComponent>();
 
+            Init();
+        }
+
+        public void Init()
+        {
             // Initialize appearance (mesh and material) according to gunData (scriptable object)
             Transform meshTransform = transform.Find("Mesh");
-            meshTransform.GetComponent<MeshFilter>().mesh = gunData.mesh;
-            meshTransform.GetComponent<MeshRenderer>().material = gunData.material;
+            meshTransform.GetComponent<MeshFilter>().mesh = stats.mesh;
+            meshTransform.GetComponent<MeshRenderer>().material = stats.material;
 
             // Initialize fields
             // magAmmo, muzzleTransform
-            SetMagAmmo(gunData.magSize);
+            SetMagAmmo(stats.magSize);
             muzzleTransform = transform.Find("Muzzle").transform;
 
             // Calculate when to play chargingBoltSound
-            chargingBoltSoundPlayTimestamp = gunData.reloadTime - chargingBoltSound.length;
+            chargingBoltSoundPlayTimestamp = stats.reloadTime - chargingBoltSound.length;
         }
 
         // Start is called before the first frame update
@@ -104,7 +109,7 @@ namespace Entities.Gun
             if (isBoltInPosition) {
                 // If on Auto, after shot cycle is completed, the trigger gets reset automatically after cycling,
                 // so a next shot will be fired if trigger is held down 
-                if (gunData.fireMode == FireMode.Auto) {
+                if (stats.fireMode == FireMode.Auto) {
                     if (isTriggerDown) {
                         Fire();
                     }
@@ -121,7 +126,7 @@ namespace Entities.Gun
 
         private IEnumerator Cycle()
         {
-            yield return new WaitForSeconds(gunData.fireInterval);
+            yield return new WaitForSeconds(stats.fireInterval);
             SetIsBoltInPosition(true);
         }
 
@@ -159,7 +164,7 @@ namespace Entities.Gun
                 StartCoroutine(SpawnTrail(tracerTrail, hit.distance));
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("NPC")) {
                     // Deal damage
-                    GetComponent<DamageDealerComponent>().DealDamage(hit.collider.gameObject, gunData.damage);
+                    GetComponent<DamageDealerComponent>().DealDamage(hit.collider.gameObject, stats.damage);
                 }
             } else {
                 // Tracer effect, endPoint is arbitrary (100m away, out of screen)
@@ -192,7 +197,7 @@ namespace Entities.Gun
         {
             // SFX
             AudioManager.GetAudioSource().PlayOneShot(releaseMagSound, 0.45f);
-            yield return new WaitForSeconds(gunData.reloadTime);
+            yield return new WaitForSeconds(stats.reloadTime);
             // TODO: Use this. However, need to trim down the audio length first...
             // yield return new WaitForSeconds(chargingBoltSoundPlayTimestamp);
             StartCoroutine(StartChargingBolt());
@@ -209,7 +214,7 @@ namespace Entities.Gun
 
         private void Reload()
         {
-            SetMagAmmo(gunData.magSize);
+            SetMagAmmo(stats.magSize);
             SetIsBoltInPosition(true);
             // Tell observers that the gun is reloaded
             subjectComponent.NotifyObservers(new MCEvent(EventType.Reloaded));

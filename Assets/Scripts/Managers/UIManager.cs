@@ -8,7 +8,7 @@ namespace Managers
 {
     public class UIManager : MonoBehaviour, IObserver
     {
-        [SerializeField] private Canvas combatModeCanvas, buildModeCanvas;
+        [SerializeField] private Canvas combatModeCanvas, buildModeCanvas, inventoryCanvas;
         [SerializeField] private GameObject interactPrompt;
         [SerializeField] private GameObject reloadPrompt;
         [SerializeField] private TextMeshProUGUI magAmmoText;
@@ -24,7 +24,7 @@ namespace Managers
                 // Player
                 case EventType.WeaponChanged:
                     GunStateComponent gun = (mcEvent as MCEventWEntity)!.entity.GetComponent<GunStateComponent>();
-                    equippedGunNameText.text = gun.gunData.gunName;
+                    equippedGunNameText.text = gun.stats.name;
                     magAmmoText.text = gun.magAmmo.ToString();
                     break;
                 case EventType.IsReloading:
@@ -49,6 +49,14 @@ namespace Managers
                 case EventType.ExitedBuildMode:
                     combatModeCanvas.enabled = true;
                     buildModeCanvas.enabled = false;
+                    break;
+                case EventType.OpenedInventory:
+                    combatModeCanvas.enabled = false;
+                    inventoryCanvas.enabled = true;
+                    break;
+                case EventType.ClosedInventory:
+                    combatModeCanvas.enabled = true;
+                    inventoryCanvas.enabled = false;
                     break;
                 // Gun
                 case EventType.AmmoChanged:

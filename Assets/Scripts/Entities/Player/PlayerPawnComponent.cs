@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Entities.Player
 {
@@ -11,8 +12,12 @@ namespace Entities.Player
 
             base.Die();
 
+            PlayerInputComponent playerInputComponent = GetComponent<PlayerInputComponent>();
+            // Close Inventory
+            // TODO: This is a hack, which is just to make sure combat inputs don't get re-enabled, because a disabled component's methods can still execute.
+            playerInputComponent.CloseInventory(new InputAction.CallbackContext());
             // Disable inputs
-            GetComponent<PlayerInputComponent>().enabled = false;
+            playerInputComponent.enabled = false;
         }
     }
 }

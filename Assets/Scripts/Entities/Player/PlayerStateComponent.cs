@@ -1,33 +1,53 @@
+using System;
 using Abilities.Interactable;
 using Abilities.Observer;
 using Entities.Gun;
+using UnityEngine;
 using EventType = Abilities.Observer.EventType;
 
 namespace Entities.Player
 {
+    public enum PlayMode
+    {
+        Combat = 0,
+        Build = 1,
+        Inventory = 2
+    }
+
     public class PlayerStateComponent : StateComponent
     {
         public InteractableComponent currentInteractable;
+        [SerializeField] private Transform handTransform;
         public GunStateComponent equippedGun;
         public GunStateComponent primaryGun;
         public bool isReloading;
-        public bool isInBuildMode = false;
 
         private PlayerObserverComponent playerObserverComponent;
         private SubjectComponent subjectComponent;
+
+        private void Awake()
+        {
+            handTransform = transform.Find("Hand");
+        }
 
         // Start is called before the first frame update
         private void Start()
         {
             playerObserverComponent = GetComponent<PlayerObserverComponent>();
             subjectComponent = GetComponent<SubjectComponent>();
-
-            EquipGun(primaryGun);
         }
 
-        public void EquipGun(GunStateComponent gun)
+        public void EquipGun(GameObject gun)
         {
-            equippedGun = gun;
+            if (equippedGun) {
+                UnEquipGun();
+            }
+
+            equippedGun = gun.GetComponent<GunStateComponent>();
+
+            // Attach gun to hand
+            equippedGun.transform.parent = handTransform;
+            equippedGun.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
 
             // Subscribe to equipped gun's events: Reloaded
             equippedGun.GetComponent<SubjectComponent>().AddObserver(playerObserverComponent,
@@ -35,6 +55,16 @@ namespace Entities.Player
             );
             // Tell UI manager about the equipped gun
             subjectComponent.NotifyObservers(new MCEventWEntity(EventType.WeaponChanged, equippedGun.gameObject));
+        }
+
+        private void UnEquipGun()
+        {
+            // UnSubscribe to equipped gun's events: Reloaded
+            // TODO: More observers to notify?
+            equippedGun.GetComponent<SubjectComponent>().RemoveObserver(playerObserverComponent,
+                EventType.Reloaded
+            );
+            equippedGun = null;
         }
 
         public void OnInteractionStarted(InteractableComponent interactableComponent)
