@@ -10,7 +10,7 @@ namespace Entities.AI.NPC
         public override void Die()
         {
             base.Die();
-            GetComponent<BtComponent>().DeactivateBt();
+            GetComponent<BtComponent>().enabled = false;
             GetComponent<NavMeshAgent>().enabled = false;
             // StartCoroutine(SinkUnderMap());
         }

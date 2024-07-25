@@ -17,12 +17,15 @@ namespace Entities.AI.NPC.Zombie
         public SortedSet<GameObject> humans = new SortedSet<GameObject>();
         public bool isEngaging;
 
-        // Start is called before the first frame update
-        private void Start()
+        private void Awake()
         {
             // Configure perception
             GetComponent<PerceptionComponent>().CreateSensorCollider(perceptionRadius, perceptionLayers);
+        }
 
+        // Start is called before the first frame update
+        private void Start()
+        {
             // Enable behavior tree
             GetComponent<ZombieBtComponent>().enabled = true;
         }

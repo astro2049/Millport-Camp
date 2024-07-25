@@ -7,21 +7,19 @@ namespace Entities.AI.NPC
     {
         protected Root bt;
 
-        // Start is called before the first frame update
-        private void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
-
-        }
-
         protected abstract void InitializeBt();
 
-        public void DeactivateBt()
+        private void OnEnable()
+        {
+            bt.Start();
+        }
+
+        private void OnDisable()
+        {
+            DeactivateBt();
+        }
+
+        private void DeactivateBt()
         {
             if (bt.CurrentState == Node.State.ACTIVE) {
                 bt.Stop();

@@ -2,6 +2,7 @@ using Abilities.Health;
 using NPBehave;
 using UnityEngine;
 using UnityEngine.AI;
+using Action = NPBehave.Action;
 using Random = UnityEngine.Random;
 
 namespace Entities.AI.NPC.Zombie
@@ -15,17 +16,15 @@ namespace Entities.AI.NPC.Zombie
         private NavMeshAgent navMeshAgent;
         private DamageDealerComponent damageDealerComponent;
 
-        // Start is called before the first frame update
-        private void Start()
+        private void Awake()
         {
             // Pre-store Components
             navMeshAgent = GetComponent<NavMeshAgent>();
             zombieStateComponent = GetComponent<ZombieStateComponent>();
             damageDealerComponent = GetComponent<DamageDealerComponent>();
 
-            // Initialize and start behavior tree
+            // Initialize behavior tree
             InitializeBt();
-            bt.Start();
             #if UNITY_EDITOR
             Debugger debugger = (Debugger)gameObject.AddComponent(typeof(Debugger));
             debugger.BehaviorTree = bt;
