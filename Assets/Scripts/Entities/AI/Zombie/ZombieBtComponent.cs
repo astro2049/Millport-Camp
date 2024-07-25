@@ -1,11 +1,12 @@
 using Abilities.Health;
+using Entities.AI.Abilities.Bt;
 using NPBehave;
 using UnityEngine;
 using UnityEngine.AI;
 using Action = NPBehave.Action;
 using Random = UnityEngine.Random;
 
-namespace Entities.AI.NPC.Zombie
+namespace Entities.AI.Zombie
 {
     public class ZombieBtComponent : BtComponent
     {

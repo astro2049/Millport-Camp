@@ -3,7 +3,7 @@ using Abilities.State;
 using Entities.AI.Abilities.Perception;
 using UnityEngine;
 
-namespace Entities.AI.NPC.Zombie
+namespace Entities.AI.Zombie
 {
     public class ZombieStateComponent : StateComponent
     {
