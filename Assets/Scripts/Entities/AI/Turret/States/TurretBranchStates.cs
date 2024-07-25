@@ -1,4 +1,6 @@
-﻿namespace Entities.AI.Turret.States
+﻿using Entities.AI.Abilities.HFSM;
+
+namespace Entities.AI.Turret.States
 {
     public class TurretTriggerFsm : HFSMState<TurretStateComponent>
     {

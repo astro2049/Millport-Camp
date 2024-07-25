@@ -14,6 +14,7 @@ namespace Managers
         [SerializeField] private TextMeshProUGUI magAmmoText;
         [SerializeField] private TextMeshProUGUI equippedGunNameText;
         [SerializeField] private GameObject overlappingObjectsText;
+        [SerializeField] private GameObject respawnButton;
 
         // Handle events
         // Player events are subscribed in GameManager.Awake(), and
@@ -57,6 +58,9 @@ namespace Managers
                 case EventType.ClosedInventory:
                     combatModeCanvas.enabled = true;
                     inventoryCanvas.enabled = false;
+                    break;
+                case EventType.PawnDead:
+                    respawnButton.SetActive(true);
                     break;
                 // Gun
                 case EventType.AmmoChanged:

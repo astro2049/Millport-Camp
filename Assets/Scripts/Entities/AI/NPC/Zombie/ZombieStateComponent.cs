@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Abilities.State;
+using Entities.AI.Abilities.Perception;
 using UnityEngine;
 
 namespace Entities.AI.NPC.Zombie

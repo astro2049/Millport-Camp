@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Entities.AI.Abilities.Perception;
+using UnityEngine;
 
 namespace Entities.AI.Turret
 {

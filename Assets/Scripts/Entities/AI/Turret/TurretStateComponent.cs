@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Abilities.Observer;
+using Abilities.State;
+using Entities.AI.Abilities.Perception;
 using Entities.Gun;
 using TMPro;
 using UnityEngine;

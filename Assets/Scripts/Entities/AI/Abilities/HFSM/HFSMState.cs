@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Abilities.State;
 
-namespace Entities.AI
+namespace Entities.AI.Abilities.HFSM
 {
     /*
      * Hierarchical Finite State Machine (HFSM) state

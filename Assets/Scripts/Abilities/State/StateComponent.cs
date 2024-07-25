@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Entities
+namespace Abilities.State
 {
     public abstract class StateComponent : MonoBehaviour
     {

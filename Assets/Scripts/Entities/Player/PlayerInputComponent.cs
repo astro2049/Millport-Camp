@@ -14,10 +14,8 @@ namespace Entities.Player
         /*
          * Public fields
          */
-        public InputActionAsset inputActionAsset;
         [Header("Movement Settings")]
         public float moveSpeed = 5f; // 5m/s
-        public Camera followCamera;
         public Vector3 lookPoint;
         // Build Mode
         public GameObject turretPrefab;
@@ -26,19 +24,15 @@ namespace Entities.Player
         public LayerMask lookAtCombatModeLayers;
         public LayerMask lookAtBuildModeLayers;
 
-        /*
-         * Private fields
-         */
+        // movement
         private Vector2 moveInput;
         private Vector3 velocity;
 
         /*
          * Pre-stored private fields
          */
-        private InputActionMap movementActions;
-        private InputActionMap combatActions;
-        private InputActionMap buildActions;
-        private InputActionMap inventoryActions;
+        private Camera followCamera;
+        private InputActionMap movementActions, combatActions, buildActions, inventoryActions;
         private Vector3 cameraForward, cameraRight;
         private Rigidbody rb;
         private PlayerStateComponent playerStateComponent;
@@ -46,11 +40,16 @@ namespace Entities.Player
 
         private void Awake()
         {
-            RegisterActionCallbacks();
+            PlayerInput playerInput = GetComponent<PlayerInput>();
+            movementActions = playerInput.actions.FindActionMap("Movement");
+            combatActions = playerInput.actions.FindActionMap("Combat");
+            buildActions = playerInput.actions.FindActionMap("Build");
+            inventoryActions = playerInput.actions.FindActionMap("Inventory");
 
             /*
              * Precalculate camera forward and right vectors
              */
+            followCamera = Camera.main;
             cameraForward = followCamera.transform.forward;
             cameraRight = followCamera.transform.right;
             // Zero out the y components to stay on the same plane
@@ -64,59 +63,6 @@ namespace Entities.Player
             // Components
             playerStateComponent = GetComponent<PlayerStateComponent>();
             subjectComponent = GetComponent<SubjectComponent>();
-        }
-
-        private void RegisterActionCallbacks()
-        {
-            /*
-             * Movement Actions
-             */
-            movementActions = inputActionAsset.FindActionMap("Movement");
-            // Bind input functions
-            // Move
-            movementActions.FindAction("Move").performed += OnMove;
-            movementActions.FindAction("Move").canceled += OnMove;
-
-            /*
-             * Combat Actions
-             */
-            combatActions = inputActionAsset.FindActionMap("Combat");
-            // Look
-            combatActions.FindAction("Look").performed += OnCombatLook;
-            // Attack
-            combatActions.FindAction("Attack").performed += OnStartAttack;
-            combatActions.FindAction("Attack").canceled += OnStopAttack;
-            // Reload
-            combatActions.FindAction("Reload").performed += OnReload;
-            // Interact
-            combatActions.FindAction("Interact").performed += OnInteract;
-            // Build
-            combatActions.FindAction("Build").performed += EnterBuildMode;
-            // Inventory
-            combatActions.FindAction("Inventory").performed += OpenInventory;
-
-            /*
-             * Build Actions
-             */
-            buildActions = inputActionAsset.FindActionMap("Build");
-            // Look
-            buildActions.FindAction("Look").performed += OnBuildLook;
-            buildActions.FindAction("Look").performed += StructureOnCursor;
-            // Place
-            buildActions.FindAction("Place").performed += PlaceTurret;
-            // Rotate structure
-            buildActions.FindAction("Rotate").performed += RotateTurret;
-            // Quit Build
-            buildActions.FindAction("Quit Build").performed += QuitBuildMode;
-
-            /*
-             * Inventory
-             */
-            inventoryActions = inputActionAsset.FindActionMap("Inventory");
-            // Look
-            inventoryActions.FindAction("Look").performed += OnInventoryLook;
-            // Close Inventory
-            inventoryActions.FindAction("Close Inventory").performed += CloseInventory;
         }
 
         private void OnEnable()
@@ -141,24 +87,28 @@ namespace Entities.Player
         /*
          * Movement Actions
          */
-        private void OnMove(InputAction.CallbackContext context)
+        public void OnMove(InputAction.CallbackContext context)
         {
+            if (context.phase != InputActionPhase.Performed && context.phase != InputActionPhase.Canceled) {
+                return;
+            }
+
             moveInput = context.ReadValue<Vector2>();
             Vector3 moveDirection = (moveInput.y * cameraForward + moveInput.x * cameraRight).normalized;
             velocity = moveDirection * moveSpeed;
         }
 
-        /*
-         * Note:
-         * We're setting rigidbody's velocity in Move() every physics frame instead of in OnMove(), because it is necessary:
-         * - Although rigidbody's drag is 0, we've turned on Use Gravity
-         * - And, colliders have a default friction coefficient of 0.6 (see https://docs.unity3d.com/Manual/collider-surface-friction.html)
-         * Because of this, the gravity will enforce friction between player and terrain, causing drag.
-         * So, if we don't do this, and just assign rigidbody's velocity in OnMove(), the player will move a short distance and quickly stop after a keypress(es), like we're applying impulses.
-         * On the other hand, assigning rigidbody's velocity in FixedUpdate() guarantees a constant move speed.
-         */
         private void Move()
         {
+            /*
+             * Note:
+             * We're setting rigidbody's velocity in Move() every physics frame instead of in OnMove(), because it is necessary:
+             * - Although rigidbody's drag is 0, we've turned on Use Gravity
+             * - And, colliders have a default friction coefficient of 0.6 (see https://docs.unity3d.com/Manual/collider-surface-friction.html)
+             * Because of this, the gravity will enforce friction between player and terrain, causing drag.
+             * So, if we don't do this, and just assign rigidbody's velocity in OnMove(), the player will move a short distance and quickly stop after a keypress(es), like we're applying impulses.
+             * On the other hand, assigning rigidbody's velocity in FixedUpdate() guarantees a constant move speed.
+             */
             rb.velocity = velocity;
         }
 
@@ -189,8 +139,12 @@ namespace Entities.Player
          * Combat Actions
          */
         // Look at where the mouse is, horizontally
-        private void OnCombatLook(InputAction.CallbackContext context)
+        public void OnCombatLook(InputAction.CallbackContext context)
         {
+            if (context.phase != InputActionPhase.Performed) {
+                return;
+            }
+
             Vector2 lookInput = context.ReadValue<Vector2>();
             if (PlayerLookAt(lookInput, lookAtCombatModeLayers)) {
                 // TODO: This 'if' is hacky
@@ -201,29 +155,32 @@ namespace Entities.Player
             }
         }
 
-        private void OnStartAttack(InputAction.CallbackContext context)
+        public void OnAttack(InputAction.CallbackContext context)
         {
-            // TODO: This 'if' is hacky
-            if (!playerStateComponent.equippedGun) {
-                return;
+            if (context.phase == InputActionPhase.Performed) {
+                // TODO: This 'if' is hacky
+                if (!playerStateComponent.equippedGun) {
+                    return;
+                }
+                if (playerStateComponent.isReloading) {
+                    return;
+                }
+                playerStateComponent.equippedGun.SetIsTriggerDown(true);
+            } else if (context.phase == InputActionPhase.Canceled) {
+                // TODO: This 'if' is hacky
+                if (!playerStateComponent.equippedGun) {
+                    return;
+                }
+                playerStateComponent.equippedGun.SetIsTriggerDown(false);
             }
-            if (playerStateComponent.isReloading) {
-                return;
-            }
-            playerStateComponent.equippedGun.SetIsTriggerDown(true);
         }
 
-        private void OnStopAttack(InputAction.CallbackContext context)
+        public void OnReload(InputAction.CallbackContext context)
         {
-            // TODO: This 'if' is hacky
-            if (!playerStateComponent.equippedGun) {
+            if (context.phase != InputActionPhase.Performed) {
                 return;
             }
-            playerStateComponent.equippedGun.SetIsTriggerDown(false);
-        }
 
-        private void OnReload(InputAction.CallbackContext context)
-        {
             // TODO: This 'if' is hacky
             if (!playerStateComponent.equippedGun) {
                 return;
@@ -237,16 +194,24 @@ namespace Entities.Player
             StartCoroutine(playerStateComponent.equippedGun.StartReloading());
         }
 
-        private void OnInteract(InputAction.CallbackContext context)
+        public void OnInteract(InputAction.CallbackContext context)
         {
+            if (context.phase != InputActionPhase.Performed) {
+                return;
+            }
+
             InteractableComponent currentInteractable = GetComponent<PlayerStateComponent>().currentInteractable;
             if (currentInteractable) {
                 currentInteractable.Interact(gameObject);
             }
         }
 
-        private void EnterBuildMode(InputAction.CallbackContext context)
+        public void EnterBuildMode(InputAction.CallbackContext context)
         {
+            if (context.phase != InputActionPhase.Performed) {
+                return;
+            }
+
             // Tell UI manager about the event
             subjectComponent.NotifyObservers(new MCEvent(EventType.EnteredBuildMode));
 
@@ -258,8 +223,12 @@ namespace Entities.Player
             buildActions.Enable();
         }
 
-        private void OpenInventory(InputAction.CallbackContext context)
+        public void OpenInventory(InputAction.CallbackContext context)
         {
+            if (context.phase != InputActionPhase.Performed) {
+                return;
+            }
+
             // Tell UI manager about the event
             subjectComponent.NotifyObservers(new MCEvent(EventType.OpenedInventory));
 
@@ -272,18 +241,26 @@ namespace Entities.Player
          * Build Actions
          */
         // Look at where the mouse is, horizontally
-        private void OnBuildLook(InputAction.CallbackContext context)
+        public void OnBuildLook(InputAction.CallbackContext context)
         {
+            if (context.phase != InputActionPhase.Performed) {
+                return;
+            }
+            
             Vector2 lookInput = context.ReadValue<Vector2>();
             PlayerLookAt(lookInput, lookAtBuildModeLayers);
         }
 
-        private void StructureOnCursor(InputAction.CallbackContext context)
+        public void StructureOnCursor(InputAction.CallbackContext context)
         {
+            if (context.phase != InputActionPhase.Performed) {
+                return;
+            }
+            
             turretToPlace.transform.position = lookPoint;
         }
 
-        private void CreateTurret()
+        public void CreateTurret()
         {
             turretToPlace = Instantiate(turretPrefab);
             turretToPlace.GetComponent<BuildableComponent>().EnterBuildMode();
@@ -291,14 +268,22 @@ namespace Entities.Player
             subjectComponent.NotifyObservers(new MCEventWEntity(EventType.PlacingStructure, turretToPlace));
         }
 
-        private void RotateTurret(InputAction.CallbackContext context)
+        public void RotateTurret(InputAction.CallbackContext context)
         {
+            if (context.phase != InputActionPhase.Performed) {
+                return;
+            }
+            
             // Up and Down are on y axis, 120.0/-120.0
             turretToPlace.transform.Rotate(Vector3.up, -90f * (context.ReadValue<Vector2>().y / 120f));
         }
 
-        private void PlaceTurret(InputAction.CallbackContext context)
+        public void PlaceTurret(InputAction.CallbackContext context)
         {
+            if (context.phase != InputActionPhase.Performed) {
+                return;
+            }
+            
             BuildableComponent buildableComponent = turretToPlace.GetComponent<BuildableComponent>();
             if (buildableComponent.isOkToPlace) {
                 buildableComponent.Place();
@@ -307,8 +292,12 @@ namespace Entities.Player
             }
         }
 
-        private void QuitBuildMode(InputAction.CallbackContext context)
+        public void QuitBuildMode(InputAction.CallbackContext context)
         {
+            if (context.phase != InputActionPhase.Performed) {
+                return;
+            }
+            
             // Tell UI manager about the event
             subjectComponent.NotifyObservers(new MCEvent(EventType.ExitedBuildMode));
 
@@ -324,14 +313,22 @@ namespace Entities.Player
          * Inventory Actions
          */
         // Look at where the mouse is, horizontally
-        private void OnInventoryLook(InputAction.CallbackContext context)
+        public void OnInventoryLook(InputAction.CallbackContext context)
         {
+            if (context.phase != InputActionPhase.Performed) {
+                return;
+            }
+            
             Vector2 lookInput = context.ReadValue<Vector2>();
             PlayerLookAt(lookInput, lookAtCombatModeLayers);
         }
 
         public void CloseInventory(InputAction.CallbackContext context)
         {
+            if (context.phase != InputActionPhase.Performed) {
+                return;
+            }
+            
             // Tell UI manager about the event
             subjectComponent.NotifyObservers(new MCEvent(EventType.ClosedInventory));
 

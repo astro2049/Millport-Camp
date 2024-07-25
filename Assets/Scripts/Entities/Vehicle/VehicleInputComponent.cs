@@ -7,23 +7,15 @@ namespace Entities.Vehicle
 {
     public class VehicleInputComponent : MonoBehaviour
     {
-        public InputActionAsset inputActionAsset;
         public Vector2 moveInput;
 
-        private InputActionMap vehicleActionMap;
         private VehicleStateComponent vehicleStateComponent;
+        private InputActionMap vehicleActionMap;
 
         private void Awake()
         {
-            vehicleActionMap = inputActionAsset.FindActionMap("Vehicle");
+            vehicleActionMap = GetComponent<PlayerInput>().actions.FindActionMap("Vehicle");
             vehicleStateComponent = GetComponent<VehicleStateComponent>();
-
-            // Bind input functions
-            // Move
-            vehicleActionMap.FindAction("Move").performed += OnMove;
-            vehicleActionMap.FindAction("Move").canceled += OnMove;
-            // Interact
-            vehicleActionMap.FindAction("Interact").performed += OnInteract;
         }
 
         private void OnEnable()
@@ -36,13 +28,21 @@ namespace Entities.Vehicle
             vehicleActionMap.Disable();
         }
 
-        private void OnMove(InputAction.CallbackContext context)
+        public void OnMove(InputAction.CallbackContext context)
         {
+            if (context.phase != InputActionPhase.Performed && context.phase != InputActionPhase.Canceled) {
+                return;
+            }
+
             moveInput = context.ReadValue<Vector2>();
         }
 
-        private void OnInteract(InputAction.CallbackContext context)
+        public void OnInteract(InputAction.CallbackContext context)
         {
+            if (context.phase != InputActionPhase.Performed) {
+                return;
+            }
+
             // Broadcast event: Player exits vehicle
             vehicleStateComponent.driver.GetComponent<SubjectComponent>().NotifyObservers(new MCEventWEntity(EventType.ExitedVehicle, gameObject));
             // Clear driver reference

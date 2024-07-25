@@ -1,6 +1,6 @@
-using System;
 using Abilities.Interactable;
 using Abilities.Observer;
+using Abilities.State;
 using Entities.Gun;
 using UnityEngine;
 using EventType = Abilities.Observer.EventType;
@@ -17,7 +17,7 @@ namespace Entities.Player
     public class PlayerStateComponent : StateComponent
     {
         public InteractableComponent currentInteractable;
-        [SerializeField] private Transform handTransform;
+        private Transform handTransform;
         public GunStateComponent equippedGun;
         public GunStateComponent primaryGun;
         public bool isReloading;
@@ -28,11 +28,7 @@ namespace Entities.Player
         private void Awake()
         {
             handTransform = transform.Find("Hand");
-        }
 
-        // Start is called before the first frame update
-        private void Start()
-        {
             playerObserverComponent = GetComponent<PlayerObserverComponent>();
             subjectComponent = GetComponent<SubjectComponent>();
         }

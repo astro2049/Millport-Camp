@@ -1,5 +1,4 @@
 ﻿using System;
-using Abilities.Observer;
 using Entities.Gun;
 using Entities.Player;
 using UI.Crafting;
@@ -7,7 +6,6 @@ using UI.Inventory;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using EventType = Abilities.Observer.EventType;
 
 namespace Managers
 {
@@ -17,12 +15,12 @@ namespace Managers
      * Available at: https://youtu.be/oJAE6CbsQQA?si=GVPbgh6AO7kSig4U (Accessed 29 June 2024).
      */
     // TODO: Only supports guns in inventory (un-stackable)
-    public class InventoryManager : MonoBehaviour, IObserver
+    public class InventoryManager : MonoBehaviour
     {
         /*
          * Inventory
          */
-        [SerializeField] private PlayerInventoryComponent playerInventoryComponent;
+        [HideInInspector] public PlayerInventoryComponent playerInventoryComponent;
 
         [SerializeField] private GameObject inventorySlotsTable;
         private InventorySlot[] inventorySlots;
@@ -49,23 +47,13 @@ namespace Managers
             craftButton.interactable = false;
 
             RegisterActionCallbacks();
-
-            // Wait for the component to be ready to add a default weapon
-            playerInventoryComponent.GetComponent<SubjectComponent>().AddObserver(this, EventType.InventoryReady);
         }
 
-        public bool OnNotify(MCEvent mcEvent)
+        private void Start()
         {
-            switch (mcEvent.type) {
-                case EventType.InventoryReady:
-                    // Add a default weapon
-                    // TODO: Kind of hacky...
-                    // TODO: And we do have to unsubscribe...
-                    CraftItem("Cyclops");
-                    EquipItem(inventorySlots[0].GetComponentInChildren<InventoryItem>());
-                    break;
-            }
-            return true;
+            // Add a default weapon for the player
+            CraftItem("AK-42");
+            EquipItem(inventorySlots[0].GetComponentInChildren<InventoryItem>());
         }
 
         private void RegisterActionCallbacks()

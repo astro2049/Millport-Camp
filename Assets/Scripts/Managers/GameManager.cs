@@ -4,37 +4,43 @@ using Entities.Player;
 using Entities.Vehicle;
 using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using EventType = Abilities.Observer.EventType;
 
 namespace Managers
 {
     public class GameManager : MonoBehaviour, IObserver
     {
+        public GameObject playerPrefab;
+
         [SerializeField] private Texture2D combatCursorTexture, UICursorTecture;
         public GameObject player;
         public CinemachineVirtualCamera playerCamera;
         public CinemachineVirtualCamera vehicleCamera;
 
         public UIManager uiManager;
+        public InventoryManager inventoryManager;
 
         private NavMeshSurface m_navMeshSurface;
 
         private void Awake()
         {
-            // Subscribe to player events:
-            // - WeaponChanged, EnteredVehicle, ExitedVehicle
-            // - OpenedInventory, ClosedInventory
-            // Subscribe UI manager to player events:
-            // - WeaponChanged, IsReloading, InteractionStarted, InteractionEnded,
-            // - EnteredBuildMode, PlacingStructure, ExitedBuildMode,
-            // - OpenedInventory, ClosedInventory
+            // Spawn player and focus camera
+            player = Instantiate(playerPrefab);
+            playerCamera.Follow = player.transform;
+            // TODO: hacky
+            inventoryManager.playerInventoryComponent = player.GetComponent<PlayerInventoryComponent>();
+
+            // Subscribe self and UI manager to player events
             SubjectComponent playerSubject = player.GetComponent<SubjectComponent>();
             playerSubject.AddObserver(this,
                 EventType.WeaponChanged,
                 EventType.EnteredVehicle,
                 EventType.ExitedVehicle,
                 EventType.OpenedInventory,
-                EventType.ClosedInventory
+                EventType.ClosedInventory,
+                EventType.PawnDead
             );
             playerSubject.AddObserver(uiManager,
                 EventType.WeaponChanged,
@@ -45,7 +51,8 @@ namespace Managers
                 EventType.PlacingStructure,
                 EventType.ExitedBuildMode,
                 EventType.OpenedInventory,
-                EventType.ClosedInventory
+                EventType.ClosedInventory,
+                EventType.PawnDead
             );
         }
 
@@ -105,6 +112,9 @@ namespace Managers
                 case EventType.ClosedInventory:
                     SetCursor(combatCursorTexture);
                     break;
+                case EventType.PawnDead:
+                    playerCamera.Follow = null;
+                    break;
             }
             return true;
         }
@@ -147,6 +157,11 @@ namespace Managers
             player.GetComponent<MeshRenderer>().enabled = true;
             player.GetComponent<CapsuleCollider>().enabled = true;
             player.GetComponent<Rigidbody>().isKinematic = false;
+        }
+
+        public void ReloadCurrentScene()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 }

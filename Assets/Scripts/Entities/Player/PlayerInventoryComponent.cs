@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using Abilities.Observer;
 using UnityEngine;
-using EventType = Abilities.Observer.EventType;
 
 namespace Entities.Player
 {
@@ -9,11 +7,6 @@ namespace Entities.Player
     {
         [SerializeField] private int size;
         private readonly HashSet<GameObject> items = new HashSet<GameObject>();
-
-        public void Start()
-        {
-            GetComponent<SubjectComponent>().NotifyObservers(new MCEvent(EventType.InventoryReady));
-        }
 
         public bool AddItem(GameObject entity)
         {
