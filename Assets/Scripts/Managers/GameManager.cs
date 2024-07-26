@@ -151,17 +151,20 @@ namespace Managers
             SwitchControlActor(vehicle);
 
             // Switch camera
+            playerCamera.Follow = null;
             vehicleCamera.Follow = vehicle.transform;
             playerCamera.Priority = 10;
             vehicleCamera.Priority = 20;
 
-            // Set player's rigidbody to kinematic, and attach the player to vehicle
-            player.GetComponent<Rigidbody>().isKinematic = true;
-            player.transform.parent = vehicle.transform;
+            // Teleport player to sky
+            TeleportActor(player, new Vector3(0, 100, 0));
+            // Let player float
+            player.GetComponent<Rigidbody>().useGravity = false;
+        }
 
-            // Turn off player's rendering and collision
-            player.GetComponent<MeshRenderer>().enabled = false;
-            player.GetComponent<CapsuleCollider>().enabled = false;
+        private void TeleportActor(GameObject actor, Vector3 position)
+        {
+            actor.transform.position = position;
         }
 
         private void ExitVehicle(GameObject vehicle)
@@ -170,17 +173,14 @@ namespace Managers
             SwitchControlActor(player);
 
             // Switch camera
+            playerCamera.Follow = player.transform;
             playerCamera.Priority = 20;
             vehicleCamera.Priority = 10;
 
-            // Detach player from vehicle, and set its rigidbody back to dynamic
-            player.transform.parent = null;
-            player.GetComponent<Rigidbody>().isKinematic = false;
-
-            // Turn on player's rendering and collision
-            player.GetComponent<MeshRenderer>().enabled = true;
-            player.GetComponent<CapsuleCollider>().enabled = true;
-            player.GetComponent<Rigidbody>().isKinematic = false;
+            // Teleport player next to door
+            TeleportActor(player, vehicle.transform.Find("Drop Off Point").transform.position);
+            // Capture player with gravity again
+            player.GetComponent<Rigidbody>().useGravity = true;
         }
 
         public void OnPause()
