@@ -1,4 +1,5 @@
 using Abilities.Buildable;
+using Abilities.Input;
 using Abilities.Interactable;
 using Abilities.Observer;
 using UnityEngine;
@@ -9,7 +10,7 @@ using Vector3 = UnityEngine.Vector3;
 
 namespace Entities.Player
 {
-    public class PlayerInputComponent : MonoBehaviour
+    public class PlayerInputComponent : InputComponent
     {
         /*
          * Public fields
@@ -37,10 +38,11 @@ namespace Entities.Player
         private Rigidbody rb;
         private PlayerStateComponent playerStateComponent;
         private SubjectComponent subjectComponent;
+        private PlayerInput playerInput;
 
         private void Awake()
         {
-            PlayerInput playerInput = GetComponent<PlayerInput>();
+            playerInput = GetComponent<PlayerInput>();
             movementActions = playerInput.actions.FindActionMap("Movement");
             combatActions = playerInput.actions.FindActionMap("Combat");
             buildActions = playerInput.actions.FindActionMap("Build");
@@ -69,14 +71,11 @@ namespace Entities.Player
         {
             movementActions.Enable();
             combatActions.Enable();
-            buildActions.Disable();
         }
 
         private void OnDisable()
         {
-            movementActions.Disable();
-            combatActions.Disable();
-            buildActions.Disable();
+            playerInput.actions.Disable();
         }
 
         private void FixedUpdate()
@@ -246,7 +245,7 @@ namespace Entities.Player
             if (context.phase != InputActionPhase.Performed) {
                 return;
             }
-            
+
             Vector2 lookInput = context.ReadValue<Vector2>();
             PlayerLookAt(lookInput, lookAtBuildModeLayers);
         }
@@ -256,7 +255,7 @@ namespace Entities.Player
             if (context.phase != InputActionPhase.Performed) {
                 return;
             }
-            
+
             turretToPlace.transform.position = lookPoint;
         }
 
@@ -273,7 +272,7 @@ namespace Entities.Player
             if (context.phase != InputActionPhase.Performed) {
                 return;
             }
-            
+
             // Up and Down are on y axis, 120.0/-120.0
             turretToPlace.transform.Rotate(Vector3.up, -90f * (context.ReadValue<Vector2>().y / 120f));
         }
@@ -283,7 +282,7 @@ namespace Entities.Player
             if (context.phase != InputActionPhase.Performed) {
                 return;
             }
-            
+
             BuildableComponent buildableComponent = turretToPlace.GetComponent<BuildableComponent>();
             if (buildableComponent.isOkToPlace) {
                 buildableComponent.Place();
@@ -297,7 +296,7 @@ namespace Entities.Player
             if (context.phase != InputActionPhase.Performed) {
                 return;
             }
-            
+
             // Tell UI manager about the event
             subjectComponent.NotifyObservers(new MCEvent(EventType.ExitedBuildMode));
 
@@ -318,7 +317,7 @@ namespace Entities.Player
             if (context.phase != InputActionPhase.Performed) {
                 return;
             }
-            
+
             Vector2 lookInput = context.ReadValue<Vector2>();
             PlayerLookAt(lookInput, lookAtCombatModeLayers);
         }
@@ -328,7 +327,7 @@ namespace Entities.Player
             if (context.phase != InputActionPhase.Performed) {
                 return;
             }
-            
+
             // Tell UI manager about the event
             subjectComponent.NotifyObservers(new MCEvent(EventType.ClosedInventory));
 

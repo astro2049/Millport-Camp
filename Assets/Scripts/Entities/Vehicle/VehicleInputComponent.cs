@@ -1,3 +1,4 @@
+using Abilities.Input;
 using Abilities.Observer;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -5,7 +6,7 @@ using EventType = Abilities.Observer.EventType;
 
 namespace Entities.Vehicle
 {
-    public class VehicleInputComponent : MonoBehaviour
+    public class VehicleInputComponent : InputComponent
     {
         public Vector2 moveInput;
 

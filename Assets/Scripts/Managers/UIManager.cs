@@ -2,19 +2,26 @@ using Abilities.Observer;
 using Entities.Gun;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using EventType = Abilities.Observer.EventType;
 
 namespace Managers
 {
     public class UIManager : MonoBehaviour, IObserver
     {
-        [SerializeField] private Canvas combatModeCanvas, buildModeCanvas, inventoryCanvas;
+        [SerializeField] private Canvas combatModeCanvas, buildModeCanvas, inventoryCanvas, pauseMenuCanvas;
+        
+        [Header("Combat Mode")]
         [SerializeField] private GameObject interactPrompt;
         [SerializeField] private GameObject reloadPrompt;
         [SerializeField] private TextMeshProUGUI magAmmoText;
         [SerializeField] private TextMeshProUGUI equippedGunNameText;
+        
+        [Header("Build Mode")]
         [SerializeField] private GameObject overlappingObjectsText;
-        [SerializeField] private GameObject respawnButton;
+
+        [Header("Pause Menu")]
+        [SerializeField] private Button resumeButton;
 
         // Handle events
         // Player events are subscribed in GameManager.Awake(), and
@@ -60,7 +67,7 @@ namespace Managers
                     inventoryCanvas.enabled = false;
                     break;
                 case EventType.PawnDead:
-                    respawnButton.SetActive(true);
+                    resumeButton.interactable = false;
                     break;
                 // Gun
                 case EventType.AmmoChanged:
@@ -78,6 +85,16 @@ namespace Managers
                     break;
             }
             return true;
+        }
+
+        public void OpenPauseMenu()
+        {
+            pauseMenuCanvas.enabled = true;
+        }
+
+        public void ClosePauseMenu()
+        {
+            pauseMenuCanvas.enabled = false;
         }
     }
 }

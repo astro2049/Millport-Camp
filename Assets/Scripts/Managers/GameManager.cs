@@ -1,7 +1,7 @@
+using Abilities.Input;
 using Abilities.Observer;
 using Cinemachine;
 using Entities.Player;
-using Entities.Vehicle;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,23 +12,44 @@ namespace Managers
 {
     public class GameManager : MonoBehaviour, IObserver
     {
-        public GameObject playerPrefab;
+        [Header("Prefabs")]
+        [SerializeField] private GameObject playerPrefab;
 
+        [Header("Cursor")]
         [SerializeField] private Texture2D combatCursorTexture, UICursorTecture;
-        public GameObject player;
-        public CinemachineVirtualCamera playerCamera;
-        public CinemachineVirtualCamera vehicleCamera;
 
-        public UIManager uiManager;
-        public InventoryManager inventoryManager;
+        [Header("Gameplay")]
+        [SerializeField] private GameObject player;
+        [SerializeField] private GameObject currentControllingActor;
+        [SerializeField] private CinemachineVirtualCamera playerCamera;
+        [SerializeField] private CinemachineVirtualCamera vehicleCamera;
+
+        [Header("Managers")]
+        [SerializeField] private UIManager uiManager;
+        [SerializeField] private InventoryManager inventoryManager;
 
         private NavMeshSurface m_navMeshSurface;
 
+        private bool isPaused = false;
+
+        private void SwitchControlActor(GameObject actor)
+        {
+            if (currentControllingActor) {
+                currentControllingActor.GetComponent<InputComponent>().enabled = false;
+            }
+            currentControllingActor = actor;
+            currentControllingActor.GetComponent<InputComponent>().enabled = true;
+        }
+
         private void Awake()
         {
+            // Set world time flowing speed to normal
+            Time.timeScale = 1f;
+
             // Spawn player and focus camera
             player = Instantiate(playerPrefab);
             playerCamera.Follow = player.transform;
+            SwitchControlActor(player);
             // TODO: hacky
             inventoryManager.playerInventoryComponent = player.GetComponent<PlayerInventoryComponent>();
 
@@ -113,7 +134,12 @@ namespace Managers
                     SetCursor(combatCursorTexture);
                     break;
                 case EventType.PawnDead:
+                    // Free camera
                     playerCamera.Follow = null;
+                    // Open Pause Menu
+                    Pause(false);
+                    // Disallow closing the pause menu
+                    GetComponent<PlayerInput>().actions.FindActionMap("Menu").Disable();
                     break;
             }
             return true;
@@ -122,8 +148,7 @@ namespace Managers
         private void EnterVehicle(GameObject vehicle)
         {
             // Switch Inputs
-            player.GetComponent<PlayerInputComponent>().enabled = false;
-            vehicle.GetComponent<VehicleInputComponent>().enabled = true;
+            SwitchControlActor(vehicle);
 
             // Switch camera
             vehicleCamera.Follow = vehicle.transform;
@@ -142,8 +167,7 @@ namespace Managers
         private void ExitVehicle(GameObject vehicle)
         {
             // Switch Inputs
-            player.GetComponent<PlayerInputComponent>().enabled = true;
-            vehicle.GetComponent<VehicleInputComponent>().enabled = false;
+            SwitchControlActor(player);
 
             // Switch camera
             playerCamera.Priority = 20;
@@ -159,9 +183,52 @@ namespace Managers
             player.GetComponent<Rigidbody>().isKinematic = false;
         }
 
+        public void OnPause()
+        {
+            if (!isPaused) {
+                Pause(true);
+            } else {
+                UnPause();
+            }
+            isPaused = !isPaused;
+        }
+
+        private void Pause(bool freezeTime)
+        {
+            if (freezeTime) {
+                // Pause the game
+                Time.timeScale = 0f;
+            }
+
+            // Open pause menu
+            uiManager.OpenPauseMenu();
+            SetCursor(UICursorTecture);
+
+            // Disable current actor's inputs
+            currentControllingActor.GetComponent<InputComponent>().enabled = false;
+        }
+
+        private void UnPause()
+        {
+            // Unpause the game
+            Time.timeScale = 1f;
+
+            // Close pause menu
+            uiManager.ClosePauseMenu();
+            SetCursor(combatCursorTexture);
+
+            // Enable current actor's inputs
+            currentControllingActor.GetComponent<InputComponent>().enabled = true;
+        }
+
         public void ReloadCurrentScene()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        public void QuitGame()
+        {
+            Application.Quit();
         }
     }
 }
