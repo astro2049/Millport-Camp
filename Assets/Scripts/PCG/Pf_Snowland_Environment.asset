@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d759e9e4847560441bcff20536475058, type: 3}
+  m_Name: Pf_Snowland_Environment
+  m_EditorClassIdentifier: 
+  floors:
+  - {fileID: 146614, guid: 9154d83fdcda70f4f84028ccd30286a2, type: 3}
+  - {fileID: 161474, guid: 66d5df05d84e531478fe461e0dbd561a, type: 3}
+  - {fileID: 198572, guid: 77f8f8b2b7c79c84fa7e05dfef7abb42, type: 3}
+  - {fileID: 185070, guid: 7527293ca015a324d9a5a3fec600da4b, type: 3}
+  - {fileID: 139022, guid: 07ace05306ce58d49963df7396227e22, type: 3}
+  - {fileID: 138554, guid: 115e19f45cfeb3648b9618a720e2f288, type: 3}
+  - {fileID: 194090, guid: 79488be375cdbca4e887818fba0d25f2, type: 3}
+  trees:
+  - {fileID: 185332, guid: 1f6d3382e7c4bb248a16b37daa112421, type: 3}
+  - {fileID: 190212, guid: 396b2aadc2f369d4e83c136cd02dd1c9, type: 3}
+  - {fileID: 182098, guid: d0fc4cc06a77cb64491e0d34c7f142e5, type: 3}
+  - {fileID: 172638, guid: 510ba1bb6971a724faa0984ef20df1c3, type: 3}
+  - {fileID: 130958, guid: 2023e1036cda08b48b0ddec79f623b1d, type: 3}
+  - {fileID: 164174, guid: 5825e892e95759e4c8731f2f425e6565, type: 3}
+  - {fileID: 117356, guid: 0137417f88902f24aad8a1c974a235dc, type: 3}
+  - {fileID: 168566, guid: af14d7397db521e43b92abe7021113f5, type: 3}
+  - {fileID: 149056, guid: b2751436e06708b48927332ec278312a, type: 3}
+  - {fileID: 109334, guid: 9f95495ddaf2d2e47bf5b1c2ee2bf4ee, type: 3}
+  - {fileID: 166702, guid: a27920c1f5b4a214db86c72c7aa41011, type: 3}
+  - {fileID: 101108, guid: a252453784235fe4ea7bd328a1db47c3, type: 3}
+  - {fileID: 104560, guid: 01ada3171b6f8424689846914f004143, type: 3}
+  - {fileID: 180584, guid: 80eec4562f0015f458b238784e11cded, type: 3}
+  - {fileID: 163302, guid: 7fc058c49bcc88644a52cedcc223f09e, type: 3}
+  - {fileID: 101962, guid: a3bbc119427cee947a484e5071eb0cfa, type: 3}
+  - {fileID: 110048, guid: 9ff00da5505916f4285c4891a1195bc7, type: 3}
+  - {fileID: 180332, guid: dd61f220c8d4f3643ad0d82a7e0927d3, type: 3}
+  - {fileID: 140432, guid: cc70edc38920dfa49b8cccea23f74d82, type: 3}
+  - {fileID: 102990, guid: 76c555a8d57b63c479e8780df868ce30, type: 3}
+  - {fileID: 135604, guid: 335f9f042781e494ab3ad14d24c8b719, type: 3}
+  rocks:
+  - {fileID: 141656, guid: b7cd2ffa547f8a64a872e4c0e2fea8fd, type: 3}
+  - {fileID: 107944, guid: 78945eba40111464bb27c0682e72aad3, type: 3}
+  - {fileID: 190588, guid: 08d9e7899d5dc7740805a597bfe30058, type: 3}
+  flowers:
+  - {fileID: 142994, guid: d6389bfdb7e456640b3a45339aac60a4, type: 3}
+  - {fileID: 135202, guid: 888a19a6a2e12e240b806f77f4d0ed07, type: 3}
+  - {fileID: 151234, guid: 390c2bf1514a09e49a2aa0361d9e314c, type: 3}
+  - {fileID: 105602, guid: 8f91512376d75e54a9b57ea29926599d, type: 3}
+  - {fileID: 185154, guid: bd797f8b461dda044840c3a0bd197fe7, type: 3}
+  - {fileID: 150346, guid: 160967ba76f9fb64980281b24fd0dbb0, type: 3}
+  - {fileID: 145908, guid: 46c53497e3001f54a99bbdccd3d1a96f, type: 3}
+  - {fileID: 161528, guid: 8f3253cb70543aa46b0b8912fa09f8a3, type: 3}
+  hills:
+  - {fileID: 128732, guid: 32e87fba02446554c9c88126061addcb, type: 3}
+  - {fileID: 105192, guid: 1de48ba9c94bab04285348e92abbb63b, type: 3}
+  - {fileID: 198022, guid: f8482f071c1c29244b0fffe897535ef5, type: 3}
+  - {fileID: 128976, guid: d62be77ab4b73b54f8cd6e96a767f023, type: 3}

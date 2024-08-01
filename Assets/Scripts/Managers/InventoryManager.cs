@@ -52,8 +52,8 @@ namespace Managers
         private void Start()
         {
             // Add a default weapon for the player
-            CraftItem("AK-42");
-            EquipItem(inventorySlots[0].GetComponentInChildren<InventoryItem>());
+            // CraftItem("AK-42");
+            // EquipItem(inventorySlots[0].GetComponentInChildren<InventoryItem>());
         }
 
         private void RegisterActionCallbacks()
