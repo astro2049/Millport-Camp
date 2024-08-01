@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d759e9e4847560441bcff20536475058, type: 3}
+  m_Name: BiomeData_5_Woodland
+  m_EditorClassIdentifier: 
+  floorMaterial: {fileID: 2100000, guid: 10ee176da59c16f46a77d05d45d2c5f6, type: 2}
+  foliageConfigs:
+  - subCellCount: 1
+    minSize: 0.5
+    maxSize: 1.5
+    prefabs:
+    - {fileID: 113998, guid: 1fedb5571d445274782330b0eea48e80, type: 3}
+    - {fileID: 102970, guid: f88e0c5504d699d4ebb950b8944bffcb, type: 3}
+    - {fileID: 190414, guid: 653c97bd88b4b084d87714542c43ee5a, type: 3}
+    - {fileID: 177546, guid: 247e09e89c199dd46b07af0a0a46b8ac, type: 3}
+    - {fileID: 108714, guid: 00ed5f0c12fd8d5499f54fb0096adab9, type: 3}
+    - {fileID: 143756, guid: 6b1e970065443dd46b6854a0caf642c9, type: 3}
+    - {fileID: 111638, guid: b1906e04b9f548148b786a8582d5a1f3, type: 3}
+    - {fileID: 170592, guid: 078efdee227ce7b40b3a095532cd4e65, type: 3}
+    - {fileID: 166498, guid: 97bb6fd1f3a811c41af585fe99d31bf3, type: 3}
+    - {fileID: 134014, guid: 1a2e1c6550b2a8d4590347dd6573d878, type: 3}

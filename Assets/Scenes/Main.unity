@@ -694,23 +694,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 899b0958245741043b02aa06d730a15b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  woodlandPrefabs: {fileID: 11400000, guid: c031ee0690e1a884881fe32e5a441d0e, type: 2}
-  snowlandPrefabs: {fileID: 11400000, guid: 895dcf9c27160b14e926fb64b696221c, type: 2}
-  worldSize: 50
+  worldGridSize: 32
+  worldCellSize: 8
+  foliageSubGridSize: 4
   floorPrefab: {fileID: 8861129652233209972, guid: e6a94e851c16d3b4f8446571d41df6c1, type: 3}
-  floorColors:
-  - {r: 0.6650944, g: 0.98200184, b: 1, a: 0}
-  - {r: 0.28751338, g: 0.83111453, b: 0.8584906, a: 0}
-  - {r: 0.2938323, g: 0.49758255, b: 0.6698113, a: 0}
-  - {r: 0.3255162, g: 0.5188679, b: 0.42514592, a: 0}
-  - {r: 0.5338644, g: 0.8773585, b: 0.6545495, a: 0}
-  - {r: 0.754717, g: 0.3850157, b: 0.16731933, a: 0}
-  - {r: 0.9245283, g: 0.66222185, b: 0.15263437, a: 0}
   whittakerBiomes:
+    seaLevelHeight: 0.3
     equatorTemperature: 30
     northPoleTemperature: -10
-    perlinNoiseScale: 10
-    perlinNoiseOffset: 0
+    humidityPerlinNoiseScale: 4
+    humidityPerlinNoiseOffset: 0
+    riverPerlinNoiseScale: {x: 4, y: 4}
+    riverPerlinNoiseOffset: 0
+  aimPlanePrefab: {fileID: 396570632468770756, guid: a40e6f1c8a9c34d46a3730b12ab0f438, type: 3}
+  biomes:
+  - biomeType: 0
+    biomeData: {fileID: 11400000, guid: da470aa0419370146af064cd64125b81, type: 2}
+  - biomeType: 1
+    biomeData: {fileID: 11400000, guid: f9b05d03951053547871496bac8cc1aa, type: 2}
+  - biomeType: 2
+    biomeData: {fileID: 11400000, guid: c91ac4a8e6a017c4c832a1f3f1f479d7, type: 2}
+  - biomeType: 3
+    biomeData: {fileID: 11400000, guid: bde4528e96596ff458c313cf612ba7e5, type: 2}
+  - biomeType: 4
+    biomeData: {fileID: 11400000, guid: 4defee013bb80234ab208546a67d358c, type: 2}
+  - biomeType: 5
+    biomeData: {fileID: 11400000, guid: 9895883a68d1cdd4b8b61607bf249140, type: 2}
+  - biomeType: 6
+    biomeData: {fileID: 11400000, guid: 07decaf1fa01ede449053b80995d91e5, type: 2}
+  - biomeType: 7
+    biomeData: {fileID: 11400000, guid: 735282c0f1fad3444b59de726168ba31, type: 2}
 --- !u!156049354 &313731510
 Grid:
   m_ObjectHideFlags: 0

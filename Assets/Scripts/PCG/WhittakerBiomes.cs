@@ -12,12 +12,16 @@ namespace PCG
         Taiga = 3,
         Grassland = 4,
         Woodland = 5,
-        Desert = 6
+        Desert = 6,
+        Mountain = 7
     }
 
     [Serializable]
     public class WhittakerBiomes
     {
+        [Header("Height")]
+        [SerializeField] private float seaLevelHeight = 0.2f;
+
         [Header("Temperature")]
         [SerializeField] private float equatorTemperature = 30f;
         [SerializeField] private float northPoleTemperature = -10f;
@@ -25,18 +29,21 @@ namespace PCG
         private float temperatureInterval;
         private int temperatureLevelCount;
 
+        [Header("Humidity")]
+        [SerializeField] private int humidityPerlinNoiseScale = 4;
+        public float humidityPerlinNoiseOffset;
         private float humidityInterval;
         private int humidityLevelCount;
 
-        [Header("Perlin Noise")]
-        [SerializeField] private int perlinNoiseScale = 10;
-        public float perlinNoiseOffset;
+        [Header("River")]
+        [SerializeField] private Vector2 riverPerlinNoiseScale = new Vector2(10f, 10f);
+        public float riverPerlinNoiseOffset;
 
         private int worldSize;
 
         // Biomes
         private BiomeType[,] biomes = {
-                         // Cold        // Cool           // Warm           // Hot
+            // Cold        // Cool           // Warm           // Hot
             /* Arid */ { BiomeType.Ice, BiomeType.Tundra, BiomeType.Desert, BiomeType.Desert },
             /* Semi-Arid */ { BiomeType.Ice, BiomeType.Tundra, BiomeType.Grassland, BiomeType.Woodland },
             /* Moist */ { BiomeType.Ice, BiomeType.Taiga, BiomeType.Woodland, BiomeType.Woodland },
@@ -54,10 +61,21 @@ namespace PCG
             temperatureInterval = temperatureDifference / temperatureLevelCount;
             humidityInterval = 1f / humidityLevelCount;
 
-            // Randomize perlin noise sample region
-            perlinNoiseOffset = Random.Range(0, 10);
+            RandomizePerlinNoisesOffsets();
 
             this.worldSize = worldSize;
+        }
+
+        // Randomize perlin noises sample region
+        public void RandomizePerlinNoisesOffsets()
+        {
+            humidityPerlinNoiseOffset = Random.Range(0f, 10f);
+            riverPerlinNoiseOffset = Random.Range(0f, 10f);
+        }
+
+        public float GetHeight(int x, int y)
+        {
+            return Mathf.PerlinNoise((float)x / worldSize * 3, (float)y / worldSize * 3);
         }
 
         public float GetTemperature(float latitude)
@@ -67,11 +85,15 @@ namespace PCG
 
         public float GetHumidity(int x, int y)
         {
-            return Mathf.PerlinNoise(perlinNoiseOffset + (float)x / worldSize * 10, perlinNoiseOffset + (float)y / worldSize * perlinNoiseScale);
+            return Mathf.PerlinNoise(humidityPerlinNoiseOffset + (float)x / worldSize * humidityPerlinNoiseScale, humidityPerlinNoiseOffset + (float)y / worldSize * humidityPerlinNoiseScale);
         }
 
         public BiomeType DetermineBiome(int x, int y)
         {
+            if (GetHeight(x, y) <= seaLevelHeight) {
+                return BiomeType.Ocean;
+            }
+
             float temperature = GetTemperature(y);
             int temperatureLevel = (int)((temperature - northPoleTemperature) / temperatureInterval);
             // Clamp temperature level because there's fluctuation
