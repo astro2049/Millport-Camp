@@ -18,9 +18,9 @@ namespace PCG
     public class LevelGenerator : MonoBehaviour
     {
         [SerializeField] private int worldGridSize = 32;
-        private const int chunkSize = 16; // m, Unity unit
-        private const int foliageSubGridSize = 16;
-        private const int foliageSubCellSize = 1; // m, Unity unit
+        private const int c_chunkSize = 16; // m, Unity unit
+        private const int c_foliageSubGridSize = c_chunkSize;
+        private const int c_foliageSubCellSize = 1; // m, Unity unit
 
         private Grid grid;
 
@@ -41,15 +41,15 @@ namespace PCG
             // Get Grid component
             grid = GetComponent<Grid>();
             // Change grid's cell size accordingly
-            grid.cellSize = new Vector3(chunkSize, 1, chunkSize);
+            grid.cellSize = new Vector3(c_chunkSize, 1, c_chunkSize);
 
             // Initialize biomes parameters
             whittakerBiomes.initializeParameters(worldGridSize);
 
             // Adjust floor cell scale according to grid cell size, because prefab is plane
-            floorPrefab.transform.localScale = new Vector3(chunkSize / 10f, 1, chunkSize / 10f);
+            floorPrefab.transform.localScale = new Vector3(c_chunkSize / 10f, 1, c_chunkSize / 10f);
             // Offset self to align with world center
-            transform.position = new Vector3(-worldGridSize * chunkSize / 2f, 0, -worldGridSize * chunkSize / 2f);
+            transform.position = new Vector3(-worldGridSize * c_chunkSize / 2f, 0, -worldGridSize * c_chunkSize / 2f);
             // Generate aim plane. Same size as the terrain.
             GameObject aimPlane = Instantiate(aimPlanePrefab);
             aimPlane.transform.localScale = floorPrefab.transform.localScale * worldGridSize;
@@ -109,12 +109,12 @@ namespace PCG
             foreach (Biome biome in biomes) {
                 foreach (Chunk chunk in biome.chunks) {
                     // (Precalculate) tile bottom left corner world coordinate
-                    Vector3 cellBottomLeftCoord = grid.GetCellCenterWorld(new Vector3Int(chunk.cellCoord.x, 0, chunk.cellCoord.y)) - new Vector3(chunkSize / 2f, 0, chunkSize / 2f);
+                    Vector3 cellBottomLeftCoord = grid.GetCellCenterWorld(new Vector3Int(chunk.cellCoord.x, 0, chunk.cellCoord.y)) - new Vector3(c_chunkSize / 2f, 0, c_chunkSize / 2f);
                     cellBottomLeftCoord.y = 0;
 
                     // Prepare index list
                     List<int> choices = new List<int>();
-                    for (int i = 0; i < foliageSubGridSize * foliageSubGridSize; i++) {
+                    for (int i = 0; i < c_foliageSubGridSize * c_foliageSubGridSize; i++) {
                         choices.Add(i);
                     }
 
@@ -125,14 +125,14 @@ namespace PCG
                         // Place the plants on the selected sub cells
                         foreach (int subCellIndex in subCellIndices) {
                             // Calculate sub cell x, y coordinate (in sub grid)
-                            int x = subCellIndex % foliageSubGridSize;
-                            int y = subCellIndex / foliageSubGridSize;
+                            int x = subCellIndex % c_foliageSubGridSize;
+                            int y = subCellIndex / c_foliageSubGridSize;
 
                             // Calculate sub cell bottom left corner world coordinate
-                            Vector3 subCellBottomLeftCoord = cellBottomLeftCoord + new Vector3(x * foliageSubCellSize, 0, y * foliageSubCellSize);
+                            Vector3 subCellBottomLeftCoord = cellBottomLeftCoord + new Vector3(x * c_foliageSubCellSize, 0, y * c_foliageSubCellSize);
 
                             // Choose a random location within this sub cell, a random scale, and place the plant
-                            Vector3 offset = new Vector3(Random.Range(0f, foliageSubCellSize), 0, Random.Range(0f, foliageSubCellSize));
+                            Vector3 offset = new Vector3(Random.Range(0f, c_foliageSubCellSize), 0, Random.Range(0f, c_foliageSubCellSize));
                             Vector3 scale = Vector3.one * Random.Range(foliageConfig.minSize, foliageConfig.maxSize);
                             GenerateRandomGameObjectFromList(foliageConfig.prefabs, subCellBottomLeftCoord + offset, scale, environmentParent);
                         }

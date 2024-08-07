@@ -21,6 +21,8 @@ namespace PCG
     {
         [Header("Height")]
         [SerializeField] private float seaLevelHeight = 0.2f;
+        [SerializeField] private int heightPerlinNoiseScale = 3;
+        public float heightPerlinNoiseOffset;
 
         [Header("Temperature")]
         [SerializeField] private float equatorTemperature = 30f;
@@ -69,13 +71,14 @@ namespace PCG
         // Randomize perlin noises sample region
         public void RandomizePerlinNoisesOffsets()
         {
+            heightPerlinNoiseOffset = Random.Range(0f, 10f);
             humidityPerlinNoiseOffset = Random.Range(0f, 10f);
             riverPerlinNoiseOffset = Random.Range(0f, 10f);
         }
 
         public float GetHeight(int x, int y)
         {
-            return Mathf.PerlinNoise((float)x / worldSize * 3, (float)y / worldSize * 3);
+            return PerlinNoise.Sample((float)x / worldSize, (float)y / worldSize, heightPerlinNoiseOffset, heightPerlinNoiseScale);
         }
 
         public float GetTemperature(float latitude)
@@ -85,7 +88,7 @@ namespace PCG
 
         public float GetHumidity(int x, int y)
         {
-            return Mathf.PerlinNoise(humidityPerlinNoiseOffset + (float)x / worldSize * humidityPerlinNoiseScale, humidityPerlinNoiseOffset + (float)y / worldSize * humidityPerlinNoiseScale);
+            return PerlinNoise.Sample((float)x / worldSize, (float)y / worldSize, humidityPerlinNoiseOffset, humidityPerlinNoiseScale);
         }
 
         public BiomeType DetermineBiome(int x, int y)
