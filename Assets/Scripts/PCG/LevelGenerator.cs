@@ -7,32 +7,20 @@ using Random = UnityEngine.Random;
 
 namespace PCG
 {
-    public class Tile
-    {
-        public BiomeType biome;
-        public Vector2Int cellCoord;
-
-        public Tile(BiomeType biome, Vector2Int cellCoord)
-        {
-            this.biome = biome;
-            this.cellCoord = cellCoord;
-        }
-    }
-
     [Serializable]
     public class Biome
     {
         public BiomeType biomeType;
-        public readonly List<Tile> tiles = new List<Tile>();
+        public readonly List<Chunk> chunks = new List<Chunk>();
         public BiomeData.BiomeData biomeData;
     }
 
     public class LevelGenerator : MonoBehaviour
     {
         [SerializeField] private int worldGridSize = 32;
-        [SerializeField] private int worldCellSize = 8; // m, Unity unit
-        [SerializeField] private int foliageSubGridSize = 4;
-        private float foliageSubCellSize; // m, Unity unit
+        private const int chunkSize = 16; // m, Unity unit
+        private const int foliageSubGridSize = 16;
+        private const int foliageSubCellSize = 1; // m, Unity unit
 
         private Grid grid;
 
@@ -53,17 +41,15 @@ namespace PCG
             // Get Grid component
             grid = GetComponent<Grid>();
             // Change grid's cell size accordingly
-            grid.cellSize = new Vector3(worldCellSize, 1, worldCellSize);
-            // (Precalculate) Foliage sub cell size
-            foliageSubCellSize = (float)worldCellSize / foliageSubGridSize;
+            grid.cellSize = new Vector3(chunkSize, 1, chunkSize);
 
             // Initialize biomes parameters
             whittakerBiomes.initializeParameters(worldGridSize);
 
             // Adjust floor cell scale according to grid cell size, because prefab is plane
-            floorPrefab.transform.localScale = new Vector3(worldCellSize / 10f, 1, worldCellSize / 10f);
+            floorPrefab.transform.localScale = new Vector3(chunkSize / 10f, 1, chunkSize / 10f);
             // Offset self to align with world center
-            transform.position = new Vector3(-worldGridSize * worldCellSize / 2f, 0, -worldGridSize * worldCellSize / 2f);
+            transform.position = new Vector3(-worldGridSize * chunkSize / 2f, 0, -worldGridSize * chunkSize / 2f);
             // Generate aim plane. Same size as the terrain.
             GameObject aimPlane = Instantiate(aimPlanePrefab);
             aimPlane.transform.localScale = floorPrefab.transform.localScale * worldGridSize;
@@ -92,7 +78,7 @@ namespace PCG
 
             // Clear biomes cells
             foreach (Biome biome in biomes) {
-                biome.tiles.Clear();
+                biome.chunks.Clear();
             }
 
             // Get a new random value for biomes generation perlin noises
@@ -113,7 +99,7 @@ namespace PCG
                     floor.GetComponent<MeshRenderer>().material = biomes[biomeType.GetHashCode()].biomeData.floorMaterial;
 
                     // Add this tile to biomes lookup table
-                    biomes[biomeType.GetHashCode()].tiles.Add(new Tile(biomeType, new Vector2Int(x, y)));
+                    biomes[biomeType.GetHashCode()].chunks.Add(new Chunk(biomeType, new Vector2Int(x, y)));
                 }
             }
         }
@@ -121,9 +107,9 @@ namespace PCG
         private void GeneratePlants()
         {
             foreach (Biome biome in biomes) {
-                foreach (Tile tile in biome.tiles) {
+                foreach (Chunk chunk in biome.chunks) {
                     // (Precalculate) tile bottom left corner world coordinate
-                    Vector3 cellBottomLeftCoord = grid.GetCellCenterWorld(new Vector3Int(tile.cellCoord.x, 0, tile.cellCoord.y)) - new Vector3(worldCellSize / 2f, 0, worldCellSize / 2f);
+                    Vector3 cellBottomLeftCoord = grid.GetCellCenterWorld(new Vector3Int(chunk.cellCoord.x, 0, chunk.cellCoord.y)) - new Vector3(chunkSize / 2f, 0, chunkSize / 2f);
                     cellBottomLeftCoord.y = 0;
 
                     // Prepare index list
