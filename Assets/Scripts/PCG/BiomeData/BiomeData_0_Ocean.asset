@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d759e9e4847560441bcff20536475058, type: 3}
   m_Name: BiomeData_0_Ocean
   m_EditorClassIdentifier: 
-  floorMaterial: {fileID: 2100000, guid: 3b3b5fc58ad0da34e8c6df4d5a51b035, type: 2}
+  floorMaterial: {fileID: 2100000, guid: 5fe9d1052e7d69048bb6faeb143cdb5a, type: 2}
   foliageConfigs: []

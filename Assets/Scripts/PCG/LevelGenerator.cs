@@ -33,6 +33,8 @@ namespace PCG
 
         [SerializeField] private GameObject aimPlanePrefab;
 
+        [SerializeField] private GameObject ocean;
+
         [Header("Biomes")]
         public Biome[] biomes;
 
@@ -61,8 +63,20 @@ namespace PCG
                 Assert.AreEqual(biomes[i].biomeType, biomeTypeValues.GetValue(i));
             }
 
+            // Resize the ocean
+            ResizeOcean();
+
             // Generate the world
             Generate();
+        }
+
+        private void ResizeOcean()
+        {
+            ocean.transform.localScale = new Vector3(worldGridSize * c_chunkSize / 10f, 1, worldGridSize * c_chunkSize / 10f);
+            // Adjust ocean's ripple density according to world size
+            // TODO: Kind of hacky
+            float rippleDensity = ocean.GetComponent<MeshRenderer>().material.GetFloat("_RippleDensity");
+            ocean.GetComponent<MeshRenderer>().material.SetFloat("_RippleDensity", rippleDensity * worldGridSize);
         }
 
         public void Generate()
@@ -81,6 +95,7 @@ namespace PCG
                 biome.chunks.Clear();
             }
 
+            /* Generate the game world */
             // Get a new random value for biomes generation perlin noises
             whittakerBiomes.RandomizePerlinNoisesOffsets();
 
@@ -94,9 +109,13 @@ namespace PCG
             for (int x = 0; x < worldGridSize; x++) {
                 for (int y = 0; y < worldGridSize; y++) {
                     Vector3 cellCoord = grid.GetCellCenterWorld(new Vector3Int(x, 0, y));
-                    GameObject floor = Instantiate(floorPrefab, new Vector3(cellCoord.x, 0, cellCoord.z), Quaternion.identity, floorsParent);
                     BiomeType biomeType = whittakerBiomes.DetermineBiome(x, y);
-                    floor.GetComponent<MeshRenderer>().material = biomes[biomeType.GetHashCode()].biomeData.floorMaterial;
+
+                    // Spawn a floor tile if it's not Ocean
+                    if (biomeType != BiomeType.Ocean) {
+                        GameObject floor = Instantiate(floorPrefab, new Vector3(cellCoord.x, 0, cellCoord.z), Quaternion.identity, floorsParent);
+                        floor.GetComponent<MeshRenderer>().material = biomes[biomeType.GetHashCode()].biomeData.floorMaterial;
+                    }
 
                     // Add this tile to biomes lookup table
                     biomes[biomeType.GetHashCode()].chunks.Add(new Chunk(biomeType, new Vector2Int(x, y)));
