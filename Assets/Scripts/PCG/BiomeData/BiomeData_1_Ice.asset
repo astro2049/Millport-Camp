@@ -13,4 +13,12 @@ MonoBehaviour:
   m_Name: BiomeData_1_Ice
   m_EditorClassIdentifier: 
   floorMaterial: {fileID: 2100000, guid: 3e8e69cc39d62f54fabe5aee73746745, type: 2}
-  foliageConfigs: []
+  foliageConfigs:
+  - occurence: 0.1
+    subCellCount: 3
+    minSize: 1
+    maxSize: 1
+    prefabs:
+    - {fileID: 135604, guid: 335f9f042781e494ab3ad14d24c8b719, type: 3}
+    - {fileID: 102990, guid: 76c555a8d57b63c479e8780df868ce30, type: 3}
+    - {fileID: 140432, guid: cc70edc38920dfa49b8cccea23f74d82, type: 3}

@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floorMaterial: {fileID: 2100000, guid: 10ee176da59c16f46a77d05d45d2c5f6, type: 2}
   foliageConfigs:
-  - subCellCount: 1
+  - occurence: 1
+    subCellCount: 3
     minSize: 0.5
     maxSize: 1.5
     prefabs:
@@ -28,3 +29,19 @@ MonoBehaviour:
     - {fileID: 170592, guid: 078efdee227ce7b40b3a095532cd4e65, type: 3}
     - {fileID: 166498, guid: 97bb6fd1f3a811c41af585fe99d31bf3, type: 3}
     - {fileID: 134014, guid: 1a2e1c6550b2a8d4590347dd6573d878, type: 3}
+  - occurence: 0.5
+    subCellCount: 3
+    minSize: 0.5
+    maxSize: 1.5
+    prefabs:
+    - {fileID: 130566, guid: ef6ea52561f2ccd4cbc5b746b20c8892, type: 3}
+    - {fileID: 105966, guid: 09191fb08393ccf4291d1be49a262339, type: 3}
+    - {fileID: 130542, guid: 32e12bfff36b3254ab61e5799485ddf6, type: 3}
+    - {fileID: 122670, guid: f7e91e1d54c5ad64f8125310343f0d30, type: 3}
+  - occurence: 0.2
+    subCellCount: 2
+    minSize: 0.7
+    maxSize: 1
+    prefabs:
+    - {fileID: 114594, guid: e0bcb36554be1124b8a89d63037350be, type: 3}
+    - {fileID: 142132, guid: 13af20cb32cfaab428901a23183d2ca1, type: 3}

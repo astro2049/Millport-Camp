@@ -13,4 +13,13 @@ MonoBehaviour:
   m_Name: BiomeData_4_Grassland
   m_EditorClassIdentifier: 
   floorMaterial: {fileID: 2100000, guid: 5abb3d18170c7cc4b8ce3577ef8b5ed8, type: 2}
-  foliageConfigs: []
+  foliageConfigs:
+  - occurence: 0.7
+    subCellCount: 3
+    minSize: 0.7
+    maxSize: 1
+    prefabs:
+    - {fileID: 105966, guid: 09191fb08393ccf4291d1be49a262339, type: 3}
+    - {fileID: 130566, guid: ef6ea52561f2ccd4cbc5b746b20c8892, type: 3}
+    - {fileID: 130542, guid: 32e12bfff36b3254ab61e5799485ddf6, type: 3}
+    - {fileID: 122670, guid: f7e91e1d54c5ad64f8125310343f0d30, type: 3}

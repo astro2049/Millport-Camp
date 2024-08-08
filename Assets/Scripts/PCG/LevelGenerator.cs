@@ -119,6 +119,11 @@ namespace PCG
                     }
 
                     foreach (FoliageConfig foliageConfig in biome.biomeData.foliageConfigs) {
+                        // Determine if to generate the plant set at all
+                        if (Random.Range(0f, 1f) >= foliageConfig.occurence) {
+                            continue;
+                        }
+
                         // Choose the sub-cells to generate this plant randomly
                         List<int> subCellIndices = GetXElementsFromYElements(foliageConfig.subCellCount, choices);
 

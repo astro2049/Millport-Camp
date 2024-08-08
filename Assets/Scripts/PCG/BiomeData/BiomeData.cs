@@ -6,11 +6,13 @@ namespace PCG.BiomeData
     [Serializable]
     public class FoliageConfig
     {
+        [Header("Possibility")]
+        [Range(0f, 1f)] public float occurence = 1f;
         [Header("Density")]
         [Range(1, 16)] public int subCellCount;
         [Header("Size Range")]
         [Range(0.3f, 1f)] public float minSize = 0.5f;
-        [Range(1f, 2f)] public float maxSize = 1.5f;
+        [Range(0.5f, 2f)] public float maxSize = 1.5f;
         [Header("Assets")]
         public GameObject[] prefabs;
     }

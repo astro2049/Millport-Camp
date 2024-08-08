@@ -14,10 +14,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floorMaterial: {fileID: 2100000, guid: 24b6231500911594fb59d37af5b88785, type: 2}
   foliageConfigs:
-  - subCellCount: 1
-    minSize: 1
+  - occurence: 0.3
+    subCellCount: 2
+    minSize: 0.3
     maxSize: 0
     prefabs:
     - {fileID: 180332, guid: dd61f220c8d4f3643ad0d82a7e0927d3, type: 3}
     - {fileID: 155732, guid: 3a394833ed3019347885eb63e392eb08, type: 3}
     - {fileID: 174300, guid: 105f2418cc866b6439b211cb0181b50e, type: 3}
+  - occurence: 0.5
+    subCellCount: 1
+    minSize: 0.7
+    maxSize: 1
+    prefabs:
+    - {fileID: 130958, guid: 2023e1036cda08b48b0ddec79f623b1d, type: 3}
+    - {fileID: 185332, guid: 1f6d3382e7c4bb248a16b37daa112421, type: 3}
+    - {fileID: 172638, guid: 510ba1bb6971a724faa0984ef20df1c3, type: 3}
+    - {fileID: 182098, guid: d0fc4cc06a77cb64491e0d34c7f142e5, type: 3}
+    - {fileID: 190212, guid: 396b2aadc2f369d4e83c136cd02dd1c9, type: 3}
+    - {fileID: 164174, guid: 5825e892e95759e4c8731f2f425e6565, type: 3}
+    - {fileID: 117356, guid: 0137417f88902f24aad8a1c974a235dc, type: 3}
+    - {fileID: 168566, guid: af14d7397db521e43b92abe7021113f5, type: 3}
+    - {fileID: 149056, guid: b2751436e06708b48927332ec278312a, type: 3}
+    - {fileID: 109334, guid: 9f95495ddaf2d2e47bf5b1c2ee2bf4ee, type: 3}
+    - {fileID: 180584, guid: 80eec4562f0015f458b238784e11cded, type: 3}
+    - {fileID: 104560, guid: 01ada3171b6f8424689846914f004143, type: 3}
+    - {fileID: 101108, guid: a252453784235fe4ea7bd328a1db47c3, type: 3}
+    - {fileID: 166702, guid: a27920c1f5b4a214db86c72c7aa41011, type: 3}
+    - {fileID: 163302, guid: 7fc058c49bcc88644a52cedcc223f09e, type: 3}
+    - {fileID: 101962, guid: a3bbc119427cee947a484e5071eb0cfa, type: 3}
+    - {fileID: 110048, guid: 9ff00da5505916f4285c4891a1195bc7, type: 3}
+  - occurence: 0.1
+    subCellCount: 2
+    minSize: 0.8
+    maxSize: 1
+    prefabs:
+    - {fileID: 142132, guid: 13af20cb32cfaab428901a23183d2ca1, type: 3}
+    - {fileID: 114594, guid: e0bcb36554be1124b8a89d63037350be, type: 3}

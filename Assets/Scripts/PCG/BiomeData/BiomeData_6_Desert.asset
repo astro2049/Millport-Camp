@@ -13,4 +13,23 @@ MonoBehaviour:
   m_Name: BiomeData_6_Desert
   m_EditorClassIdentifier: 
   floorMaterial: {fileID: 2100000, guid: 4930c6ffa5b9b9f4098249a43abf8506, type: 2}
-  foliageConfigs: []
+  foliageConfigs:
+  - occurence: 1
+    subCellCount: 5
+    minSize: 1
+    maxSize: 1
+    prefabs:
+    - {fileID: 160216, guid: c43d0e52994b357469fc0af69152016c, type: 3}
+    - {fileID: 124282, guid: 4a0161dd17a0d6b42b4f8046836bcb22, type: 3}
+    - {fileID: 103846, guid: cb2f3e821d9528844b40c91c674903d9, type: 3}
+    - {fileID: 117394, guid: 9211b397ed1fec54fa30bd8c8b657e1f, type: 3}
+    - {fileID: 177766, guid: cd24e2db351b23d4394bf6b5203c87a9, type: 3}
+    - {fileID: 164432, guid: 33869a01d3f526a40817cb7dc480cfe0, type: 3}
+    - {fileID: 128182, guid: f469bb5d4878e0545be36504442967ff, type: 3}
+    - {fileID: 167010, guid: f44a0a8cf86c4624faaaa432ee3b78ae, type: 3}
+    - {fileID: 185840, guid: fe78b30f7a980d748a46c587a31099fc, type: 3}
+    - {fileID: 178776, guid: 27b2a5e9e01330645a7ab5be223502ae, type: 3}
+    - {fileID: 132560, guid: 322f1c098632dc7488899237a7c30940, type: 3}
+    - {fileID: 185334, guid: e630370e466d57648b32da531956bf10, type: 3}
+    - {fileID: 160396, guid: db96700501799fd448a90dae5ab5a837, type: 3}
+    - {fileID: 108566, guid: b83247e7d4e0a3349a19ac9ceb4ab3ba, type: 3}
