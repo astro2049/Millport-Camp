@@ -78,7 +78,12 @@ namespace PCG
 
         public float GetHeight(int x, int y)
         {
-            return PerlinNoise.Sample((float)x / worldSize, (float)y / worldSize, heightPerlinNoiseOffset, heightPerlinNoiseScale);
+            // Get height according to height Perlin noise map
+            float height = PerlinNoise.Sample((float)x / worldSize, (float)y / worldSize, heightPerlinNoiseOffset, heightPerlinNoiseScale);
+            // Apply falloff
+            height -= TerrainGenerator.GetFallOffHeight(x, y, worldSize);
+
+            return height;
         }
 
         public float GetTemperature(float latitude)

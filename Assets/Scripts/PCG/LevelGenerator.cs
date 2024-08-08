@@ -31,8 +31,8 @@ namespace PCG
 
         [SerializeField] private WhittakerBiomes whittakerBiomes = new WhittakerBiomes();
 
+        [Header("Gameplay")]
         [SerializeField] private GameObject aimPlanePrefab;
-
         [SerializeField] private GameObject ocean;
 
         [Header("Biomes")]
