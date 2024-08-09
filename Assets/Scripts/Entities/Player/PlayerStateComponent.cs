@@ -1,9 +1,9 @@
-using Abilities.Interactable;
-using Abilities.Observer;
-using Abilities.State;
+using Entities.Abilities.Interactable;
+using Entities.Abilities.Observer;
+using Entities.Abilities.State;
 using Entities.Gun;
 using UnityEngine;
-using EventType = Abilities.Observer.EventType;
+using EventType = Entities.Abilities.Observer.EventType;
 
 namespace Entities.Player
 {

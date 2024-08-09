@@ -1,12 +1,12 @@
-using Abilities.Input;
-using Abilities.Observer;
 using Cinemachine;
+using Entities.Abilities.Input;
+using Entities.Abilities.Observer;
 using Entities.Player;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using EventType = Abilities.Observer.EventType;
+using EventType = Entities.Abilities.Observer.EventType;
 
 namespace Managers
 {

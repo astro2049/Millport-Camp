@@ -1,4 +1,4 @@
-using Abilities.Pawn;
+using Entities.Abilities.Pawn;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

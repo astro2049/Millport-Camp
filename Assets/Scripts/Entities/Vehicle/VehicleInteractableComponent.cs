@@ -1,7 +1,7 @@
-using Abilities.Interactable;
-using Abilities.Observer;
+using Entities.Abilities.Interactable;
+using Entities.Abilities.Observer;
 using UnityEngine;
-using EventType = Abilities.Observer.EventType;
+using EventType = Entities.Abilities.Observer.EventType;
 
 namespace Entities.Vehicle
 {

@@ -1,5 +1,5 @@
-﻿using Abilities.Observer;
-using EventType = Abilities.Observer.EventType;
+﻿using Entities.Abilities.Observer;
+using EventType = Entities.Abilities.Observer.EventType;
 
 namespace Entities.AI.Turret
 {

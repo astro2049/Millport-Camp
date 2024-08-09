@@ -1,9 +1,8 @@
-using Abilities.Health;
-using Entities.AI.Abilities.Bt;
+using Entities.Abilities.AI.Bt;
+using Entities.Abilities.Health;
 using NPBehave;
 using UnityEngine;
 using UnityEngine.AI;
-using Action = NPBehave.Action;
 using Random = UnityEngine.Random;
 
 namespace Entities.AI.Zombie

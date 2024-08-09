@@ -1,4 +1,4 @@
-﻿using Abilities.Observer;
+﻿using Entities.Abilities.Observer;
 
 namespace Entities.Player
 {

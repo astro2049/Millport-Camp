@@ -1,9 +1,9 @@
 using System.Collections;
-using Abilities.Health;
-using Abilities.Observer;
+using Entities.Abilities.Health;
+using Entities.Abilities.Observer;
 using Managers;
 using UnityEngine;
-using EventType = Abilities.Observer.EventType;
+using EventType = Entities.Abilities.Observer.EventType;
 
 namespace Entities.Gun
 {

@@ -1,10 +1,10 @@
-using Abilities.Buildable;
-using Abilities.Input;
-using Abilities.Interactable;
-using Abilities.Observer;
+using Entities.Abilities.Buildable;
+using Entities.Abilities.Input;
+using Entities.Abilities.Interactable;
+using Entities.Abilities.Observer;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using EventType = Abilities.Observer.EventType;
+using EventType = Entities.Abilities.Observer.EventType;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 

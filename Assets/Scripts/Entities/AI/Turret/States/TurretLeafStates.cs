@@ -1,4 +1,4 @@
-﻿using Entities.AI.Abilities.HFSM;
+﻿using Entities.Abilities.AI.HFSM;
 using UnityEngine;
 
 namespace Entities.AI.Turret.States

@@ -1,8 +1,8 @@
-using Abilities.Input;
-using Abilities.Observer;
+using Entities.Abilities.Input;
+using Entities.Abilities.Observer;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using EventType = Abilities.Observer.EventType;
+using EventType = Entities.Abilities.Observer.EventType;
 
 namespace Entities.Vehicle
 {
