@@ -574,6 +574,11 @@ MonoBehaviour:
     riverPerlinNoiseOffset: 0
   aimPlanePrefab: {fileID: 396570632468770756, guid: a40e6f1c8a9c34d46a3730b12ab0f438, type: 3}
   ocean: {fileID: 871361320}
+  baseBiomes: 050000000300000001000000
+  basePrefabs:
+  - {fileID: 8153363081382670942, guid: ca6cb4757026f764cb58dccbd49d9123, type: 3}
+  - {fileID: 3166029889146373948, guid: d1ab5cece426b234693e4cd5235226f1, type: 3}
+  - {fileID: 9114555402583503517, guid: 06495a71460b0ba41a3bf455616d92e7, type: 3}
   biomes:
   - biomeType: 0
     biomeData: {fileID: 11400000, guid: da470aa0419370146af064cd64125b81, type: 2}

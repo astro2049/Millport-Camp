@@ -27,6 +27,8 @@ namespace PCG
 
         private Transform environmentParent;
         private Transform floorsParent;
+        private Transform foliageParent;
+        private Transform basesParent;
 
         [SerializeField] private GameObject floorPrefab;
 
@@ -35,6 +37,9 @@ namespace PCG
         [Header("Gameplay")]
         [SerializeField] private GameObject aimPlanePrefab;
         [SerializeField] private GameObject ocean;
+        // Bases
+        [SerializeField] private BiomeType[] baseBiomes;
+        [SerializeField] private GameObject[] basePrefabs;
 
         [Header("Biomes")]
         public Biome[] biomes;
@@ -87,6 +92,10 @@ namespace PCG
             environmentParent.parent = transform;
             floorsParent = new GameObject("Floors").transform;
             floorsParent.parent = environmentParent;
+            foliageParent = new GameObject("Foliage").transform;
+            foliageParent.parent = environmentParent;
+            basesParent = new GameObject("Bases").transform;
+            basesParent.parent = environmentParent;
 
             // Clear biomes cells
             foreach (Biome biome in biomes) {
@@ -100,6 +109,7 @@ namespace PCG
             // Generate the world map
             GenerateFloors();
             GeneratePlants();
+            PlaceBases();
         }
 
         private void GenerateFloors()
@@ -156,7 +166,7 @@ namespace PCG
                             // Choose a random location within this sub cell, a random scale, and place the plant
                             Vector3 offset = new Vector3(Random.Range(0f, c_foliageSubCellSize), 0, Random.Range(0f, c_foliageSubCellSize));
                             Vector3 scale = Vector3.one * Random.Range(foliageConfig.minSize, foliageConfig.maxSize);
-                            GenerateRandomGameObjectFromList(foliageConfig.prefabs, subCellBottomLeftCoord + offset, scale, environmentParent);
+                            GenerateRandomGameObjectFromList(foliageConfig.prefabs, subCellBottomLeftCoord + offset, scale, foliageParent);
                         }
                     }
                 }
@@ -190,6 +200,29 @@ namespace PCG
             go.layer = LayerMask.NameToLayer("Structure");
             // Add component MaterialShifter
             go.AddComponent<MaterialShifterComponent>();
+        }
+
+        private void PlaceBases()
+        {
+            int i = 0;
+            foreach (BiomeType biomeType in baseBiomes) {
+                List<Chunk> chunks = biomes[biomeType.GetHashCode()].chunks;
+                Chunk chunk = chunks[chunks.Count / 2];
+
+                // Get chunk center world coordinate
+                Vector3 chunkCenter = grid.GetCellCenterWorld(new Vector3Int(chunk.cellCoord.x, 0, chunk.cellCoord.y));
+                chunkCenter.y = 0;
+
+                // Clear all foliage in chunk
+                Collider[] hitColliders = Physics.OverlapBox(chunkCenter, Vector3.one * (c_chunkSize / 2f), Quaternion.identity, LayerMask.GetMask("Structure"));
+                foreach (Collider hitCollider in hitColliders) {
+                    Destroy(hitCollider.gameObject);
+                }
+
+                // Place base in the center
+                GameObject researchBase = Instantiate(basePrefabs[i], chunkCenter, Quaternion.identity, basesParent);
+                i++;
+            }
         }
     }
 }
