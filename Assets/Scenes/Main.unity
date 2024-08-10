@@ -694,11 +694,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 899b0958245741043b02aa06d730a15b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldGridSize: 32
+  worldGridSize: 64
   floorPrefab: {fileID: 8861129652233209972, guid: e6a94e851c16d3b4f8446571d41df6c1, type: 3}
   whittakerBiomes:
-    seaLevelHeight: 0.3
-    heightPerlinNoiseScale: 3
+    seaLevelHeight: 0.15
+    heightPerlinNoiseScale: 5
     heightPerlinNoiseOffset: 0
     equatorTemperature: 30
     northPoleTemperature: -10

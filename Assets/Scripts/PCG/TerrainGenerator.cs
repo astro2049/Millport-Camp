@@ -15,7 +15,7 @@ namespace PCG
             // Calculate falloff
             // Normalize deviation, range from 0 to 1
             float normalizedDeviation = deviation / (worldSize / 2f);
-            float falloff = Mathf.Pow(normalizedDeviation, 5);
+            float falloff = Mathf.Pow(normalizedDeviation, 4);
 
             return falloff;
         }
