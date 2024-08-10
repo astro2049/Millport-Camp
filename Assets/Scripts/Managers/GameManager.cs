@@ -1,7 +1,9 @@
 using Cinemachine;
+using Entities.Abilities.ClearingDistance;
 using Entities.Abilities.Input;
 using Entities.Abilities.Observer;
 using Entities.Player;
+using PCG;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -27,6 +29,7 @@ namespace Managers
         [Header("Managers")]
         [SerializeField] private UIManager uiManager;
         [SerializeField] private InventoryManager inventoryManager;
+        [SerializeField] private LevelGenerator levelGenerator;
 
         private NavMeshSurface m_navMeshSurface;
 
@@ -43,6 +46,9 @@ namespace Managers
 
         private void Awake()
         {
+            // Generate the world
+            levelGenerator.Generate();
+
             // Set world time flowing speed to normal
             Time.timeScale = 1f;
 
@@ -160,6 +166,9 @@ namespace Managers
             TeleportActor(player, new Vector3(0, 100, 0));
             // Let player float
             player.GetComponent<Rigidbody>().useGravity = false;
+
+            // Configure clearing distance collider according to vehicle camera
+            Camera.main.GetComponent<ClearingDistanceColliderComponent>().ConfigureCollider(vehicleCamera.m_Lens.OrthographicSize);
         }
 
         private void TeleportActor(GameObject actor, Vector3 position)
@@ -181,6 +190,9 @@ namespace Managers
             TeleportActor(player, vehicle.transform.Find("Drop Off Point").transform.position);
             // Capture player with gravity again
             player.GetComponent<Rigidbody>().useGravity = true;
+
+            // Configure clearing distance collider according to player camera
+            Camera.main.GetComponent<ClearingDistanceColliderComponent>().ConfigureCollider(playerCamera.m_Lens.OrthographicSize);
         }
 
         public void OnPause()

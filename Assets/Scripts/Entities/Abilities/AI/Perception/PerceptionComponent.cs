@@ -6,9 +6,12 @@ namespace Entities.Abilities.AI.Perception
     {
         public void CreateSensorCollider(float radius, LayerMask[] includeLayers)
         {
-            GameObject sensorGameObject = new GameObject("Sensor Collider");
-            sensorGameObject.transform.parent = transform;
-            sensorGameObject.transform.localPosition = Vector3.zero;
+            GameObject sensorGameObject = new GameObject("Sensor Collider") {
+                transform = {
+                    parent = transform,
+                    localPosition = Vector3.zero
+                }
+            };
 
             /*
              * Configure sensor collider

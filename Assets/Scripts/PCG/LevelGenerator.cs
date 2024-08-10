@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Entities.Abilities.ClearingDistance;
 using PCG.BiomeData;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -65,9 +66,6 @@ namespace PCG
 
             // Resize the ocean
             ResizeOcean();
-
-            // Generate the world
-            Generate();
         }
 
         private void ResizeOcean()
@@ -186,7 +184,12 @@ namespace PCG
         private void GenerateRandomGameObjectFromList(GameObject[] options, Vector3 coord, Vector3 scale, Transform parent)
         {
             GameObject go = Instantiate(options[Random.Range(0, options.Length)], coord, Quaternion.identity, parent);
+            // Apply random scale
             go.transform.localScale = scale;
+            // Assign layer "Structure"
+            go.layer = LayerMask.NameToLayer("Structure");
+            // Add component MaterialShifter
+            go.AddComponent<MaterialShifterComponent>();
         }
     }
 }
