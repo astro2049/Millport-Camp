@@ -1,3 +1,4 @@
+using System;
 using Entities.Abilities.Observer;
 using Entities.Gun;
 using TMPro;
@@ -10,18 +11,21 @@ namespace Managers
     public class UIManager : MonoBehaviour, IObserver
     {
         [SerializeField] private Canvas combatModeCanvas, buildModeCanvas, inventoryCanvas, pauseMenuCanvas;
-        
+
         [Header("Combat Mode")]
         [SerializeField] private GameObject interactPrompt;
         [SerializeField] private GameObject reloadPrompt;
         [SerializeField] private TextMeshProUGUI magAmmoText;
         [SerializeField] private TextMeshProUGUI equippedGunNameText;
-        
+
         [Header("Build Mode")]
         [SerializeField] private GameObject overlappingObjectsText;
 
         [Header("Pause Menu")]
         [SerializeField] private Button resumeButton;
+
+        [Header("Debug")]
+        [SerializeField] private TextMeshProUGUI FPSText;
 
         // Handle events
         // Player events are subscribed in GameManager.Awake(), and
@@ -95,6 +99,31 @@ namespace Managers
         public void ClosePauseMenu()
         {
             pauseMenuCanvas.enabled = false;
+        }
+
+        private void Update()
+        {
+            UpdateFPSText();
+        }
+
+        // FPS counter
+        private const int c_FPSSampleFrames = 100;
+        private readonly float[] deltaTimeSamples = new float[c_FPSSampleFrames];
+        private float deltaTimeSamplesSum = 0;
+        private int frameCount = 0;
+
+        private void UpdateFPSText()
+        {
+            int sampleIndex = frameCount % c_FPSSampleFrames;
+            // Subtract old sample from samples sum
+            deltaTimeSamplesSum -= deltaTimeSamples[sampleIndex];
+            // Put in the fresh sample, and add it to the samples sum
+            deltaTimeSamples[sampleIndex] = Time.unscaledDeltaTime;
+            deltaTimeSamplesSum += deltaTimeSamples[sampleIndex];
+            frameCount++;
+
+            // Update FPS value
+            FPSText.text = "FPS: " + (int)(c_FPSSampleFrames / deltaTimeSamplesSum);
         }
     }
 }
