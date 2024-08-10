@@ -121,15 +121,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Inventory",
-                    "type": "Button",
-                    "id": "76302b60-6e4f-45f8-884b-c0e61625e737",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -152,17 +143,6 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Build",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "bbf0a547-6f01-4e0b-9a66-8aa76fe72bfd",
-                    "path": "<Keyboard>/tab",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Inventory",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -284,74 +264,6 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Place",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "Inventory",
-            "id": "a3f8f283-14b7-49cb-a35e-e5f084b396b3",
-            "actions": [
-                {
-                    "name": "Look",
-                    "type": "Value",
-                    "id": "aadde05a-edb5-44db-9b27-056015fb88aa",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Equip",
-                    "type": "Button",
-                    "id": "bb5a5581-d3ce-4c1f-813c-3bf7f1ffd0cc",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Close Inventory",
-                    "type": "Button",
-                    "id": "e153d216-0b65-4227-8543-be9288577a72",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "8719d847-9e4b-49c3-9ccc-3377e163dc72",
-                    "path": "<Mouse>/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1f09c5b5-bf22-460f-997a-5b2b7433a1c9",
-                    "path": "<Keyboard>/tab",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Close Inventory",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "19a23d3d-8028-4c9a-b792-09d24cc31bd0",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Equip",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

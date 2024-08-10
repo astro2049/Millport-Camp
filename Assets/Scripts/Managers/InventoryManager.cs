@@ -33,8 +33,6 @@ namespace Managers
         [SerializeField] private GameObject equipPrompt;
         [SerializeField] private InventoryItem equippedItem;
 
-        [SerializeField] private InputActionAsset inputActionsAsset;
-
         private void Awake()
         {
             // Initialize inventory slots
@@ -45,8 +43,6 @@ namespace Managers
                 craftingOption.buttonClickedEvent.AddListener(SelectCraftingOption);
             }
             craftButton.interactable = false;
-
-            RegisterActionCallbacks();
         }
 
         private void Start()
@@ -54,12 +50,6 @@ namespace Managers
             // Add a default weapon for the player
             // CraftItem("AK-42");
             // EquipItem(inventorySlots[0].GetComponentInChildren<InventoryItem>());
-        }
-
-        private void RegisterActionCallbacks()
-        {
-            InputActionMap inventoryInputActions = inputActionsAsset.FindActionMap("Inventory");
-            inventoryInputActions.FindAction("Equip").performed += OnEquip;
         }
 
         private bool AddItem(string name, GameObject entity)
@@ -105,7 +95,7 @@ namespace Managers
             equipPrompt.SetActive(false);
         }
 
-        private void OnEquip(InputAction.CallbackContext context)
+        public void OnEquip()
         {
             if (selectingItem) {
                 EquipItem();

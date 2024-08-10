@@ -33,7 +33,7 @@ namespace Entities.Player
          * Pre-stored private fields
          */
         private Camera followCamera;
-        private InputActionMap movementActions, combatActions, buildActions, inventoryActions;
+        private InputActionMap movementActions, combatActions, buildActions;
         private Vector3 cameraForward, cameraRight;
         private Rigidbody rb;
         private PlayerStateComponent playerStateComponent;
@@ -46,7 +46,6 @@ namespace Entities.Player
             movementActions = playerInput.actions.FindActionMap("Movement");
             combatActions = playerInput.actions.FindActionMap("Combat");
             buildActions = playerInput.actions.FindActionMap("Build");
-            inventoryActions = playerInput.actions.FindActionMap("Inventory");
 
             /*
              * Precalculate camera forward and right vectors
@@ -222,20 +221,6 @@ namespace Entities.Player
             buildActions.Enable();
         }
 
-        public void OpenInventory(InputAction.CallbackContext context)
-        {
-            if (context.phase != InputActionPhase.Performed) {
-                return;
-            }
-
-            // Tell UI manager about the event
-            subjectComponent.NotifyObservers(new MCEvent(EventType.OpenedInventory));
-
-            // Switch action maps
-            combatActions.Disable();
-            inventoryActions.Enable();
-        }
-
         /*
          * Build Actions
          */
@@ -306,34 +291,6 @@ namespace Entities.Player
             // Switch action maps
             combatActions.Enable();
             buildActions.Disable();
-        }
-
-        /*
-         * Inventory Actions
-         */
-        // Look at where the mouse is, horizontally
-        public void OnInventoryLook(InputAction.CallbackContext context)
-        {
-            if (context.phase != InputActionPhase.Performed) {
-                return;
-            }
-
-            Vector2 lookInput = context.ReadValue<Vector2>();
-            PlayerLookAt(lookInput, lookAtCombatModeLayers);
-        }
-
-        public void CloseInventory(InputAction.CallbackContext context)
-        {
-            if (context.phase != InputActionPhase.Performed) {
-                return;
-            }
-
-            // Tell UI manager about the event
-            subjectComponent.NotifyObservers(new MCEvent(EventType.ClosedInventory));
-
-            // Switch action maps
-            combatActions.Enable();
-            inventoryActions.Disable();
         }
     }
 }

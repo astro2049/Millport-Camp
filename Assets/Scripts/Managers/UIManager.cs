@@ -62,14 +62,6 @@ namespace Managers
                     combatModeCanvas.enabled = true;
                     buildModeCanvas.enabled = false;
                     break;
-                case EventType.OpenedInventory:
-                    combatModeCanvas.enabled = false;
-                    inventoryCanvas.enabled = true;
-                    break;
-                case EventType.ClosedInventory:
-                    combatModeCanvas.enabled = true;
-                    inventoryCanvas.enabled = false;
-                    break;
                 case EventType.PawnDead:
                     resumeButton.interactable = false;
                     break;
@@ -99,6 +91,18 @@ namespace Managers
         public void ClosePauseMenu()
         {
             pauseMenuCanvas.enabled = false;
+        }
+
+        public void OpenInventory()
+        {
+            combatModeCanvas.enabled = false;
+            inventoryCanvas.enabled = true;
+        }
+
+        public void CloseInventory()
+        {
+            combatModeCanvas.enabled = true;
+            inventoryCanvas.enabled = false;
         }
 
         private void Update()

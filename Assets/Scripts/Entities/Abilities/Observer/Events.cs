@@ -16,9 +16,6 @@ namespace Entities.Abilities.Observer
         EnteredBuildMode = 7,
         PlacingStructure = 8,
         ExitedBuildMode = 9,
-        InventoryReady = 10,
-        OpenedInventory = 11,
-        ClosedInventory = 12,
 
         // Pawn (Player, Zombie, Combat Robot)
         PawnDead = 13,

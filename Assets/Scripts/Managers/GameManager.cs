@@ -12,6 +12,13 @@ using EventType = Entities.Abilities.Observer.EventType;
 
 namespace Managers
 {
+    public enum PlayerMode
+    {
+        Combat = 0,
+        Inventory = 1,
+        PauseMenu = 2
+    }
+
     public class GameManager : MonoBehaviour, IObserver
     {
         [Header("Prefabs")]
@@ -34,6 +41,7 @@ namespace Managers
         private NavMeshSurface m_navMeshSurface;
 
         private bool isPaused = false;
+        private PlayerMode playerMode = PlayerMode.Combat;
 
         private void SwitchControlActor(GameObject actor)
         {
@@ -65,8 +73,6 @@ namespace Managers
                 EventType.WeaponChanged,
                 EventType.EnteredVehicle,
                 EventType.ExitedVehicle,
-                EventType.OpenedInventory,
-                EventType.ClosedInventory,
                 EventType.PawnDead
             );
             playerSubject.AddObserver(uiManager,
@@ -77,8 +83,6 @@ namespace Managers
                 EventType.EnteredBuildMode,
                 EventType.PlacingStructure,
                 EventType.ExitedBuildMode,
-                EventType.OpenedInventory,
-                EventType.ClosedInventory,
                 EventType.PawnDead
             );
         }
@@ -132,12 +136,6 @@ namespace Managers
                     break;
                 case EventType.ExitedVehicle:
                     ExitVehicle((mcEvent as MCEventWEntity)!.entity);
-                    break;
-                case EventType.OpenedInventory:
-                    SetCursor(UICursorTecture);
-                    break;
-                case EventType.ClosedInventory:
-                    SetCursor(combatCursorTexture);
                     break;
                 case EventType.PawnDead:
                     // Free camera
@@ -195,26 +193,84 @@ namespace Managers
             Camera.main.GetComponent<ClearingDistanceColliderComponent>().ConfigureCollider(playerCamera.m_Lens.OrthographicSize);
         }
 
-        public void OnPause()
+        public void OnEscape(InputAction.CallbackContext context)
         {
-            if (!isPaused) {
-                Pause(true);
-            } else {
-                UnPause();
+            if (context.phase != InputActionPhase.Performed) {
+                return;
             }
-            isPaused = !isPaused;
+
+            if (playerMode == PlayerMode.Combat) {
+                OpenPauseMenu();
+            } else if (playerMode == PlayerMode.PauseMenu) {
+                ClosePauseMenu();
+            } else if (playerMode == PlayerMode.Inventory) {
+                CloseInventory();
+            }
         }
 
-        private void Pause(bool freezeTime)
+        public void OnTab(InputAction.CallbackContext context)
         {
-            if (freezeTime) {
-                // Pause the game
-                Time.timeScale = 0f;
+            if (context.phase != InputActionPhase.Performed) {
+                return;
             }
+
+            if (playerMode == PlayerMode.Combat) {
+                OpenInventory();
+            } else if (playerMode == PlayerMode.Inventory) {
+                CloseInventory();
+            }
+        }
+
+        private void OpenPauseMenu()
+        {
+            // Assign status markers
+            Pause(true);
+            playerMode = PlayerMode.PauseMenu;
 
             // Open pause menu
             uiManager.OpenPauseMenu();
             SetCursor(UICursorTecture);
+        }
+
+        private void ClosePauseMenu()
+        {
+            // Assign status markers
+            UnPause();
+            playerMode = PlayerMode.Combat;
+
+            // Close pause menu
+            uiManager.ClosePauseMenu();
+            SetCursor(combatCursorTexture);
+        }
+
+        private void OpenInventory()
+        {
+            // Assign status markers
+            Pause(true);
+            playerMode = PlayerMode.Inventory;
+
+            SetCursor(UICursorTecture);
+            uiManager.OpenInventory();
+        }
+
+        private void CloseInventory()
+        {
+            // Assign status markers
+            UnPause();
+            playerMode = PlayerMode.Combat;
+
+            SetCursor(combatCursorTexture);
+            uiManager.CloseInventory();
+        }
+
+        private void Pause(bool freezeTime)
+        {
+            isPaused = true;
+
+            if (freezeTime) {
+                // Pause the game
+                Time.timeScale = 0f;
+            }
 
             // Disable current actor's inputs
             currentControllingActor.GetComponent<InputComponent>().enabled = false;
@@ -222,12 +278,10 @@ namespace Managers
 
         private void UnPause()
         {
+            isPaused = false;
+
             // Unpause the game
             Time.timeScale = 1f;
-
-            // Close pause menu
-            uiManager.ClosePauseMenu();
-            SetCursor(combatCursorTexture);
 
             // Enable current actor's inputs
             currentControllingActor.GetComponent<InputComponent>().enabled = true;

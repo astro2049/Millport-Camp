@@ -11,14 +11,11 @@ namespace Entities.Player
             // Set rigidbody to kinematic to avoid falling through floor
             GetComponent<Rigidbody>().isKinematic = true;
 
-            PlayerInputComponent playerInputComponent = GetComponent<PlayerInputComponent>();
-            // Close Inventory
-            // TODO: This is a hack, which is just to make sure combat inputs don't get re-enabled, because a disabled component's methods can still execute.
-            playerInputComponent.CloseInventory(new InputAction.CallbackContext());
             // Disable inputs
+            PlayerInputComponent playerInputComponent = GetComponent<PlayerInputComponent>();
             playerInputComponent.enabled = false;
             GetComponent<PlayerInput>().enabled = false;
-            
+
             base.Die();
         }
     }
