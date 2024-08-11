@@ -4,7 +4,6 @@ using Entities.Player;
 using UI.Crafting;
 using UI.Inventory;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Managers
@@ -29,14 +28,15 @@ namespace Managers
         [SerializeField] private GameObject gunPrefab;
         public Transform dragTransform;
 
-        [SerializeField] private InventoryItem selectingItem;
-        [SerializeField] private GameObject equipPrompt;
+        [SerializeField] private InventoryItem selectedItem;
+        [SerializeField] private Button equipButton;
         [SerializeField] private InventoryItem equippedItem;
 
         private void Awake()
         {
             // Initialize inventory slots
             inventorySlots = inventorySlotsTable.GetComponentsInChildren<InventorySlot>();
+            equipButton.interactable = false;
 
             // Initialize crafting options
             foreach (CraftingOption craftingOption in craftingOptionsTable.GetComponentsInChildren<CraftingOption>()) {
@@ -48,8 +48,10 @@ namespace Managers
         private void Start()
         {
             // Add a default weapon for the player
-            // CraftItem("AK-42");
-            // EquipItem(inventorySlots[0].GetComponentInChildren<InventoryItem>());
+            // TODO: Kind of hacky
+            CraftItem("Cyclops");
+            SelectInventoryItem(inventorySlots[0].GetComponentInChildren<InventoryItem>());
+            EquipItem();
         }
 
         private bool AddItem(string name, GameObject entity)
@@ -73,9 +75,7 @@ namespace Managers
             InventoryItem item = newItemGo.GetComponent<InventoryItem>();
             // Inject drag transform
             item.Init(name, entity, dragTransform);
-            // Subscribe to hover/un-hover events
-            item.mouseEnterEvent.AddListener(SetHoveringItem);
-            item.mouseExitEvent.AddListener(ClearHoveringItem);
+            item.buttonClickedEvent.AddListener(SelectInventoryItem);
         }
 
         private void TeleportUnderground(GameObject entity)
@@ -83,35 +83,22 @@ namespace Managers
             entity.transform.position = new Vector3(0, -1, 0);
         }
 
-        private void SetHoveringItem(InventoryItem item)
+        private void SelectInventoryItem(InventoryItem item)
         {
-            selectingItem = item;
-            equipPrompt.SetActive(true);
-        }
-
-        private void ClearHoveringItem()
-        {
-            selectingItem = null;
-            equipPrompt.SetActive(false);
-        }
-
-        public void OnEquip()
-        {
-            if (selectingItem) {
-                EquipItem();
+            if (selectedItem) {
+                selectedItem.Unselect();
             }
+            selectedItem = item;
+            equipButton.interactable = true;
         }
 
-        private void EquipItem(InventoryItem item = null)
+        public void EquipItem()
         {
             if (equippedItem) {
                 TeleportUnderground(equippedItem.entity);
                 equippedItem.UnEquip();
             }
-            if (!item) {
-                item = selectingItem;
-            }
-            equippedItem = item;
+            equippedItem = selectedItem;
             playerInventoryComponent.EquipItem(equippedItem.entity);
             equippedItem.Equip();
         }

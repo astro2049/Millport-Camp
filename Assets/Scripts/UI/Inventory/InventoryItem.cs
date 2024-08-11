@@ -11,7 +11,7 @@ namespace UI.Inventory
      * Coco Code (2022) 'Unity INVENTORY: A Definitive Tutorial', YouTube, 29 Sept
      * Available at: https://youtu.be/oJAE6CbsQQA?si=GVPbgh6AO7kSig4U (Accessed 29 June 2024).
      */
-    public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+    public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         // Fields
         public GameObject entity;
@@ -24,13 +24,12 @@ namespace UI.Inventory
         private Image backgroundImage;
         [HideInInspector] public Transform dragTransform;
 
-        // Mouse hover/un-hover events
-        public UnityEvent<InventoryItem> mouseEnterEvent = new UnityEvent<InventoryItem>();
-        public UnityEvent mouseExitEvent = new UnityEvent();
+        public UnityEvent<InventoryItem> buttonClickedEvent = new UnityEvent<InventoryItem>();
 
         private void Awake()
         {
             button = GetComponent<Button>();
+            button.onClick.AddListener(Select);
 
             parentSlotTransform = transform.parent;
 
@@ -67,16 +66,6 @@ namespace UI.Inventory
             transform.SetParent(parentSlotTransform);
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            mouseEnterEvent.Invoke(this);
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            mouseExitEvent.Invoke();
-        }
-
         public void Equip()
         {
             button.interactable = false;
@@ -87,6 +76,17 @@ namespace UI.Inventory
         {
             button.interactable = true;
             equippedEText.enabled = false;
+        }
+
+        private void Select()
+        {
+            button.interactable = false;
+            buttonClickedEvent.Invoke(this);
+        }
+
+        public void Unselect()
+        {
+            button.interactable = true;
         }
     }
 }

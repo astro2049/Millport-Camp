@@ -325,14 +325,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entity: {fileID: 0}
+  button: {fileID: 0}
   nameText: {fileID: 8193698894358104658}
   equippedEText: {fileID: 8545448774564961370}
   parentSlotTransform: {fileID: 0}
   dragTransform: {fileID: 0}
-  pointerEnterEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  pointerExitEvent:
+  buttonClickedEvent:
     m_PersistentCalls:
       m_Calls: []
 --- !u!222 &3224301382300946560
@@ -395,10 +393,10 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.8862745, g: 0.94509804, b: 0.627451, a: 1}
-    m_PressedColor: {r: 0.8862745, g: 0.94509804, b: 0.627451, a: 1}
+    m_HighlightedColor: {r: 1, g: 0.8, b: 0.57254905, a: 1}
+    m_PressedColor: {r: 1, g: 0.8, b: 0.57254905, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.8862745, g: 0.94509804, b: 0.627451, a: 1}
+    m_DisabledColor: {r: 1, g: 0.8, b: 0.57254905, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
