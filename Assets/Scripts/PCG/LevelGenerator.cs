@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Entities.Abilities.ClearingDistance;
+using Managers;
 using PCG.BiomeData;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -40,6 +41,8 @@ namespace PCG
         // Bases
         [SerializeField] private BiomeType[] baseBiomes;
         [SerializeField] private GameObject[] basePrefabs;
+        // Quests
+        [SerializeField] private QuestManager questManager;
 
         [Header("Biomes")]
         public Biome[] biomes;
@@ -221,6 +224,21 @@ namespace PCG
 
                 // Place base in the center
                 GameObject researchBase = Instantiate(basePrefabs[i], chunkCenter, Quaternion.identity, basesParent);
+
+                // Quest: configure trigger collider for detecting player, and quest destination component
+                // Sphere collider
+                SphereCollider sphereCollider = researchBase.AddComponent<SphereCollider>();
+                Vector3 sphereColliderCenter = sphereCollider.center;
+                sphereCollider.center = new Vector3(sphereColliderCenter.x, 0, sphereColliderCenter.z);
+                sphereCollider.radius = 15f;
+                sphereCollider.isTrigger = true;
+                sphereCollider.excludeLayers = ~LayerMask.GetMask("Player");
+                // Quest destination component
+                researchBase.AddComponent<QuestDestinationComponent>();
+
+                // Assign this research base to the corresponding quest
+                questManager.quests[i].AssignDestinationGo(researchBase);
+
                 i++;
             }
         }

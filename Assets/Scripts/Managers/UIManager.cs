@@ -1,6 +1,7 @@
 using System;
 using Entities.Abilities.Observer;
 using Entities.Gun;
+using Managers.Quests;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -128,6 +129,23 @@ namespace Managers
 
             // Update FPS value
             FPSText.text = "FPS: " + (int)(c_FPSSampleFrames / deltaTimeSamplesSum);
+        }
+
+        // Quests
+        [Header("Quest")]
+        [SerializeField] private TextMeshProUGUI questNameText;
+        [SerializeField] private TextMeshProUGUI questDescriptionText;
+        [SerializeField] private GameObject endingScreen;
+
+        public void UpdateQuest(Quest quest)
+        {
+            questNameText.text = quest.name;
+            questDescriptionText.text = quest.description;
+        }
+
+        public void GameCompleted()
+        {
+            endingScreen.SetActive(true);
         }
     }
 }

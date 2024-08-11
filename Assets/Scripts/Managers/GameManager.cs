@@ -232,7 +232,7 @@ namespace Managers
             SetCursor(UICursorTecture);
         }
 
-        private void ClosePauseMenu()
+        public void ClosePauseMenu()
         {
             // Assign status markers
             UnPause();
