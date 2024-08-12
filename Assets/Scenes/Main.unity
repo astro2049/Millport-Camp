@@ -2426,6 +2426,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4280512423890118, guid: 5b1d1e0afbc306648ba00b80061f5870, type: 3}
   m_PrefabInstance: {fileID: 1199889368}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1202655009 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 131015509034594827, guid: e033458519c83d6468ef99c5b7e30ebe, type: 3}
+  m_PrefabInstance: {fileID: 6401855864992513659}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b923fbee5d85451e97be2ebda04678f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1231292294 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7583822055054261532, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
@@ -4247,6 +4258,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5139789935533595156, guid: e033458519c83d6468ef99c5b7e30ebe, type: 3}
+      propertyPath: mapUIComponent
+      value: 
+      objectReference: {fileID: 1202655009}
     - target: {fileID: 5223246881129969093, guid: e033458519c83d6468ef99c5b7e30ebe, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

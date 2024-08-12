@@ -313,7 +313,7 @@ namespace Managers
             playerMode = PlayerMode.Map;
 
             SetCursor(UICursorTexture);
-            uiManager.OpenMap();
+            uiManager.OpenMap(currentControllingActor.transform);
         }
 
         private void CloseMap()

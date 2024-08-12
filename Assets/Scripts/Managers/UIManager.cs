@@ -3,6 +3,7 @@ using Entities.Abilities.Observer;
 using Entities.Gun;
 using Gameplay.Quests;
 using TMPro;
+using UI.Map;
 using UnityEngine;
 using UnityEngine.UI;
 using EventType = Entities.Abilities.Observer.EventType;
@@ -155,22 +156,25 @@ namespace Managers
 
         // Maps
         [Header("Maps")]
-        [SerializeField] private Image mapImage;
+        [SerializeField] private MapUIComponent mapUIComponent;
 
         public void RenderMapUIs(Texture2D mapTexture2D)
         {
-            Sprite mapSprite = Sprite.Create(mapTexture2D, new Rect(0, 0, mapTexture2D.width, mapTexture2D.height), new Vector2(0.5f, 0.5f));
-            mapImage.sprite = mapSprite;
+            mapUIComponent.Initialize(mapTexture2D);
         }
 
-        public void OpenMap()
+        public void OpenMap(Transform playerTransform)
         {
+            mapUIComponent.UpdatePlayerLocation(playerTransform);
+
+            // Switch canvas
             combatModeCanvas.enabled = false;
             mapCanvas.enabled = true;
         }
 
         public void CloseMap()
         {
+            // Switch canvas
             combatModeCanvas.enabled = true;
             mapCanvas.enabled = false;
         }
