@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4090378307352239596}
   - component: {fileID: 3138770804878135140}
   m_Layer: 5
-  m_Name: Pf_Crafting_Option
+  m_Name: UI_Crafting_Option
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
