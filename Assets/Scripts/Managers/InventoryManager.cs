@@ -19,7 +19,17 @@ namespace Managers
         /*
          * Inventory
          */
-        [HideInInspector] public PlayerInventoryComponent playerInventoryComponent;
+        private PlayerInventoryComponent playerInventoryComponent;
+        public void SetPlayerInventoryComponent(PlayerInventoryComponent aPlayerInventoryComponent)
+        {
+            playerInventoryComponent = aPlayerInventoryComponent;
+
+            // Add a default weapon for the player
+            // TODO: Kind of hacky
+            CraftItem("Cyclops");
+            SelectInventoryItem(inventorySlots[0].GetComponentInChildren<InventoryItem>());
+            EquipItem();
+        }
 
         [SerializeField] private GameObject inventorySlotsTable;
         private InventorySlot[] inventorySlots;
@@ -43,15 +53,6 @@ namespace Managers
                 craftingOption.buttonClickedEvent.AddListener(SelectCraftingOption);
             }
             craftButton.interactable = false;
-        }
-
-        private void Start()
-        {
-            // Add a default weapon for the player
-            // TODO: Kind of hacky
-            CraftItem("Cyclops");
-            SelectInventoryItem(inventorySlots[0].GetComponentInChildren<InventoryItem>());
-            EquipItem();
         }
 
         private bool AddItem(string name, GameObject entity)

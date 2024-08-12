@@ -1,3 +1,4 @@
+using System.Collections;
 using Cinemachine;
 using Entities.Abilities.ClearingDistance;
 using Entities.Abilities.Input;
@@ -8,6 +9,7 @@ using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using EventType = Entities.Abilities.Observer.EventType;
 
 namespace Managers
@@ -37,10 +39,10 @@ namespace Managers
         [SerializeField] private UIManager uiManager;
         [SerializeField] private InventoryManager inventoryManager;
         [SerializeField] private LevelGenerator levelGenerator;
+        [SerializeField] private MinimapGenerator minimapGenerator;
 
         private NavMeshSurface m_navMeshSurface;
 
-        private bool isPaused = false;
         private PlayerMode playerMode = PlayerMode.Combat;
 
         private void SwitchControlActor(GameObject actor)
@@ -54,18 +56,33 @@ namespace Managers
 
         private void Awake()
         {
+            // Set world time flowing speed to normal (for reloading level)
+            Time.timeScale = 1f;
+
             // Generate the world
             levelGenerator.Generate();
 
-            // Set world time flowing speed to normal
-            Time.timeScale = 1f;
+            // Wait for the current frame to finish. This is because there are Destroy() calls in levelGenerator.Generate()
+            StartCoroutine(OnLevelGenerationComplete());
+        }
 
+        private IEnumerator OnLevelGenerationComplete()
+        {
+            yield return new WaitForEndOfFrame();
+
+            // Take a bird's eye view shot of the map (for in-game minimap and outputting png)
+            minimapGenerator = GetComponent<MinimapGenerator>();
+            minimapGenerator.CaptureWorldMapBirdsEyeView(levelGenerator.worldGridSize * LevelGenerator.c_chunkSize);
+
+            SpawnPlayer();
+        }
+
+        private void SpawnPlayer()
+        {
             // Spawn player and focus camera
             player = Instantiate(playerPrefab);
             playerCamera.Follow = player.transform;
             SwitchControlActor(player);
-            // TODO: hacky
-            inventoryManager.playerInventoryComponent = player.GetComponent<PlayerInventoryComponent>();
 
             // Subscribe self and UI manager to player events
             SubjectComponent playerSubject = player.GetComponent<SubjectComponent>();
@@ -85,6 +102,9 @@ namespace Managers
                 EventType.ExitedBuildMode,
                 EventType.PawnDead
             );
+
+            // TODO: hacky
+            inventoryManager.SetPlayerInventoryComponent(player.GetComponent<PlayerInventoryComponent>());
         }
 
         // Start is called before the first frame update
@@ -265,8 +285,6 @@ namespace Managers
 
         private void Pause(bool freezeTime)
         {
-            isPaused = true;
-
             if (freezeTime) {
                 // Pause the game
                 Time.timeScale = 0f;
@@ -278,8 +296,6 @@ namespace Managers
 
         private void UnPause()
         {
-            isPaused = false;
-
             // Unpause the game
             Time.timeScale = 1f;
 

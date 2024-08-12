@@ -19,8 +19,8 @@ namespace PCG
 
     public class LevelGenerator : MonoBehaviour
     {
-        [SerializeField] private int worldGridSize = 32;
-        private const int c_chunkSize = 16; // m, Unity unit
+        public int worldGridSize = 32;
+        public const int c_chunkSize = 16; // m, Unity unit
         private const int c_foliageSubGridSize = c_chunkSize;
         private const int c_foliageSubCellSize = 1; // m, Unity unit
 
