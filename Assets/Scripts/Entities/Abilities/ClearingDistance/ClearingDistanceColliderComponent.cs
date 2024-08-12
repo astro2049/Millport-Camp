@@ -20,12 +20,20 @@ namespace Entities.Abilities.ClearingDistance
 
         private void OnTriggerEnter(Collider other)
         {
-            other.gameObject.GetComponent<MaterialShifterComponent>().MakeTransparent(transparentStructureMaterial);
+            MaterialShifterComponent materialShifterComponent = other.gameObject.GetComponent<MaterialShifterComponent>();
+            // Turret does not have this component, foliage does
+            if (materialShifterComponent) {
+                materialShifterComponent.MakeTransparent(transparentStructureMaterial);
+            }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            other.gameObject.GetComponent<MaterialShifterComponent>().RestoreMaterials();
+            MaterialShifterComponent materialShifterComponent = other.gameObject.GetComponent<MaterialShifterComponent>();
+            // Turret does not have this component, foliage does
+            if (materialShifterComponent) {
+                materialShifterComponent.RestoreMaterials();
+            }
         }
     }
 }

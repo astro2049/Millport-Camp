@@ -11,7 +11,12 @@ namespace Managers
 {
     public class UIManager : MonoBehaviour, IObserver
     {
-        [SerializeField] private Canvas combatModeCanvas, buildModeCanvas, inventoryCanvas, pauseMenuCanvas;
+        [Header("Canvases")]
+        [SerializeField] private Canvas combatModeCanvas;
+        [SerializeField] private Canvas buildModeCanvas;
+        [SerializeField] private Canvas inventoryCanvas;
+        [SerializeField] private Canvas pauseMenuCanvas;
+        [SerializeField] private Canvas mapCanvas;
 
         [Header("Combat Mode")]
         [SerializeField] private GameObject interactPrompt;
@@ -146,6 +151,28 @@ namespace Managers
         public void GameCompleted()
         {
             endingScreen.SetActive(true);
+        }
+
+        // Maps
+        [Header("Maps")]
+        [SerializeField] private Image mapImage;
+
+        public void RenderMapUIs(Texture2D mapTexture2D)
+        {
+            Sprite mapSprite = Sprite.Create(mapTexture2D, new Rect(0, 0, mapTexture2D.width, mapTexture2D.height), new Vector2(0.5f, 0.5f));
+            mapImage.sprite = mapSprite;
+        }
+
+        public void OpenMap()
+        {
+            combatModeCanvas.enabled = false;
+            mapCanvas.enabled = true;
+        }
+
+        public void CloseMap()
+        {
+            combatModeCanvas.enabled = true;
+            mapCanvas.enabled = false;
         }
     }
 }

@@ -1,16 +1,19 @@
 ﻿using UnityEngine;
 using System.IO;
+using UnityEngine.Events;
 
 namespace Managers
 {
     public class MinimapGenerator : MonoBehaviour
     {
+        [HideInInspector] public UnityEvent<Texture2D> minimapGenerated = new UnityEvent<Texture2D>();
+
         [SerializeField] private string pngName = "minimap.png";
         [SerializeField] private int pngResolution = 1080;
         [SerializeField] private Camera mapCamera;
 
         // Reference: https://discussions.unity.com/t/rendering-screenshot-larger-than-screen-resolution/542549/6
-        public void CaptureWorldMapBirdsEyeView(int worldSize)
+        public void StreamWorldToMinimap(int worldSize)
         {
             // Adjust bird's eye view camera's orthographic size (half of vertical/world size)
             mapCamera.orthographicSize = worldSize / 2f;
@@ -18,14 +21,14 @@ namespace Managers
             // Set up render texture and texture 2D (for later output to png)
             RenderTexture mapRenderTexture = new RenderTexture(pngResolution, pngResolution, 24, RenderTextureFormat.ARGB32);
             mapCamera.targetTexture = mapRenderTexture;
-            Texture2D mapBirdsEyeView = new Texture2D(pngResolution, pngResolution, TextureFormat.RGB24, false);
+            Texture2D mapTexture2D = new Texture2D(pngResolution, pngResolution, TextureFormat.RGB24, false);
 
             // Render camera image to render texture
             mapCamera.Render();
             // Read the image from tender texture to texture 2D
             RenderTexture.active = mapRenderTexture;
-            mapBirdsEyeView.ReadPixels(new Rect(0, 0, pngResolution, pngResolution), 0, 0);
-            mapBirdsEyeView.Apply();
+            mapTexture2D.ReadPixels(new Rect(0, 0, pngResolution, pngResolution), 0, 0);
+            mapTexture2D.Apply();
 
             // Destroy render texture
             mapCamera.targetTexture = null;
@@ -33,8 +36,11 @@ namespace Managers
             Destroy(mapRenderTexture);
 
             // Write this texture 2D png to disk
-            byte[] bytes = mapBirdsEyeView.EncodeToPNG();
+            byte[] bytes = mapTexture2D.EncodeToPNG();
             File.WriteAllBytes(Path.Combine(Application.dataPath, pngName), bytes);
+
+            // Tell ui manager minimap is generated, and passing it
+            minimapGenerated.Invoke(mapTexture2D);
         }
     }
 }

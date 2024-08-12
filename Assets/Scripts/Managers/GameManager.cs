@@ -18,7 +18,8 @@ namespace Managers
     {
         Combat = 0,
         Inventory = 1,
-        PauseMenu = 2
+        PauseMenu = 2,
+        Map = 3
     }
 
     public class GameManager : MonoBehaviour, IObserver
@@ -27,7 +28,10 @@ namespace Managers
         [SerializeField] private GameObject playerPrefab;
 
         [Header("Cursor")]
-        [SerializeField] private Texture2D combatCursorTexture, UICursorTecture;
+        [SerializeField] private Texture2D combatCursorTexture;
+        [FormerlySerializedAs("UICursorTecture")]
+        [Header("Cursor")]
+        [SerializeField] private Texture2D UICursorTexture;
 
         [Header("Gameplay")]
         [SerializeField] private GameObject player;
@@ -59,6 +63,9 @@ namespace Managers
             // Set world time flowing speed to normal (for reloading level)
             Time.timeScale = 1f;
 
+            minimapGenerator = GetComponent<MinimapGenerator>();
+            minimapGenerator.minimapGenerated.AddListener(mapTexture2D => uiManager.RenderMapUIs(mapTexture2D));
+
             // Generate the world
             levelGenerator.Generate();
 
@@ -71,8 +78,7 @@ namespace Managers
             yield return new WaitForEndOfFrame();
 
             // Take a bird's eye view shot of the map (for in-game minimap and outputting png)
-            minimapGenerator = GetComponent<MinimapGenerator>();
-            minimapGenerator.CaptureWorldMapBirdsEyeView(levelGenerator.worldGridSize * LevelGenerator.c_chunkSize);
+            minimapGenerator.StreamWorldToMinimap(levelGenerator.worldGridSize * LevelGenerator.c_chunkSize);
 
             SpawnPlayer();
         }
@@ -124,7 +130,7 @@ namespace Managers
             if (texture == combatCursorTexture) {
                 // Crosshair center
                 Cursor.SetCursor(texture, new Vector2(texture.width / 2f, texture.height / 2f), CursorMode.Auto);
-            } else if (texture == UICursorTecture) {
+            } else if (texture == UICursorTexture) {
                 // Mouse tip on top left
                 Cursor.SetCursor(texture, Vector2.zero, CursorMode.Auto);
             }
@@ -213,6 +219,7 @@ namespace Managers
             Camera.main.GetComponent<ClearingDistanceColliderComponent>().ConfigureCollider(playerCamera.m_Lens.OrthographicSize);
         }
 
+        // UI inputs
         public void OnEscape(InputAction.CallbackContext context)
         {
             if (context.phase != InputActionPhase.Performed) {
@@ -225,6 +232,8 @@ namespace Managers
                 ClosePauseMenu();
             } else if (playerMode == PlayerMode.Inventory) {
                 CloseInventory();
+            } else if (playerMode == PlayerMode.Map) {
+                CloseMap();
             }
         }
 
@@ -241,6 +250,19 @@ namespace Managers
             }
         }
 
+        public void OnM(InputAction.CallbackContext context)
+        {
+            if (context.phase != InputActionPhase.Performed) {
+                return;
+            }
+
+            if (playerMode == PlayerMode.Combat) {
+                OpenMap();
+            } else if (playerMode == PlayerMode.Map) {
+                CloseMap();
+            }
+        }
+
         private void OpenPauseMenu()
         {
             // Assign status markers
@@ -249,7 +271,7 @@ namespace Managers
 
             // Open pause menu
             uiManager.OpenPauseMenu();
-            SetCursor(UICursorTecture);
+            SetCursor(UICursorTexture);
         }
 
         public void ClosePauseMenu()
@@ -269,7 +291,7 @@ namespace Managers
             Pause(true);
             playerMode = PlayerMode.Inventory;
 
-            SetCursor(UICursorTecture);
+            SetCursor(UICursorTexture);
             uiManager.OpenInventory();
         }
 
@@ -281,6 +303,26 @@ namespace Managers
 
             SetCursor(combatCursorTexture);
             uiManager.CloseInventory();
+        }
+
+        private void OpenMap()
+        {
+            // Assign status markers
+            Pause(true);
+            playerMode = PlayerMode.Map;
+
+            SetCursor(UICursorTexture);
+            uiManager.OpenMap();
+        }
+
+        private void CloseMap()
+        {
+            // Assign status markers
+            UnPause();
+            playerMode = PlayerMode.Combat;
+
+            SetCursor(combatCursorTexture);
+            uiManager.CloseMap();
         }
 
         private void Pause(bool freezeTime)
