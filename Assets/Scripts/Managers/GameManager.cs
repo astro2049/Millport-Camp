@@ -4,6 +4,7 @@ using Entities.Abilities.ClearingDistance;
 using Entities.Abilities.Input;
 using Entities.Abilities.Observer;
 using Entities.Player;
+using Gameplay;
 using PCG;
 using Unity.AI.Navigation;
 using UnityEngine;
@@ -78,7 +79,7 @@ namespace Managers
             yield return new WaitForEndOfFrame();
 
             // Take a bird's eye view shot of the map (for in-game minimap and outputting png)
-            minimapGenerator.StreamWorldToMinimap(levelGenerator.worldGridSize * LevelGenerator.c_chunkSize);
+            minimapGenerator.StreamWorldToMinimap(WorldConfigurations.s_worldGridSize * WorldConfigurations.c_chunkSize);
 
             SpawnPlayer();
         }

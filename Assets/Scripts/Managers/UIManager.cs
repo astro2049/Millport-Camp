@@ -1,7 +1,7 @@
 using System;
 using Entities.Abilities.Observer;
 using Entities.Gun;
-using Managers.Quests;
+using Gameplay.Quests;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

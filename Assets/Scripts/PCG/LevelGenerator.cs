@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Entities.Abilities.ClearingDistance;
+using Gameplay;
 using Managers;
 using PCG.BiomeData;
 using UnityEngine;
@@ -19,9 +20,7 @@ namespace PCG
 
     public class LevelGenerator : MonoBehaviour
     {
-        public int worldGridSize = 32;
-        public const int c_chunkSize = 16; // m, Unity unit
-        private const int c_foliageSubGridSize = c_chunkSize;
+        private const int c_foliageSubGridSize = WorldConfigurations.c_chunkSize;
         private const int c_foliageSubCellSize = 1; // m, Unity unit
 
         private Grid grid;
@@ -52,18 +51,18 @@ namespace PCG
             // Get Grid component
             grid = GetComponent<Grid>();
             // Change grid's cell size accordingly
-            grid.cellSize = new Vector3(c_chunkSize, 1, c_chunkSize);
+            grid.cellSize = new Vector3(WorldConfigurations.c_chunkSize, 1, WorldConfigurations.c_chunkSize);
 
             // Initialize biomes parameters
-            whittakerBiomes.initializeParameters(worldGridSize);
+            whittakerBiomes.initializeParameters(WorldConfigurations.s_worldGridSize);
 
             // Adjust floor cell scale according to grid cell size, because prefab is plane
-            floorPrefab.transform.localScale = new Vector3(c_chunkSize / 10f, 1, c_chunkSize / 10f);
+            floorPrefab.transform.localScale = new Vector3(WorldConfigurations.c_chunkSize / 10f, 1, WorldConfigurations.c_chunkSize / 10f);
             // Offset self to align with world center
-            transform.position = new Vector3(-worldGridSize * c_chunkSize / 2f, 0, -worldGridSize * c_chunkSize / 2f);
+            transform.position = new Vector3(-WorldConfigurations.s_worldGridSize * WorldConfigurations.c_chunkSize / 2f, 0, -WorldConfigurations.s_worldGridSize * WorldConfigurations.c_chunkSize / 2f);
             // Generate aim plane. Same size as the terrain.
             GameObject aimPlane = Instantiate(aimPlanePrefab);
-            aimPlane.transform.localScale = floorPrefab.transform.localScale * worldGridSize;
+            aimPlane.transform.localScale = floorPrefab.transform.localScale * WorldConfigurations.s_worldGridSize;
 
             // Make sure biomes array is correct in size and types
             Array biomeTypeValues = Enum.GetValues(typeof(BiomeType));
@@ -78,11 +77,11 @@ namespace PCG
 
         private void ResizeOcean()
         {
-            ocean.transform.localScale = new Vector3(worldGridSize * c_chunkSize / 10f, 1, worldGridSize * c_chunkSize / 10f);
+            ocean.transform.localScale = new Vector3(WorldConfigurations.s_worldGridSize * WorldConfigurations.c_chunkSize / 10f, 1, WorldConfigurations.s_worldGridSize * WorldConfigurations.c_chunkSize / 10f);
             // Adjust ocean's ripple density according to world size
             // TODO: Kind of hacky
             float rippleDensity = ocean.GetComponent<MeshRenderer>().material.GetFloat("_RippleDensity");
-            ocean.GetComponent<MeshRenderer>().material.SetFloat("_RippleDensity", rippleDensity * worldGridSize);
+            ocean.GetComponent<MeshRenderer>().material.SetFloat("_RippleDensity", rippleDensity * WorldConfigurations.s_worldGridSize);
         }
 
         public void Generate()
@@ -117,8 +116,8 @@ namespace PCG
 
         private void GenerateFloors()
         {
-            for (int x = 0; x < worldGridSize; x++) {
-                for (int y = 0; y < worldGridSize; y++) {
+            for (int x = 0; x < WorldConfigurations.s_worldGridSize; x++) {
+                for (int y = 0; y < WorldConfigurations.s_worldGridSize; y++) {
                     Vector3 cellCoord = grid.GetCellCenterWorld(new Vector3Int(x, 0, y));
                     BiomeType biomeType = whittakerBiomes.DetermineBiome(x, y);
 
@@ -139,7 +138,7 @@ namespace PCG
             foreach (Biome biome in biomes) {
                 foreach (Chunk chunk in biome.chunks) {
                     // (Precalculate) tile bottom left corner world coordinate
-                    Vector3 cellBottomLeftCoord = grid.GetCellCenterWorld(new Vector3Int(chunk.cellCoord.x, 0, chunk.cellCoord.y)) - new Vector3(c_chunkSize / 2f, 0, c_chunkSize / 2f);
+                    Vector3 cellBottomLeftCoord = grid.GetCellCenterWorld(new Vector3Int(chunk.cellCoord.x, 0, chunk.cellCoord.y)) - new Vector3(WorldConfigurations.c_chunkSize / 2f, 0, WorldConfigurations.c_chunkSize / 2f);
                     cellBottomLeftCoord.y = 0;
 
                     // Prepare index list
@@ -217,7 +216,7 @@ namespace PCG
                 chunkCenter.y = 0;
 
                 // Clear all foliage in chunk
-                Collider[] hitColliders = Physics.OverlapBox(chunkCenter, Vector3.one * (c_chunkSize / 2f), Quaternion.identity, LayerMask.GetMask("Structure"));
+                Collider[] hitColliders = Physics.OverlapBox(chunkCenter, Vector3.one * (WorldConfigurations.c_chunkSize / 2f), Quaternion.identity, LayerMask.GetMask("Structure"));
                 foreach (Collider hitCollider in hitColliders) {
                     Destroy(hitCollider.gameObject);
                 }

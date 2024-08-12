@@ -1,8 +1,8 @@
-﻿using UnityEngine;
-using System.IO;
+﻿using System.IO;
+using UnityEngine;
 using UnityEngine.Events;
 
-namespace Managers
+namespace Gameplay
 {
     public class MinimapGenerator : MonoBehaviour
     {

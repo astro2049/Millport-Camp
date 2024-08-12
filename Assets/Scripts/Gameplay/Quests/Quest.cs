@@ -3,7 +3,7 @@ using PCG;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Managers.Quests
+namespace Gameplay.Quests
 {
     [Serializable]
     // 'Go to destination' quest
