@@ -5,6 +5,7 @@ using Entities.Abilities.Input;
 using Entities.Abilities.Observer;
 using Entities.Player;
 using Gameplay;
+using Gameplay.Quests;
 using PCG;
 using Unity.AI.Navigation;
 using UnityEngine;
@@ -44,27 +45,41 @@ namespace Managers
         [SerializeField] private UIManager uiManager;
         [SerializeField] private InventoryManager inventoryManager;
         [SerializeField] private LevelGenerator levelGenerator;
-        [SerializeField] private MinimapGenerator minimapGenerator;
+        private MinimapGenerator minimapGenerator;
+        private QuestManager questManager;
 
         private NavMeshSurface m_navMeshSurface;
 
         private PlayerMode playerMode = PlayerMode.Combat;
 
+        // Quest Destination Indicator
+        [FormerlySerializedAs("destinationIndicatorComponent")]
+        [Header("Destination Indicator")]
+        [SerializeField] private QuestLocationIndicatorComponent questLocationIndicatorComponent;
+
         private void SwitchControlActor(GameObject actor)
         {
+            // Assign current actor to currentControllingActor and switch inputs
             if (currentControllingActor) {
                 currentControllingActor.GetComponent<InputComponent>().enabled = false;
             }
             currentControllingActor = actor;
             currentControllingActor.GetComponent<InputComponent>().enabled = true;
+
+            // Set actor for destinationIndicatorComponent
+            questLocationIndicatorComponent.SetActor(currentControllingActor);
         }
 
         private void Awake()
         {
+            // Get components
+            minimapGenerator = GetComponent<MinimapGenerator>();
+            questManager = GetComponent<QuestManager>();
+
             // Set world time flowing speed to normal (for reloading level)
             Time.timeScale = 1f;
 
-            minimapGenerator = GetComponent<MinimapGenerator>();
+            // Subscribe to minimap generator event: minimapGenerated
             minimapGenerator.minimapGenerated.AddListener(mapTexture2D => uiManager.RenderMapUIs(mapTexture2D));
 
             // Generate the world
@@ -81,7 +96,14 @@ namespace Managers
             // Take a bird's eye view shot of the map (for in-game minimap and outputting png)
             minimapGenerator.StreamWorldToMinimap(WorldConfigurations.s_worldGridSize * WorldConfigurations.c_chunkSize);
 
+            // Spawn the player
             SpawnPlayer();
+
+            // Start the first quest
+            if (questManager.quests.Length > 0) {
+                questManager.StartStory();
+            }
+            questLocationIndicatorComponent.enabled = true;
         }
 
         private void SpawnPlayer()

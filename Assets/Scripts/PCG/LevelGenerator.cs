@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Entities.Abilities.ClearingDistance;
 using Gameplay;
+using Gameplay.Quests;
 using Managers;
 using PCG.BiomeData;
 using UnityEngine;
@@ -37,9 +38,7 @@ namespace PCG
         [Header("Gameplay")]
         [SerializeField] private GameObject aimPlanePrefab;
         [SerializeField] private GameObject ocean;
-        // Bases
-        [SerializeField] private BiomeType[] baseBiomes;
-        [SerializeField] private GameObject[] basePrefabs;
+
         // Quests
         [SerializeField] private QuestManager questManager;
 
@@ -206,9 +205,8 @@ namespace PCG
 
         private void PlaceBases()
         {
-            int i = 0;
-            foreach (BiomeType biomeType in baseBiomes) {
-                List<Chunk> chunks = biomes[biomeType.GetHashCode()].chunks;
+            foreach (Quest quest in questManager.quests) {
+                List<Chunk> chunks = biomes[quest.baseBiome.GetHashCode()].chunks;
                 Chunk chunk = chunks[chunks.Count / 2];
 
                 // Get chunk center world coordinate
@@ -222,7 +220,7 @@ namespace PCG
                 }
 
                 // Place base in the center
-                GameObject researchBase = Instantiate(basePrefabs[i], chunkCenter, Quaternion.identity, basesParent);
+                GameObject researchBase = Instantiate(quest.basePrefab, chunkCenter, Quaternion.identity, basesParent);
 
                 // Quest: configure trigger collider for detecting player, and quest destination component
                 // Sphere collider
@@ -236,9 +234,7 @@ namespace PCG
                 researchBase.AddComponent<QuestDestinationComponent>();
 
                 // Assign this research base to the corresponding quest
-                questManager.quests[i].AssignDestinationGo(researchBase);
-
-                i++;
+                quest.AssignDestinationGo(researchBase);
             }
         }
     }

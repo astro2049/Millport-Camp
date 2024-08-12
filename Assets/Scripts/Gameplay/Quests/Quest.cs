@@ -12,10 +12,16 @@ namespace Gameplay.Quests
         public string name;
         public string description;
 
+        public BiomeType baseBiome;
+        public GameObject basePrefab;
+
+        public GameObject destinationGo;
+
         [HideInInspector] public UnityEvent questFinished;
 
-        public void AssignDestinationGo(GameObject destinationGo)
+        public void AssignDestinationGo(GameObject aDestinationGo)
         {
+            destinationGo = aDestinationGo;
             destinationGo.GetComponent<QuestDestinationComponent>().reachedByPlayer.AddListener(Finish);
         }
 
