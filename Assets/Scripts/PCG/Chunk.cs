@@ -6,12 +6,12 @@ namespace PCG
     public class Chunk
     {
         public BiomeType biome;
-        public Vector2Int cellCoord;
+        public Vector2Int cellCoordinate;
 
-        public Chunk(BiomeType biome, Vector2Int cellCoord)
+        public Chunk(BiomeType biome, Vector2Int cellCoordinate)
         {
             this.biome = biome;
-            this.cellCoord = cellCoord;
+            this.cellCoordinate = cellCoordinate;
         }
     }
 }

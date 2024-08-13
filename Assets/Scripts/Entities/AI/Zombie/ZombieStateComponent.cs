@@ -22,18 +22,5 @@ namespace Entities.AI.Zombie
             // Configure perception
             GetComponent<PerceptionComponent>().CreateSensorCollider(perceptionRadius, perceptionLayers);
         }
-
-        // Start is called before the first frame update
-        private void Start()
-        {
-            // Enable behavior tree
-            GetComponent<ZombieBtComponent>().enabled = true;
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
-
-        }
     }
 }

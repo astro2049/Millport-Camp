@@ -11,12 +11,19 @@ namespace Entities.Abilities.AI.Bt
 
         private void OnEnable()
         {
-            bt.Start();
+            ActivateBt();
         }
 
         private void OnDisable()
         {
             DeactivateBt();
+        }
+
+        private void ActivateBt()
+        {
+            if (bt.CurrentState == Node.State.INACTIVE) {
+                bt.Start();
+            }
         }
 
         private void DeactivateBt()

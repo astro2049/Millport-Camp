@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 using EventType = Entities.Abilities.Observer.EventType;
 
 namespace Managers.GameManager
@@ -47,8 +48,6 @@ namespace Managers.GameManager
         [SerializeField] private LevelGenerator levelGenerator;
         private MinimapGenerator minimapGenerator;
         private QuestManager questManager;
-
-        private NavMeshSurface m_navMeshSurface;
 
         [HideInInspector] public PlayerMode playerMode = PlayerMode.Combat;
 
@@ -140,11 +139,6 @@ namespace Managers.GameManager
         private void Start()
         {
             SetCursor(combatCursorTexture);
-
-            m_navMeshSurface = GetComponent<NavMeshSurface>();
-
-            // Build nav mesh
-            // m_navMeshSurface.BuildNavMesh();
         }
 
         // https://docs.unity3d.com/2022.3/Documentation/ScriptReference/Cursor.SetCursor.html
@@ -190,7 +184,7 @@ namespace Managers.GameManager
                     // Free camera
                     playerCamera.Follow = null;
                     // Open Pause Menu
-                    Pause(false);
+                    OpenPauseMenu(false);
                     // Disallow closing the pause menu
                     GetComponent<PlayerInput>().actions.FindActionMap("Menu").Disable();
                     break;
@@ -242,10 +236,12 @@ namespace Managers.GameManager
             Camera.main.GetComponent<ClearingDistanceColliderComponent>().ConfigureCollider(playerCamera.m_Lens.OrthographicSize);
         }
 
-        public void OpenPauseMenu()
+        public void OpenPauseMenu(bool pause)
         {
             // Assign status markers
-            Pause(true);
+            if (pause) {
+                Pause();
+            }
             playerMode = PlayerMode.PauseMenu;
 
             // Open pause menu
@@ -267,7 +263,7 @@ namespace Managers.GameManager
         public void OpenInventory()
         {
             // Assign status markers
-            Pause(true);
+            Pause();
             playerMode = PlayerMode.Inventory;
 
             SetCursor(UICursorTexture);
@@ -287,7 +283,7 @@ namespace Managers.GameManager
         public void OpenMap()
         {
             // Assign status markers
-            Pause(true);
+            Pause();
             playerMode = PlayerMode.Map;
 
             SetCursor(UICursorTexture);
@@ -304,12 +300,10 @@ namespace Managers.GameManager
             uiManager.CloseMap();
         }
 
-        private void Pause(bool freezeTime)
+        private void Pause()
         {
-            if (freezeTime) {
-                // Pause the game
-                Time.timeScale = 0f;
-            }
+            // Pause the game
+            Time.timeScale = 0f;
 
             // Disable current actor's inputs
             currentControllingActor.GetComponent<InputComponent>().enabled = false;

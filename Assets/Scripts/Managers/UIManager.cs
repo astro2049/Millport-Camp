@@ -5,6 +5,7 @@ using Gameplay.Quests;
 using TMPro;
 using UI.Map;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using EventType = Entities.Abilities.Observer.EventType;
 
@@ -29,6 +30,8 @@ namespace Managers
         [SerializeField] private GameObject overlappingObjectsText;
 
         [Header("Pause Menu")]
+        [SerializeField] private Image pauseMenuBackground;
+        [SerializeField] private TextMeshProUGUI pauseMenuTitle;
         [SerializeField] private Button resumeButton;
 
         [Header("Debug")]
@@ -70,6 +73,8 @@ namespace Managers
                     buildModeCanvas.enabled = false;
                     break;
                 case EventType.PawnDead:
+                    pauseMenuBackground.enabled = false;
+                    pauseMenuTitle.text = "You're Dead";
                     resumeButton.interactable = false;
                     break;
                 // Gun

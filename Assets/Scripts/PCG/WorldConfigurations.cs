@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Gameplay
+namespace PCG
 {
     public class WorldConfigurations : MonoBehaviour
     {

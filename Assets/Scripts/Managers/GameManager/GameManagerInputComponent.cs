@@ -20,7 +20,7 @@ namespace Managers.GameManager
             }
 
             if (gameManager.playerMode == PlayerMode.Combat) {
-                gameManager.OpenPauseMenu();
+                gameManager.OpenPauseMenu(true);
             } else if (gameManager.playerMode == PlayerMode.PauseMenu) {
                 gameManager.ClosePauseMenu();
             } else if (gameManager.playerMode == PlayerMode.Inventory) {
