@@ -14,7 +14,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using EventType = Entities.Abilities.Observer.EventType;
 
-namespace Managers
+namespace Managers.GameManager
 {
     public enum PlayerMode
     {
@@ -50,7 +50,7 @@ namespace Managers
 
         private NavMeshSurface m_navMeshSurface;
 
-        private PlayerMode playerMode = PlayerMode.Combat;
+        [HideInInspector] public PlayerMode playerMode = PlayerMode.Combat;
 
         // Quest Destination Indicator
         [FormerlySerializedAs("destinationIndicatorComponent")]
@@ -242,51 +242,7 @@ namespace Managers
             Camera.main.GetComponent<ClearingDistanceColliderComponent>().ConfigureCollider(playerCamera.m_Lens.OrthographicSize);
         }
 
-        // UI inputs
-        public void OnEscape(InputAction.CallbackContext context)
-        {
-            if (context.phase != InputActionPhase.Performed) {
-                return;
-            }
-
-            if (playerMode == PlayerMode.Combat) {
-                OpenPauseMenu();
-            } else if (playerMode == PlayerMode.PauseMenu) {
-                ClosePauseMenu();
-            } else if (playerMode == PlayerMode.Inventory) {
-                CloseInventory();
-            } else if (playerMode == PlayerMode.Map) {
-                CloseMap();
-            }
-        }
-
-        public void OnTab(InputAction.CallbackContext context)
-        {
-            if (context.phase != InputActionPhase.Performed) {
-                return;
-            }
-
-            if (playerMode == PlayerMode.Combat) {
-                OpenInventory();
-            } else if (playerMode == PlayerMode.Inventory) {
-                CloseInventory();
-            }
-        }
-
-        public void OnM(InputAction.CallbackContext context)
-        {
-            if (context.phase != InputActionPhase.Performed) {
-                return;
-            }
-
-            if (playerMode == PlayerMode.Combat) {
-                OpenMap();
-            } else if (playerMode == PlayerMode.Map) {
-                CloseMap();
-            }
-        }
-
-        private void OpenPauseMenu()
+        public void OpenPauseMenu()
         {
             // Assign status markers
             Pause(true);
@@ -308,7 +264,7 @@ namespace Managers
             SetCursor(combatCursorTexture);
         }
 
-        private void OpenInventory()
+        public void OpenInventory()
         {
             // Assign status markers
             Pause(true);
@@ -318,7 +274,7 @@ namespace Managers
             uiManager.OpenInventory();
         }
 
-        private void CloseInventory()
+        public void CloseInventory()
         {
             // Assign status markers
             UnPause();
@@ -328,7 +284,7 @@ namespace Managers
             uiManager.CloseInventory();
         }
 
-        private void OpenMap()
+        public void OpenMap()
         {
             // Assign status markers
             Pause(true);
@@ -338,7 +294,7 @@ namespace Managers
             uiManager.OpenMap(currentControllingActor.transform);
         }
 
-        private void CloseMap()
+        public void CloseMap()
         {
             // Assign status markers
             UnPause();
