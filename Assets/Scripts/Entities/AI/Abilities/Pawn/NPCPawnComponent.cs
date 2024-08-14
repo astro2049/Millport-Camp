@@ -1,6 +1,7 @@
 using System.Collections;
 using Entities.AI.Abilities.Bt;
 using Entities.Abilities.Pawn;
+using Entities.AI.CombatRobot;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -11,7 +12,19 @@ namespace Entities.AI.Abilities.Pawn
         public override void Die()
         {
             base.Die();
-            GetComponent<BtComponent>().enabled = false;
+            BtComponent btComponent = GetComponent<BtComponent>();
+
+            // Shut down behaviors
+            // Zombie
+            if (btComponent) {
+                btComponent.enabled = false;
+            }
+            // Combat Robot
+            CombatRobotHFSMComponent hfsmComponent = GetComponent<CombatRobotHFSMComponent>();
+            if (hfsmComponent) {
+                hfsmComponent.enabled = false;
+            }
+
             GetComponent<NavMeshAgent>().enabled = false;
             // StartCoroutine(SinkUnderMap());
         }

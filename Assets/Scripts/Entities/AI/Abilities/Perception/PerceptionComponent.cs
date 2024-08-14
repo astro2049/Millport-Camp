@@ -4,7 +4,7 @@ namespace Entities.AI.Abilities.Perception
 {
     public abstract class PerceptionComponent : MonoBehaviour
     {
-        public void CreateSensorCollider(float radius, LayerMask[] includeLayers)
+        public void CreateSensorCollider(float radius, LayerMask includeLayers)
         {
             GameObject sensorGameObject = new GameObject("Sensor Collider") {
                 transform = {
@@ -19,13 +19,7 @@ namespace Entities.AI.Abilities.Perception
             SphereCollider sensorCollider = sensorGameObject.AddComponent<SphereCollider>();
             sensorCollider.isTrigger = true;
             sensorCollider.radius = radius;
-            // Layer masks
-            LayerMask combinedLayerMask = 0;
-            foreach (LayerMask layer in includeLayers) {
-                combinedLayerMask |= layer;
-            }
-            sensorCollider.includeLayers = combinedLayerMask;
-            sensorCollider.excludeLayers = ~combinedLayerMask;
+            sensorCollider.excludeLayers = ~includeLayers;
 
             sensorGameObject.AddComponent<SensorComponent>();
         }

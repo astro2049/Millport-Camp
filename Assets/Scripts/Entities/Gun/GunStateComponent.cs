@@ -23,6 +23,7 @@ namespace Entities.Gun
         public GunData stats;
         public int magAmmo;
         [SerializeField] private LayerMask raycastLayers;
+        [SerializeField] private LayerMask damageLayers;
         // Muzzle
         private Transform muzzleTransform;
         // Sounds
@@ -158,11 +159,12 @@ namespace Entities.Gun
             Ray ray = new Ray(muzzlePosition, muzzleForward);
             TrailRenderer tracerTrail = Instantiate(tracerPrefab, muzzlePosition, Quaternion.LookRotation(muzzleForward)).GetComponent<TrailRenderer>();
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, raycastLayers)) {
-                // Debug: DrawLine - Green if hit NPC, otherwise cyan
-                Debug.DrawLine(muzzlePosition, hit.point, hit.collider.gameObject.layer == LayerMask.NameToLayer("NPC") ? Color.green : Color.cyan, 5f);
+                // Debug: DrawLine - Green if hit NPC or Player, otherwise cyan
+                Debug.DrawLine(muzzlePosition, hit.point, hit.collider.gameObject.layer == damageLayers ? Color.green : Color.cyan, 5f);
                 // Tracer effect
                 StartCoroutine(SpawnTrail(tracerTrail, hit.distance));
-                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("NPC")) {
+                LayerMask hitLayer = 1 << hit.collider.gameObject.layer;
+                if ((hitLayer & damageLayers) == hitLayer) {
                     // Deal damage
                     GetComponent<DamageDealerComponent>().DealDamage(hit.collider.gameObject, stats.damage);
                 }

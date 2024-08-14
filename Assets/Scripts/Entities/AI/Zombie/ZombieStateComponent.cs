@@ -12,9 +12,9 @@ namespace Entities.AI.Zombie
         public float randomPatrolRadius = 10f;
         public float attackRange = 2f;
         public float perceptionRadius = 7.5f;
-        public LayerMask[] perceptionLayers;
+        public LayerMask perceptionLayers;
 
-        public SortedSet<GameObject> humans = new SortedSet<GameObject>();
+        public HashSet<GameObject> humans = new HashSet<GameObject>();
         public bool isEngaging;
 
         private void Awake()

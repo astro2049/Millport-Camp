@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 164401785996861785}
   m_Layer: 8
   m_Name: Zombie
-  m_TagString: Untagged
+  m_TagString: Zombie
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -151,8 +151,8 @@ MonoBehaviour:
   attackRange: 2
   perceptionRadius: 7.5
   perceptionLayers:
-  - serializedVersion: 2
-    m_Bits: 128
+    serializedVersion: 2
+    m_Bits: 384
   isEngaging: 0
 --- !u!114 &5976199100760700302
 MonoBehaviour:
@@ -312,7 +312,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4885386086854501295, guid: fbfc5490f1f8e4f43bda0629a7dc403a, type: 3}
       propertyPath: m_Name
-      value: Prefab_Health_Bar
+      value: Health_Bar
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

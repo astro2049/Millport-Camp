@@ -27,7 +27,7 @@ namespace Entities.AI.Turret.States
 
         protected override void Enter()
         {
-            owner.TriggerDown();
+            owner.gunnerComponent.TriggerDown();
         }
 
         protected override void Execute(float deltaTime)
@@ -37,12 +37,12 @@ namespace Entities.AI.Turret.States
                 return;
             }
             // Set gun look point to target's chest center
-            owner.gun.lookPoint = owner.target.transform.position + new Vector3(0, 1, 0);
+            owner.gunnerComponent.gun.lookPoint = owner.target.transform.position + new Vector3(0, 1, 0);
         }
 
         protected override void Exit()
         {
-            owner.TriggerUp();
+            owner.gunnerComponent.TriggerUp();
         }
     }
 
@@ -53,7 +53,7 @@ namespace Entities.AI.Turret.States
 
         protected override void Enter()
         {
-            owner.Reload();
+            owner.gunnerComponent.Reload();
         }
     }
 

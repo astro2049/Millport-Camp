@@ -12,7 +12,7 @@ namespace Entities.Abilities.Health
         // Start is called before the first frame update
         private void Start()
         {
-            Transform healthBarTransform = transform.Find("Prefab_Health_Bar");
+            Transform healthBarTransform = transform.Find("Health_Bar");
             if (healthBarTransform) {
                 healthBarComponent = healthBarTransform.GetComponent<HealthBarComponent>();
             }

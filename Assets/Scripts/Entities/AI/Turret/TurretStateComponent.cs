@@ -2,8 +2,8 @@
 using System.Linq;
 using Entities.Abilities.Observer;
 using Entities.Abilities.State;
+using Entities.AI.Abilities.Gunner;
 using Entities.AI.Abilities.Perception;
-using Entities.Gun;
 using TMPro;
 using UnityEngine;
 using EventType = Entities.Abilities.Observer.EventType;
@@ -15,10 +15,10 @@ namespace Entities.AI.Turret
         public float turnSpeed = 360f; // 360 deg/s
 
         public float perceptionRadius = 5f;
-        public LayerMask[] perceptionLayers;
+        public LayerMask perceptionLayers;
 
         public Transform baseTransform;
-        public GunStateComponent gun;
+        public GunnerComponent gunnerComponent;
 
         public TextMeshPro ammoText;
 
@@ -30,11 +30,10 @@ namespace Entities.AI.Turret
             // Configure perception
             GetComponent<PerceptionComponent>().CreateSensorCollider(perceptionRadius, perceptionLayers);
 
+            gunnerComponent = GetComponent<GunnerComponent>();
+
             turretHfsm = GetComponent<TurretHFSMComponent>();
             turretObserverComponent = GetComponent<TurretObserverComponent>();
-
-            // Subscribe to gun events: Reloaded
-            gun.GetComponent<SubjectComponent>().AddObserver(turretObserverComponent, EventType.Reloaded);
         }
 
         // HFSM Context
@@ -87,21 +86,6 @@ namespace Entities.AI.Turret
             } else {
                 return false;
             }
-        }
-
-        public void TriggerDown()
-        {
-            gun.SetIsTriggerDown(true);
-        }
-
-        public void TriggerUp()
-        {
-            gun.SetIsTriggerDown(false);
-        }
-
-        public void Reload()
-        {
-            StartCoroutine(gun.StartReloading());
         }
     }
 }

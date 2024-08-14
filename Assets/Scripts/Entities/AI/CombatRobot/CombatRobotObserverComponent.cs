@@ -2,24 +2,23 @@
 using Entities.AI.Abilities.Gunner;
 using EventType = Entities.Abilities.Observer.EventType;
 
-namespace Entities.AI.Turret
+namespace Entities.AI.CombatRobot
 {
-    public class TurretObserverComponent : ObserverComponent
+    public class CombatRobotObserverComponent : ObserverComponent
     {
-        private TurretStateComponent turretStateComponent;
+        private CombatRobotStateComponent combatRobotStateComponent;
         private GunnerComponent gunnerComponent;
-        private TurretHFSMComponent turretHfsm;
+        private CombatRobotHFSMComponent combatRobotHfsm;
 
         private void Awake()
         {
-            turretStateComponent = GetComponent<TurretStateComponent>();
+            combatRobotStateComponent = GetComponent<CombatRobotStateComponent>();
             gunnerComponent = GetComponent<GunnerComponent>();
-            turretHfsm = GetComponent<TurretHFSMComponent>();
+            combatRobotHfsm = GetComponent<CombatRobotHFSMComponent>();
 
             // Subscribe to gun events:
-            // - AmmoChanged, MagEmpty, Reloaded
+            // - MagEmpty, Reloaded
             gunnerComponent.gun.GetComponent<SubjectComponent>().AddObserver(this,
-                EventType.AmmoChanged,
                 EventType.MagEmpty,
                 EventType.Reloaded
             );
@@ -30,18 +29,18 @@ namespace Entities.AI.Turret
             switch (mcEvent.type) {
                 // Pawn
                 case EventType.PawnDead:
-                    turretStateComponent.RemoveTarget((mcEvent as MCEventWEntity)!.entity);
+                    combatRobotStateComponent.RemoveTarget((mcEvent as MCEventWEntity)!.entity);
+                    // Stop evading, if is evading
+                    if (combatRobotHfsm.movementHfsm.combatFsm.current.name == "Evade") {
+                        combatRobotHfsm.movementHfsm.combatFsm.ChangeState("Idle");
+                    }
                     break;
                 // Gun
-                case EventType.AmmoChanged:
-                    int ammo = gunnerComponent.gun.magAmmo;
-                    turretStateComponent.ammoText.text = ammo.ToString();
-                    break;
                 case EventType.MagEmpty:
-                    turretHfsm.gunHfsm.ChangeState("Reload");
+                    combatRobotHfsm.gunHfsm.ChangeState("Reload");
                     break;
                 case EventType.Reloaded:
-                    turretHfsm.gunHfsm.ChangeState("Trigger");
+                    combatRobotHfsm.gunHfsm.ChangeState("Trigger");
                     break;
             }
             return true;

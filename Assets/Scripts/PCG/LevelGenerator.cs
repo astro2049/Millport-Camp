@@ -125,7 +125,7 @@ namespace PCG
             // Build nav mesh
             navMeshSurface.BuildNavMesh();
 
-            PlaceZombies();
+            // PlaceZombies();
             PlaceCombatRobots();
         }
 

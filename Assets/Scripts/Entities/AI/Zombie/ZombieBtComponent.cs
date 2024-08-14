@@ -1,3 +1,4 @@
+using System.Linq;
 using Entities.Abilities.Health;
 using Entities.AI.Abilities.Bt;
 using NPBehave;
@@ -98,7 +99,7 @@ namespace Entities.AI.Zombie
                 navMeshAgent.ResetPath();
                 return Action.Result.FAILED;
             }
-            navMeshAgent.SetDestination(zombieStateComponent.humans.Min.transform.position);
+            navMeshAgent.SetDestination(zombieStateComponent.humans.First().transform.position);
             if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance <= zombieStateComponent.attackRange) {
                 return Action.Result.SUCCESS;
             } else {
@@ -108,7 +109,7 @@ namespace Entities.AI.Zombie
 
         private void Attack()
         {
-            damageDealerComponent.DealDamage(zombieStateComponent.humans.Min, 100f);
+            damageDealerComponent.DealDamage(zombieStateComponent.humans.First(), 100f);
             // TODO: Reset combat status, this is hacky
             zombieStateComponent.isEngaging = false;
         }

@@ -8,13 +8,19 @@ namespace Entities.Abilities.NPCActivationDistance
         private void OnTriggerEnter(Collider other)
         {
             // Activate NPC
-            other.gameObject.GetComponent<BtComponent>().enabled = true;
+            BtComponent btComponent = other.gameObject.GetComponent<BtComponent>();
+            if (btComponent) {
+                btComponent.enabled = true;
+            }
         }
 
         private void OnTriggerExit(Collider other)
         {
             // Deactivate NPC
-            other.gameObject.GetComponent<BtComponent>().enabled = false;
+            BtComponent btComponent = other.gameObject.GetComponent<BtComponent>();
+            if (btComponent) {
+                btComponent.enabled = false;
+            }
         }
     }
 }
