@@ -99,7 +99,7 @@ namespace Entities.AI.CombatRobot.States
         protected override void Execute(float deltaTime)
         {
             // Turn to face the target enemy
-            Quaternion targetRotation = Quaternion.LookRotation(owner.target.transform.position - owner.transform.position);
+            Quaternion targetRotation = Quaternion.LookRotation(owner.targetTrackerComponent.target.transform.position - owner.transform.position);
             owner.transform.rotation = Quaternion.RotateTowards(owner.transform.rotation, targetRotation, owner.turnSpeed * Time.deltaTime);
         }
     }
@@ -110,7 +110,7 @@ namespace Entities.AI.CombatRobot.States
 
         protected override void Execute(float deltaTime)
         {
-            if (Vector3.Distance(owner.transform.position, owner.target.transform.position) <= owner.evadeDistance) {
+            if (Vector3.Distance(owner.transform.position, owner.targetTrackerComponent.target.transform.position) <= owner.evadeDistance) {
                 parentState.ChangeState("Evade");
             }
         }
@@ -128,7 +128,10 @@ namespace Entities.AI.CombatRobot.States
         protected override void Execute(float deltaTime)
         {
             // Back off at movement speed
-            owner.transform.Translate(Vector3.Normalize(owner.transform.position - owner.target.transform.position) * owner.moveSpeed * deltaTime, Space.Self);
+            owner.transform.Translate(Vector3.Normalize(owner.transform.position - owner.targetTrackerComponent.target.transform.position) * owner.moveSpeed * deltaTime, Space.World);
+            if (Vector3.Distance(owner.transform.position, owner.targetTrackerComponent.target.transform.position) >= owner.evadeDistance) {
+                parentState.ChangeState("Idle");
+            }
         }
 
         protected override void Exit()

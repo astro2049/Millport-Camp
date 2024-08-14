@@ -1,15 +1,16 @@
 ﻿using Entities.AI.Abilities.Perception;
+using Entities.AI.Abilities.TargetTracker;
 using UnityEngine;
 
 namespace Entities.AI.CombatRobot
 {
     public class CombatRobotPerceptionComponent : PerceptionComponent
     {
-        private CombatRobotStateComponent combatRobotStateComponent;
+        private TargetTrackerComponent targetTrackerComponent;
 
         private void Awake()
         {
-            combatRobotStateComponent = GetComponent<CombatRobotStateComponent>();
+            targetTrackerComponent = GetComponent<TargetTrackerComponent>();
         }
 
         public override void OnPerceptionTriggerEnter(Collider other)
@@ -17,7 +18,7 @@ namespace Entities.AI.CombatRobot
             if (other.gameObject.CompareTag("CombatRobot")) {
                 return;
             }
-            combatRobotStateComponent.AddTarget(other.gameObject);
+            targetTrackerComponent.AddTarget(other.gameObject);
         }
 
         public override void OnPerceptionTriggerExit(Collider other)
@@ -25,7 +26,7 @@ namespace Entities.AI.CombatRobot
             if (other.gameObject.CompareTag("CombatRobot")) {
                 return;
             }
-            combatRobotStateComponent.RemoveTarget(other.gameObject);
+            targetTrackerComponent.RemoveTarget(other.gameObject);
         }
     }
 }

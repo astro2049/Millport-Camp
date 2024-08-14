@@ -27,7 +27,12 @@ namespace Entities.Abilities.Observer
 
         // Structures
         CanPlace = 17,
-        CannotPlace = 18
+        CannotPlace = 18,
+
+        // AI: Target Tracker
+        AcquiredFirstTarget = 19,
+        AcquiredNewTarget = 20,
+        LostAllTargets = 21
     }
 
     public class MCEvent

@@ -76,7 +76,7 @@ namespace Entities.AI.CombatRobot.States
                 return;
             }
             // Set gun look point to target's chest center
-            owner.gunnerComponent.gun.lookPoint = owner.target.transform.position + new Vector3(0, 1, 0);
+            owner.gunnerComponent.gun.lookPoint = owner.targetTrackerComponent.target.transform.position + new Vector3(0, 1, 0);
         }
 
         protected override void Exit()

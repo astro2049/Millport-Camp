@@ -1785,6 +1785,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4973556685779051336, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
+      propertyPath: health
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 4973556685779051336, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
+      propertyPath: maxHealth
+      value: 10000
+      objectReference: {fileID: 0}
     - target: {fileID: 5105231151093237616, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
       propertyPath: m_Name
       value: Zombie
