@@ -1,5 +1,5 @@
-using Entities.Abilities.AI.Bt;
 using Entities.Abilities.Health;
+using Entities.AI.Abilities.Bt;
 using NPBehave;
 using UnityEngine;
 using UnityEngine.AI;

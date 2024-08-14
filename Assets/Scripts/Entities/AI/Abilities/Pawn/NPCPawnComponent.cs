@@ -1,10 +1,10 @@
 using System.Collections;
-using Entities.Abilities.AI.Bt;
+using Entities.AI.Abilities.Bt;
 using Entities.Abilities.Pawn;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Entities.Abilities.AI.Pawn
+namespace Entities.AI.Abilities.Pawn
 {
     public class NPCPawnComponent : PawnComponent
     {

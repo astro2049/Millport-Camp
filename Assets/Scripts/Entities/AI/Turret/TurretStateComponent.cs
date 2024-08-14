@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Entities.Abilities.AI.Perception;
 using Entities.Abilities.Observer;
 using Entities.Abilities.State;
+using Entities.AI.Abilities.Perception;
 using Entities.Gun;
 using TMPro;
 using UnityEngine;

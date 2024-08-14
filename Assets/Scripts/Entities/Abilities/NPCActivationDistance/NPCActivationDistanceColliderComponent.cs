@@ -1,4 +1,4 @@
-﻿using Entities.Abilities.AI.Bt;
+﻿using Entities.AI.Abilities.Bt;
 using UnityEngine;
 
 namespace Entities.Abilities.NPCActivationDistance

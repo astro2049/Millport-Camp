@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Entities.Abilities.AI.Perception
+namespace Entities.AI.Abilities.Perception
 {
     public class SensorComponent : MonoBehaviour
     {

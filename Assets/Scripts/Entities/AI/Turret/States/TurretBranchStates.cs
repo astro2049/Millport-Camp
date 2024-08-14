@@ -1,4 +1,4 @@
-﻿using Entities.Abilities.AI.HFSM;
+﻿using Entities.AI.Abilities.HFSM;
 
 namespace Entities.AI.Turret.States
 {
