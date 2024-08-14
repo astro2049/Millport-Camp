@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5518125336730570392}
   - component: {fileID: 6343340821810109193}
   m_Layer: 6
-  m_Name: Pf_AimPlane
+  m_Name: AimPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

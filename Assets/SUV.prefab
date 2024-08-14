@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 8692904920287675312}
   - component: {fileID: 402371923989164298}
   m_Layer: 11
-  m_Name: Pf_SUV
+  m_Name: SUV
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
