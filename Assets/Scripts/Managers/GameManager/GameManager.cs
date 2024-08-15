@@ -33,7 +33,7 @@ namespace Managers.GameManager
 
         [Header("Gameplay")]
         [SerializeField] private GameObject player;
-        [SerializeField] private GameObject currentControllingActor;
+        [SerializeField] private GameObject currentActor;
         [SerializeField] private CinemachineVirtualCamera playerCamera;
         [SerializeField] private CinemachineVirtualCamera vehicleCamera;
 
@@ -57,27 +57,30 @@ namespace Managers.GameManager
         {
             SubjectComponent subject;
 
-            if (currentControllingActor) {
-                currentControllingActor.GetComponent<InputComponent>().enabled = false;
-                subject = currentControllingActor.GetComponent<SubjectComponent>();
+            if (currentActor) {
+                currentActor.tag = "Untagged";
+                currentActor.GetComponent<InputComponent>().enabled = false;
+                subject = currentActor.GetComponent<SubjectComponent>();
                 subject.RemoveObserver(this, EventType.Dead);
                 subject.RemoveObserver(uiManager, EventType.Dead);
+                subject.NotifyObservers(new MCEventWEntity(EventType.NotControlledByPlayer, currentActor));
             }
 
             // Assign current actor to currentControllingActor
-            currentControllingActor = actor;
+            currentActor = actor;
+            currentActor.tag = "Player";
             // Switch inputs, and subscribe to Dead event
-            currentControllingActor.GetComponent<InputComponent>().enabled = true;
-            subject = currentControllingActor.GetComponent<SubjectComponent>();
+            currentActor.GetComponent<InputComponent>().enabled = true;
+            subject = currentActor.GetComponent<SubjectComponent>();
             subject.AddObserver(this, EventType.Dead);
             subject.AddObserver(uiManager, EventType.Dead);
 
             // Attach NPC activation collider
-            npcActivationCollider.transform.parent = currentControllingActor.transform;
+            npcActivationCollider.transform.parent = currentActor.transform;
             npcActivationCollider.transform.localPosition = Vector3.zero;
 
             // Set actor for destinationIndicatorComponent
-            questLocationIndicatorComponent.SetActor(currentControllingActor);
+            questLocationIndicatorComponent.SetActor(currentActor);
         }
 
         private void Awake()
@@ -191,8 +194,8 @@ namespace Managers.GameManager
                     break;
                 case EventType.Dead:
                     // Disable inputs
-                    currentControllingActor.GetComponent<InputComponent>().enabled = false;
-                    currentControllingActor.GetComponent<PlayerInput>().enabled = false;
+                    currentActor.GetComponent<InputComponent>().enabled = false;
+                    currentActor.GetComponent<PlayerInput>().enabled = false;
                     // Free camera
                     playerCamera.Follow = null;
                     // Open Pause Menu
@@ -299,7 +302,7 @@ namespace Managers.GameManager
             playerMode = PlayerMode.Map;
 
             SetCursor(UICursorTexture);
-            uiManager.OpenMap(currentControllingActor.transform);
+            uiManager.OpenMap(currentActor.transform);
         }
 
         public void CloseMap()
@@ -318,7 +321,7 @@ namespace Managers.GameManager
             Time.timeScale = 0f;
 
             // Disable current actor's inputs
-            currentControllingActor.GetComponent<InputComponent>().enabled = false;
+            currentActor.GetComponent<InputComponent>().enabled = false;
         }
 
         private void UnPause()
@@ -327,7 +330,7 @@ namespace Managers.GameManager
             Time.timeScale = 1f;
 
             // Enable current actor's inputs
-            currentControllingActor.GetComponent<InputComponent>().enabled = true;
+            currentActor.GetComponent<InputComponent>().enabled = true;
         }
 
         public void ReloadCurrentScene()

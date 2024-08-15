@@ -22,6 +22,7 @@ namespace Entities.Abilities.Observer
 
         // Actor (Player, Zombie, Combat Robot, Vehicle, Turret)
         Dead = 13,
+        NotControlledByPlayer = 12,
 
         // Gun
         AmmoChanged = 14,

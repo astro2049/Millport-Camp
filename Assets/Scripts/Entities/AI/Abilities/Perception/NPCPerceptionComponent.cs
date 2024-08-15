@@ -1,5 +1,7 @@
+using Entities.Abilities.Observer;
 using Entities.AI.Abilities.TargetTracker;
 using UnityEngine;
+using EventType = Entities.Abilities.Observer.EventType;
 
 namespace Entities.AI.Abilities.Perception
 {
@@ -17,20 +19,51 @@ namespace Entities.AI.Abilities.Perception
 
         public override void OnPerceptionTriggerEnter(Collider other)
         {
-            // Ignore own kind
-            if (other.gameObject.CompareTag(gameObject.tag)) {
+            GameObject actor = other.gameObject;
+            bool isPlayerControlled = false;
+
+            if (!IsInterested(actor, ref isPlayerControlled)) {
                 return;
             }
-            targetTrackerComponent.AddTarget(other.gameObject);
+
+            targetTrackerComponent.AddTarget(actor);
+            if (isPlayerControlled) {
+                actor.GetComponent<SubjectComponent>().AddObserver(targetTrackerComponent, EventType.NotControlledByPlayer);
+            }
         }
 
         public override void OnPerceptionTriggerExit(Collider other)
         {
-            // Ignore own kind
-            if (other.gameObject.CompareTag(gameObject.tag)) {
+            GameObject actor = other.gameObject;
+            bool isPlayerControlled = false;
+
+            if (!IsInterested(actor, ref isPlayerControlled)) {
                 return;
             }
-            targetTrackerComponent.RemoveTarget(other.gameObject);
+
+            targetTrackerComponent.RemoveTarget(actor);
+            if (isPlayerControlled) {
+                actor.GetComponent<SubjectComponent>().RemoveObserver(targetTrackerComponent, EventType.NotControlledByPlayer);
+            }
+        }
+
+        private bool IsInterested(GameObject actor, ref bool isPlayerControlled)
+        {
+            int layer = actor.layer;
+            if (layer == LayerMask.NameToLayer("NPC")) {
+                // Ignore own kind
+                if (actor.CompareTag(gameObject.tag)) {
+                    return false;
+                }
+                return true;
+            } else {
+                // Only interested in player
+                if (actor.CompareTag("Player")) {
+                    isPlayerControlled = true;
+                    return true;
+                }
+                return false;
+            }
         }
     }
 }

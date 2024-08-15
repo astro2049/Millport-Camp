@@ -52,6 +52,7 @@ namespace Entities.AI.Abilities.TargetTracker
         public bool OnNotify(MCEvent mcEvent)
         {
             switch (mcEvent.type) {
+                case EventType.NotControlledByPlayer:
                 case EventType.Dead:
                     GameObject enemy = (mcEvent as MCEventWEntity)!.entity;
                     RemoveTarget(enemy);
