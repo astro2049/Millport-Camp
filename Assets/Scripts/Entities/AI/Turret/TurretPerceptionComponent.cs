@@ -1,25 +1,26 @@
 ﻿using Entities.AI.Abilities.Perception;
+using Entities.AI.Abilities.TargetTracker;
 using UnityEngine;
 
 namespace Entities.AI.Turret
 {
     public class TurretPerceptionComponent : PerceptionComponent
     {
-        private TurretStateComponent turretStateComponent;
+        private TargetTrackerComponent targetTrackerComponent;
 
         private void Awake()
         {
-            turretStateComponent = GetComponent<TurretStateComponent>();
+            targetTrackerComponent = GetComponent<TargetTrackerComponent>();
         }
 
         public override void OnPerceptionTriggerEnter(Collider other)
         {
-            turretStateComponent.AddTarget(other.gameObject);
+            targetTrackerComponent.AddTarget(other.gameObject);
         }
 
         public override void OnPerceptionTriggerExit(Collider other)
         {
-            turretStateComponent.RemoveTarget(other.gameObject);
+            targetTrackerComponent.RemoveTarget(other.gameObject);
         }
     }
 }

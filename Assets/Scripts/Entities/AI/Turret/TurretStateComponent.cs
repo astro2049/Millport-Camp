@@ -1,12 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Entities.Abilities.Observer;
-using Entities.Abilities.State;
+﻿using Entities.Abilities.State;
 using Entities.AI.Abilities.Gunner;
 using Entities.AI.Abilities.Perception;
-using TMPro;
+using Entities.AI.Abilities.TargetTracker;
 using UnityEngine;
-using EventType = Entities.Abilities.Observer.EventType;
 
 namespace Entities.AI.Turret
 {
@@ -18,12 +14,9 @@ namespace Entities.AI.Turret
         public LayerMask perceptionLayers;
 
         public Transform baseTransform;
+
         public GunnerComponent gunnerComponent;
-
-        public TextMeshPro ammoText;
-
-        private TurretHFSMComponent turretHfsm;
-        private TurretObserverComponent turretObserverComponent;
+        public TargetTrackerComponent targetTrackerComponent;
 
         private void Awake()
         {
@@ -31,57 +24,14 @@ namespace Entities.AI.Turret
             GetComponent<PerceptionComponent>().CreateSensorCollider(perceptionRadius, perceptionLayers);
 
             gunnerComponent = GetComponent<GunnerComponent>();
-
-            turretHfsm = GetComponent<TurretHFSMComponent>();
-            turretObserverComponent = GetComponent<TurretObserverComponent>();
+            targetTrackerComponent = GetComponent<TargetTrackerComponent>();
         }
 
         // HFSM Context
-        public GameObject target;
-        private readonly HashSet<GameObject> targets = new HashSet<GameObject>();
-
-        public void AddTarget(GameObject enemy)
-        {
-            // If there's no target lock-on, set target
-            if (!target) {
-                target = enemy;
-            }
-
-            // Add enemy to targets list (set),
-            // and subscribe to its event: PawnDead
-            targets.Add(enemy);
-            enemy.GetComponent<SubjectComponent>().AddObserver(turretObserverComponent, EventType.PawnDead);
-
-            // Possible transition: Idle -> Track
-            if (turretHfsm.baseFsm.current.name == "Idle") {
-                turretHfsm.baseFsm.ChangeState("Track");
-            }
-        }
-
-        public void RemoveTarget(GameObject enemy)
-        {
-            // Remove enemy lost track of off the target list (set)
-            targets.Remove(enemy);
-
-            // Assign new target
-            if (targets.Count != 0) {
-                // If the target list is not empty, assign first in set as new target
-                // TODO: This can be more intelligent, like selecting based on distance
-                target = targets.First();
-            } else {
-                // If the target list is empty, then there's no target at the moment
-                target = null;
-                // Possible transition: Track -> Idle
-                if (turretHfsm.baseFsm.current.name == "Track") {
-                    turretHfsm.baseFsm.ChangeState("Idle");
-                }
-            }
-        }
-
         public bool TargetIsAligned()
         {
-            if (targets.Count != 0) {
-                Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - baseTransform.position);
+            if (targetTrackerComponent.target) {
+                Quaternion targetRotation = Quaternion.LookRotation(targetTrackerComponent.target.transform.position - baseTransform.position);
                 return Mathf.Abs(Quaternion.Angle(targetRotation, baseTransform.rotation)) <= 1f;
             } else {
                 return false;

@@ -3,10 +3,38 @@ using UnityEngine;
 
 namespace Entities.AI.Turret.States
 {
-    /*
-     * Turret gun HFSM leaf/action states
-     */
-    // Idle
+    public class TurretGunHfsm : HFSMState<TurretStateComponent>
+    {
+        public TurretGunHfsm(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState)
+            : base(owner, type, name, parentState)
+        {
+            TurretTriggerFsm triggerFsm = new TurretTriggerFsm(owner, HFSMStateType.Branch, "Trigger", this);
+            TurretReloadState reloadState = new TurretReloadState(owner, HFSMStateType.Leaf, "Reload", this);
+            subStates.Add(triggerFsm.name, triggerFsm);
+            subStates.Add(reloadState.name, reloadState);
+            current = subStates["Trigger"];
+        }
+    }
+
+    public class TurretTriggerFsm : HFSMState<TurretStateComponent>
+    {
+        public TurretTriggerFsm(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState)
+            : base(owner, type, name, parentState)
+        {
+            TurretTriggerIdleState idleState = new TurretTriggerIdleState(owner, HFSMStateType.Leaf, "Idle", this);
+            TurretFireState fireState = new TurretFireState(owner, HFSMStateType.Leaf, "Fire", this);
+            subStates.Add(idleState.name, idleState);
+            subStates.Add(fireState.name, fireState);
+            current = subStates["Idle"];
+        }
+
+        protected override void Exit()
+        {
+            // Upon leaving trigger state (to reload), release trigger
+            ChangeState("Idle");
+        }
+    }
+
     public class TurretTriggerIdleState : HFSMState<TurretStateComponent>
     {
         public TurretTriggerIdleState(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState) : base(owner, type, name, parentState) { }
@@ -19,7 +47,6 @@ namespace Entities.AI.Turret.States
         }
     }
 
-    // Fire
     // TODO: Currently the turret only works with AUTO mode guns
     public class TurretFireState : HFSMState<TurretStateComponent>
     {
@@ -37,7 +64,7 @@ namespace Entities.AI.Turret.States
                 return;
             }
             // Set gun look point to target's chest center
-            owner.gunnerComponent.gun.lookPoint = owner.target.transform.position + new Vector3(0, 1, 0);
+            owner.gunnerComponent.gun.lookPoint = owner.targetTrackerComponent.target.transform.position + new Vector3(0, 1, 0);
         }
 
         protected override void Exit()
@@ -46,7 +73,6 @@ namespace Entities.AI.Turret.States
         }
     }
 
-    // Reload
     public class TurretReloadState : HFSMState<TurretStateComponent>
     {
         public TurretReloadState(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState) : base(owner, type, name, parentState) { }
@@ -54,27 +80,6 @@ namespace Entities.AI.Turret.States
         protected override void Enter()
         {
             owner.gunnerComponent.Reload();
-        }
-    }
-
-    /*
-     * Turret base FSM leaf/action states
-     */
-    // Idle
-    public class TurretBaseIdleState : HFSMState<TurretStateComponent>
-    {
-        public TurretBaseIdleState(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState) : base(owner, type, name, parentState) { }
-    }
-
-    // Track target
-    public class TurretTrackState : HFSMState<TurretStateComponent>
-    {
-        public TurretTrackState(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState) : base(owner, type, name, parentState) { }
-
-        protected override void Execute(float deltaTime)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(owner.target.transform.position - owner.baseTransform.position);
-            owner.baseTransform.rotation = Quaternion.RotateTowards(owner.baseTransform.rotation, targetRotation, owner.turnSpeed * Time.deltaTime);
         }
     }
 }

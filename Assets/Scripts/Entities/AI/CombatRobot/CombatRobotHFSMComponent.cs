@@ -37,6 +37,7 @@ namespace Entities.AI.CombatRobot
                 EventType.Reloaded
             );
 
+            // Initialize HFSMs
             CombatRobotStateComponent combatRobotStateComponent = GetComponent<CombatRobotStateComponent>();
             gunHfsm = new GunHfsm(combatRobotStateComponent, HFSMStateType.Branch, "Gun", null);
             movementHfsm = new MovementHfsm(combatRobotStateComponent, HFSMStateType.Branch, "Movement", null);
@@ -64,7 +65,8 @@ namespace Entities.AI.CombatRobot
                     break;
                 // Pawn
                 case EventType.PawnDead:
-                    targetTrackerComponent.RemoveTarget((mcEvent as MCEventWEntity)!.entity);
+                    GameObject enemy1 = (mcEvent as MCEventWEntity)!.entity;
+                    targetTrackerComponent.RemoveTarget(enemy1);
                     // Stop evading, if is evading
                     if (movementHfsm.combatFsm.current.name == "Evade") {
                         movementHfsm.combatFsm.ChangeState("Idle");
