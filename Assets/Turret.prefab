@@ -54,10 +54,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnSpeed: 360
-  perceptionRadius: 10
-  perceptionLayers:
-    serializedVersion: 2
-    m_Bits: 256
   baseTransform: {fileID: 6438648072855754948}
   gunnerComponent: {fileID: 0}
   targetTrackerComponent: {fileID: 0}
@@ -73,6 +69,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3a30cd0667f4915ad9a84d4982d7d5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  radius: 10
+  includeLayers:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &4122488242861203387
 MonoBehaviour:
   m_ObjectHideFlags: 0

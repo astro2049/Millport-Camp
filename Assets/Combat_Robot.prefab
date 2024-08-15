@@ -135,6 +135,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a53b7dbf44243b2a197bb26850ef542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  radius: 12
+  includeLayers:
+    serializedVersion: 2
+    m_Bits: 384
 --- !u!114 &1169347455565530111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,10 +156,6 @@ MonoBehaviour:
   patrolPointRadius: 10
   patrolWaitTime: 3
   evadeDistance: 3
-  perceptionRadius: 12
-  perceptionLayers:
-    serializedVersion: 2
-    m_Bits: 384
   navMeshAgent: {fileID: 0}
   gunnerComponent: {fileID: 0}
   targetTrackerComponent: {fileID: 0}

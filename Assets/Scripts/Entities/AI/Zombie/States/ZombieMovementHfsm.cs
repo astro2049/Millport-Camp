@@ -52,11 +52,6 @@ namespace Entities.AI.Zombie.States
                 parentState.ChangeState("Wait");
             }
         }
-
-        protected override void Exit()
-        {
-            owner.navMeshAgent.ResetPath();
-        }
     }
 
     public class PatrolWaitState : HFSMState<ZombieStateComponent>

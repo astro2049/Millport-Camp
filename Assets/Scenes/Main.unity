@@ -207,10 +207,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zombie (3)
       objectReference: {fileID: 0}
-    - target: {fileID: 5105231151093237616, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7583822055054261532, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5
@@ -250,10 +246,6 @@ PrefabInstance:
     - target: {fileID: 7583822055054261532, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8064412323141067901, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
-      propertyPath: attackRange
-      value: 2.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -784,10 +776,6 @@ PrefabInstance:
     - target: {fileID: 261278061893848929, guid: 2179bee3a6ef28b438ac36351c7a7304, type: 3}
       propertyPath: m_Name
       value: Pf_SUV
-      objectReference: {fileID: 0}
-    - target: {fileID: 261278061893848929, guid: 2179bee3a6ef28b438ac36351c7a7304, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1850,21 +1838,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4973556685779051336, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
-      propertyPath: health
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 4973556685779051336, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
-      propertyPath: maxHealth
-      value: 100
-      objectReference: {fileID: 0}
     - target: {fileID: 5105231151093237616, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
       propertyPath: m_Name
       value: Zombie
-      objectReference: {fileID: 0}
-    - target: {fileID: 5105231151093237616, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7583822055054261532, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2404,21 +2380,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4973556685779051336, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
-      propertyPath: health
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 4973556685779051336, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
-      propertyPath: maxHealth
-      value: 100
-      objectReference: {fileID: 0}
     - target: {fileID: 5105231151093237616, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
       propertyPath: m_Name
       value: Zombie (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 5105231151093237616, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7583822055054261532, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2527,10 +2491,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zombie (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 5105231151093237616, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7583822055054261532, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2
@@ -2570,10 +2530,6 @@ PrefabInstance:
     - target: {fileID: 7583822055054261532, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8064412323141067901, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
-      propertyPath: attackRange
-      value: 2.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3632,17 +3588,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1169347455565530111, guid: 3ad495d8e73834841861a3adcc4b65c6, type: 3}
-      propertyPath: moveSpeed
-      value: 3.5
-      objectReference: {fileID: 0}
     - target: {fileID: 3272280871037772915, guid: 3ad495d8e73834841861a3adcc4b65c6, type: 3}
       propertyPath: m_Name
       value: Combat_Robot (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3272280871037772915, guid: 3ad495d8e73834841861a3adcc4b65c6, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6360388343135098242, guid: 3ad495d8e73834841861a3adcc4b65c6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4067,17 +4015,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1169347455565530111, guid: 3ad495d8e73834841861a3adcc4b65c6, type: 3}
-      propertyPath: moveSpeed
-      value: 3.5
-      objectReference: {fileID: 0}
     - target: {fileID: 3272280871037772915, guid: 3ad495d8e73834841861a3adcc4b65c6, type: 3}
       propertyPath: m_Name
       value: Combat_Robot
-      objectReference: {fileID: 0}
-    - target: {fileID: 3272280871037772915, guid: 3ad495d8e73834841861a3adcc4b65c6, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6360388343135098242, guid: 3ad495d8e73834841861a3adcc4b65c6, type: 3}
       propertyPath: m_LocalPosition.x

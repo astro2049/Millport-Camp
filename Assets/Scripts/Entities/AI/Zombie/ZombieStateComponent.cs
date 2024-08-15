@@ -20,10 +20,6 @@ namespace Entities.AI.Zombie
         public float attackRange = 2f;
         public float attackInterval = 0.5f;
 
-        [Header("Perception")]
-        public float perceptionRadius = 7.5f;
-        public LayerMask perceptionLayers;
-
         public NavMeshAgent navMeshAgent;
 
         public DamageDealerComponent damageDealerComponent;
@@ -36,9 +32,6 @@ namespace Entities.AI.Zombie
             damageDealerComponent = GetComponent<DamageDealerComponent>();
             targetTrackerComponent = GetComponent<TargetTrackerComponent>();
             hfsmComponent = GetComponent<ZombieHFSMComponent>();
-
-            // Configure perception
-            GetComponent<PerceptionComponent>().CreateSensorCollider(perceptionRadius, perceptionLayers);
         }
     }
 }

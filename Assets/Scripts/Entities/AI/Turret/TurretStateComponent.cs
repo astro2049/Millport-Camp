@@ -10,9 +10,6 @@ namespace Entities.AI.Turret
     {
         public float turnSpeed = 360f; // 360 deg/s
 
-        public float perceptionRadius = 5f;
-        public LayerMask perceptionLayers;
-
         public Transform baseTransform;
 
         public GunnerComponent gunnerComponent;
@@ -20,9 +17,6 @@ namespace Entities.AI.Turret
 
         private void Awake()
         {
-            // Configure perception
-            GetComponent<PerceptionComponent>().CreateSensorCollider(perceptionRadius, perceptionLayers);
-
             gunnerComponent = GetComponent<GunnerComponent>();
             targetTrackerComponent = GetComponent<TargetTrackerComponent>();
         }

@@ -10,6 +10,9 @@ namespace Entities.AI.Zombie
 
         private void Awake()
         {
+            // Configure perception
+            CreateSensorCollider();
+
             targetTrackerComponent = GetComponent<TargetTrackerComponent>();
         }
 

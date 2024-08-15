@@ -16,10 +16,6 @@ namespace Entities.AI.CombatRobot
         public float patrolWaitTime = 3f;
         public float evadeDistance = 3f;
 
-        [Header("Perception")]
-        public float perceptionRadius = 12f;
-        public LayerMask perceptionLayers;
-
         public NavMeshAgent navMeshAgent;
 
         public GunnerComponent gunnerComponent;
@@ -30,9 +26,6 @@ namespace Entities.AI.CombatRobot
             navMeshAgent = GetComponent<NavMeshAgent>();
             gunnerComponent = GetComponent<GunnerComponent>();
             targetTrackerComponent = GetComponent<TargetTrackerComponent>();
-
-            // Configure perception
-            GetComponent<PerceptionComponent>().CreateSensorCollider(perceptionRadius, perceptionLayers);
         }
 
         // HFSM context

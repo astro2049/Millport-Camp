@@ -146,6 +146,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c269f401aa974a1ea36a0f273acfc286, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  radius: 7.5
+  includeLayers:
+    serializedVersion: 2
+    m_Bits: 384
 --- !u!114 &3484090821709941856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,10 +182,6 @@ MonoBehaviour:
   attackDamage: 30
   attackRange: 2
   attackInterval: 0.5
-  perceptionRadius: 7.5
-  perceptionLayers:
-    serializedVersion: 2
-    m_Bits: 384
   navMeshAgent: {fileID: 0}
   damageDealerComponent: {fileID: 0}
   targetTrackerComponent: {fileID: 0}
