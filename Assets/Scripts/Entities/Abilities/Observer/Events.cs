@@ -17,8 +17,8 @@ namespace Entities.Abilities.Observer
         PlacingStructure = 8,
         ExitedBuildMode = 9,
 
-        // Pawn (Player, Zombie, Combat Robot)
-        PawnDead = 13,
+        // Actor (Player, Zombie, Combat Robot, Vehicle, Turret)
+        Dead = 13,
 
         // Gun
         AmmoChanged = 14,

@@ -1,11 +1,12 @@
-﻿using Entities.Abilities.Observer;
+﻿using System.Collections.Generic;
+using Entities.Abilities.Observer;
 using Entities.AI.Abilities.Gunner;
 using Entities.AI.Abilities.HFSM;
 using Entities.AI.Abilities.TargetTracker;
 using Entities.AI.CombatRobot.States;
+using TMPro;
 using UnityEngine;
 using EventType = Entities.Abilities.Observer.EventType;
-
 
 namespace Entities.AI.CombatRobot
 {
@@ -43,10 +44,14 @@ namespace Entities.AI.CombatRobot
             movementHfsm = new MovementHfsm(combatRobotStateComponent, HFSMStateType.Branch, "Movement", null);
         }
 
+        [SerializeField] private TextMeshPro hfsmActiveBranchText;
+
         private void Update()
         {
             gunHfsm.ExecuteBranch(Time.deltaTime);
             movementHfsm.ExecuteBranch(Time.deltaTime);
+
+            hfsmActiveBranchText.text = movementHfsm.GetActiveBranch(new List<string>());
         }
 
         public bool OnNotify(MCEvent mcEvent)
@@ -55,7 +60,7 @@ namespace Entities.AI.CombatRobot
                 // Target Tracker
                 case EventType.AcquiredNewTarget:
                     GameObject enemy = (mcEvent as MCEventWEntity)!.entity;
-                    enemy.GetComponent<SubjectComponent>().AddObserver(this, EventType.PawnDead);
+                    enemy.GetComponent<SubjectComponent>().AddObserver(this, EventType.Dead);
                     break;
                 case EventType.AcquiredFirstTarget:
                     movementHfsm.ChangeState("Combat");
@@ -64,7 +69,7 @@ namespace Entities.AI.CombatRobot
                     movementHfsm.ChangeState("Patrol");
                     break;
                 // Pawn
-                case EventType.PawnDead:
+                case EventType.Dead:
                     GameObject enemy1 = (mcEvent as MCEventWEntity)!.entity;
                     targetTrackerComponent.RemoveTarget(enemy1);
 

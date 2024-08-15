@@ -1,11 +1,9 @@
-using System;
 using Entities.Abilities.Observer;
 using Entities.Gun;
 using Gameplay.Quests;
 using TMPro;
 using UI.Map;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using EventType = Entities.Abilities.Observer.EventType;
 
@@ -72,7 +70,7 @@ namespace Managers
                     combatModeCanvas.enabled = true;
                     buildModeCanvas.enabled = false;
                     break;
-                case EventType.PawnDead:
+                case EventType.Dead:
                     pauseMenuBackground.enabled = false;
                     pauseMenuTitle.text = "You're Dead";
                     resumeButton.interactable = false;

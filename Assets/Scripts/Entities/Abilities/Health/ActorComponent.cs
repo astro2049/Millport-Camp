@@ -1,26 +1,19 @@
-using Entities.Abilities.Health;
-using Entities.Abilities.Observer;
+﻿using Entities.Abilities.Observer;
 using UnityEngine;
 using EventType = Entities.Abilities.Observer.EventType;
 
-namespace Entities.Abilities.Pawn
+namespace Entities.Abilities.Health
 {
-    public abstract class PawnComponent : MonoBehaviour
+    public class ActorComponent : MonoBehaviour
     {
         public virtual void Die()
         {
-            // Notify observers of death, if has subject
-            // And disable subject
+            // If has subject, notify observers of death, and disable self
             SubjectComponent subject = GetComponent<SubjectComponent>();
             if (subject) {
-                subject.NotifyObservers(new MCEventWEntity(EventType.PawnDead, gameObject));
+                subject.NotifyObservers(new MCEventWEntity(EventType.Dead, gameObject));
                 subject.enabled = false;
             }
-
-            transform.Rotate(new Vector3(0, 0, 90));
-            // Turn off capsule collider
-            // TODO: This does not trigger onExit()
-            GetComponent<CapsuleCollider>().enabled = false;
 
             // Disable health bar, if has one
             HealthBarComponent healthBarComponent = GetComponent<HealthComponent>().healthBarComponent;

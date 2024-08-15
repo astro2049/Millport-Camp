@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Entities.Abilities.State;
+using UnityEngine;
 
 namespace Entities.AI.Abilities.HFSM
 {
@@ -94,6 +95,16 @@ namespace Entities.AI.Abilities.HFSM
             current.ExitBranch();
             current = subStates[name];
             current.EnterBranch();
+        }
+
+        public string GetActiveBranch(List<string> stateNames)
+        {
+            stateNames.Add(name);
+
+            if (!isBranch) {
+                return string.Join(" > ", stateNames);
+            }
+            return current.GetActiveBranch(stateNames);
         }
     }
 }

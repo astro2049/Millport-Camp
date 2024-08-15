@@ -1,4 +1,3 @@
-using Entities.Abilities.Pawn;
 using UnityEngine;
 
 namespace Entities.Abilities.Health
@@ -39,7 +38,7 @@ namespace Entities.Abilities.Health
 
             // Trigger death if health is 0
             if (health == 0) {
-                GetComponent<PawnComponent>().Die();
+                GetComponent<ActorComponent>().Die();
             }
         }
     }

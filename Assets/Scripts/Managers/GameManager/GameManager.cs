@@ -7,12 +7,9 @@ using Entities.Player;
 using Gameplay;
 using Gameplay.Quests;
 using PCG;
-using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 using EventType = Entities.Abilities.Observer.EventType;
 
 namespace Managers.GameManager
@@ -32,8 +29,6 @@ namespace Managers.GameManager
 
         [Header("Cursor")]
         [SerializeField] private Texture2D combatCursorTexture;
-        [FormerlySerializedAs("UICursorTecture")]
-        [Header("Cursor")]
         [SerializeField] private Texture2D UICursorTexture;
 
         [Header("Gameplay")]
@@ -52,18 +47,34 @@ namespace Managers.GameManager
         [HideInInspector] public PlayerMode playerMode = PlayerMode.Combat;
 
         // Quest Destination Indicator
-        [FormerlySerializedAs("destinationIndicatorComponent")]
         [Header("Destination Indicator")]
         [SerializeField] private QuestLocationIndicatorComponent questLocationIndicatorComponent;
 
+        [Header("Misc")]
+        [SerializeField] private GameObject npcActivationCollider;
+
         private void SwitchControlActor(GameObject actor)
         {
-            // Assign current actor to currentControllingActor and switch inputs
+            SubjectComponent subject;
+
             if (currentControllingActor) {
                 currentControllingActor.GetComponent<InputComponent>().enabled = false;
+                subject = currentControllingActor.GetComponent<SubjectComponent>();
+                subject.RemoveObserver(this, EventType.Dead);
+                subject.RemoveObserver(uiManager, EventType.Dead);
             }
+
+            // Assign current actor to currentControllingActor
             currentControllingActor = actor;
+            // Switch inputs, and subscribe to Dead event
             currentControllingActor.GetComponent<InputComponent>().enabled = true;
+            subject = currentControllingActor.GetComponent<SubjectComponent>();
+            subject.AddObserver(this, EventType.Dead);
+            subject.AddObserver(uiManager, EventType.Dead);
+
+            // Attach NPC activation collider
+            npcActivationCollider.transform.parent = currentControllingActor.transform;
+            npcActivationCollider.transform.localPosition = Vector3.zero;
 
             // Set actor for destinationIndicatorComponent
             questLocationIndicatorComponent.SetActor(currentControllingActor);
@@ -117,8 +128,7 @@ namespace Managers.GameManager
             playerSubject.AddObserver(this,
                 EventType.WeaponChanged,
                 EventType.EnteredVehicle,
-                EventType.ExitedVehicle,
-                EventType.PawnDead
+                EventType.ExitedVehicle
             );
             playerSubject.AddObserver(uiManager,
                 EventType.WeaponChanged,
@@ -127,8 +137,7 @@ namespace Managers.GameManager
                 EventType.InteractionEnded,
                 EventType.EnteredBuildMode,
                 EventType.PlacingStructure,
-                EventType.ExitedBuildMode,
-                EventType.PawnDead
+                EventType.ExitedBuildMode
             );
 
             // TODO: hacky
@@ -180,7 +189,10 @@ namespace Managers.GameManager
                 case EventType.ExitedVehicle:
                     ExitVehicle((mcEvent as MCEventWEntity)!.entity);
                     break;
-                case EventType.PawnDead:
+                case EventType.Dead:
+                    // Disable inputs
+                    currentControllingActor.GetComponent<InputComponent>().enabled = false;
+                    currentControllingActor.GetComponent<PlayerInput>().enabled = false;
                     // Free camera
                     playerCamera.Follow = null;
                     // Open Pause Menu

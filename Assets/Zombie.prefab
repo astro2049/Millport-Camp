@@ -149,7 +149,7 @@ MonoBehaviour:
   radius: 7.5
   includeLayers:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 2432
 --- !u!114 &3484090821709941856
 MonoBehaviour:
   m_ObjectHideFlags: 0

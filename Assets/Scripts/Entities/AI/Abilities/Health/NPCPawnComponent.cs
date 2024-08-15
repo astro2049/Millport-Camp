@@ -1,11 +1,11 @@
 using System.Collections;
-using Entities.Abilities.Pawn;
+using Entities.Abilities.Health;
 using Entities.AI.Abilities.HFSM;
 using Entities.AI.Abilities.Perception;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Entities.AI.Abilities.Pawn
+namespace Entities.AI.Abilities.Health
 {
     public class NPCPawnComponent : PawnComponent
     {

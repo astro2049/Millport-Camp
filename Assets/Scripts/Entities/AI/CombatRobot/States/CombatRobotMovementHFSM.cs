@@ -10,16 +10,16 @@ namespace Entities.AI.CombatRobot.States
 
         public MovementHfsm(CombatRobotStateComponent owner, HFSMStateType type, string name, HFSMState<CombatRobotStateComponent> parentState) : base(owner, type, name, parentState)
         {
-            MovementPatrolFsm patrolFsm = new MovementPatrolFsm(owner, HFSMStateType.Branch, "Patrol", this);
+            PatrolFsm patrolFsm = new PatrolFsm(owner, HFSMStateType.Branch, "Patrol", this);
             combatFsm = new MovementCombatFsm(owner, HFSMStateType.Branch, "Combat", this);
             AddSubStates(patrolFsm, combatFsm);
             current = subStates["Patrol"];
         }
     }
 
-    public class MovementPatrolFsm : HFSMState<CombatRobotStateComponent>
+    public class PatrolFsm : HFSMState<CombatRobotStateComponent>
     {
-        public MovementPatrolFsm(CombatRobotStateComponent owner, HFSMStateType type, string name, HFSMState<CombatRobotStateComponent> parentState) : base(owner, type, name, parentState)
+        public PatrolFsm(CombatRobotStateComponent owner, HFSMStateType type, string name, HFSMState<CombatRobotStateComponent> parentState) : base(owner, type, name, parentState)
         {
             MoveToPatrolPointState moveToPatrolPointState = new MoveToPatrolPointState(owner, HFSMStateType.Leaf, "MoveToPatrolPoint", this);
             WaitState waitState = new WaitState(owner, HFSMStateType.Leaf, "Wait", this);

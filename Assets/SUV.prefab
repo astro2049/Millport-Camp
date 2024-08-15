@@ -103,9 +103,11 @@ GameObject:
   - component: {fileID: 5771653962808560662}
   - component: {fileID: 3176964072189215174}
   - component: {fileID: 152691014892776641}
+  - component: {fileID: 9174710321506731476}
   - component: {fileID: 6244490815072601007}
   - component: {fileID: 8692904920287675312}
   - component: {fileID: 402371923989164298}
+  - component: {fileID: 8961373666561337877}
   m_Layer: 11
   m_Name: SUV
   m_TagString: Untagged
@@ -357,6 +359,18 @@ MonoBehaviour:
   health: 1000
   maxHealth: 1000
   healthBarComponent: {fileID: 0}
+--- !u!114 &9174710321506731476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261278061893848929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c567d1d69df4c1da6f73cc37d90b81f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6244490815072601007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409,6 +423,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8961373666561337877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261278061893848929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f157a2c798354fc09f7729a27b9bf1e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &734684022703294102
 GameObject:
   m_ObjectHideFlags: 0

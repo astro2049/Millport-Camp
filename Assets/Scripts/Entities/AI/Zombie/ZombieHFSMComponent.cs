@@ -46,7 +46,7 @@ namespace Entities.AI.Zombie
                 // Target Tracker
                 case EventType.AcquiredNewTarget:
                     GameObject enemy = (mcEvent as MCEventWEntity)!.entity;
-                    enemy.GetComponent<SubjectComponent>().AddObserver(this, EventType.PawnDead);
+                    enemy.GetComponent<SubjectComponent>().AddObserver(this, EventType.Dead);
                     break;
                 case EventType.AcquiredFirstTarget:
                     movementHfsm.ChangeState("Chase");
@@ -55,7 +55,7 @@ namespace Entities.AI.Zombie
                     movementHfsm.ChangeState("Patrol");
                     break;
                 // Pawn
-                case EventType.PawnDead:
+                case EventType.Dead:
                     GameObject enemy1 = (mcEvent as MCEventWEntity)!.entity;
                     targetTrackerComponent.RemoveTarget(enemy1);
 
