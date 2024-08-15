@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4302471459554690638}
   - component: {fileID: 3120138249932785916}
   - component: {fileID: 512752104877478979}
-  - component: {fileID: 1943617125496727896}
   - component: {fileID: 1169347455565530111}
   - component: {fileID: 7583300051326172321}
   - component: {fileID: 5883952406461239530}
@@ -22,6 +21,7 @@ GameObject:
   - component: {fileID: 1041573978013112498}
   - component: {fileID: 7865034884448829632}
   - component: {fileID: 7849682781285070761}
+  - component: {fileID: 4407816939536837942}
   m_Layer: 8
   m_Name: Combat_Robot
   m_TagString: CombatRobot
@@ -124,22 +124,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7692115ebd25df44da6135a186829616, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1943617125496727896
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3272280871037772915}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a53b7dbf44243b2a197bb26850ef542, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius: 12
-  includeLayers:
-    serializedVersion: 2
-    m_Bits: 2432
 --- !u!114 &1169347455565530111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,6 +267,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4407816939536837942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3272280871037772915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07b2f31ac3e541dea7bbb2fdc9af08dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 12
+  includeLayers:
+    serializedVersion: 2
+    m_Bits: 2432
 --- !u!1 &3294915699785897960
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,9 +414,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Text - HFSMs
-
-'
+  m_text: Movement > Idle
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

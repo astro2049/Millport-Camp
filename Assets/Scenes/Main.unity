@@ -207,10 +207,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zombie (3)
       objectReference: {fileID: 0}
-    - target: {fileID: 5105231151093237616, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7583822055054261532, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5
@@ -254,7 +250,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5265375694373803713, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
 --- !u!1001 &91488149
 PrefabInstance:
@@ -1923,10 +1922,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zombie
       objectReference: {fileID: 0}
-    - target: {fileID: 5105231151093237616, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7583822055054261532, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4
@@ -1970,7 +1965,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5265375694373803713, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
 --- !u!1 &766872914
 GameObject:
@@ -2469,10 +2467,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zombie (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 5105231151093237616, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7583822055054261532, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3
@@ -2516,7 +2510,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5265375694373803713, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
 --- !u!1001 &995191273
 PrefabInstance:
@@ -2529,10 +2526,6 @@ PrefabInstance:
     - target: {fileID: 1665573947308029565, guid: bd2b48b6b8b6789449a226f02452d3e4, type: 3}
       propertyPath: m_Name
       value: Turret
-      objectReference: {fileID: 0}
-    - target: {fileID: 1665573947308029565, guid: bd2b48b6b8b6789449a226f02452d3e4, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4471998349324631518, guid: bd2b48b6b8b6789449a226f02452d3e4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2644,10 +2637,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zombie (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 5105231151093237616, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7583822055054261532, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2
@@ -2691,7 +2680,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5265375694373803713, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
 --- !u!1 &1124649597
 GameObject:

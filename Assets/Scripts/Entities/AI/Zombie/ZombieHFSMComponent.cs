@@ -1,7 +1,8 @@
-﻿using Entities.Abilities.Observer;
+﻿using System.Collections.Generic;
+using Entities.Abilities.Observer;
 using Entities.AI.Abilities.HFSM;
-using Entities.AI.Abilities.TargetTracker;
 using Entities.AI.Zombie.States;
+using TMPro;
 using UnityEngine;
 using EventType = Entities.Abilities.Observer.EventType;
 
@@ -9,7 +10,6 @@ namespace Entities.AI.Zombie
 {
     public class ZombieHFSMComponent : HFSMComponent, IObserver
     {
-        private TargetTrackerComponent targetTrackerComponent;
         private SubjectComponent subjectComponent;
 
         // HFSMs: Hand, Movement
@@ -18,7 +18,6 @@ namespace Entities.AI.Zombie
 
         private void Awake()
         {
-            targetTrackerComponent = GetComponent<TargetTrackerComponent>();
             subjectComponent = GetComponent<SubjectComponent>();
 
             // Subscribe to target tracker events
@@ -34,35 +33,26 @@ namespace Entities.AI.Zombie
             movementHfsm = new MovementHfsm(zombieStateComponent, HFSMStateType.Branch, "Movement", null);
         }
 
+        [SerializeField] private TextMeshPro hfsmActiveBranchText;
+
         private void Update()
         {
             handHfsm.ExecuteBranch(Time.deltaTime);
             movementHfsm.ExecuteBranch(Time.deltaTime);
+
+            hfsmActiveBranchText.text = handHfsm.GetActiveBranch(new List<string>());
         }
 
         public bool OnNotify(MCEvent mcEvent)
         {
             switch (mcEvent.type) {
                 // Target Tracker
-                case EventType.AcquiredNewTarget:
-                    GameObject enemy = (mcEvent as MCEventWEntity)!.entity;
-                    enemy.GetComponent<SubjectComponent>().AddObserver(this, EventType.Dead);
-                    break;
                 case EventType.AcquiredFirstTarget:
                     movementHfsm.ChangeState("Chase");
                     break;
                 case EventType.LostAllTargets:
+                    handHfsm.ChangeState("Idle");
                     movementHfsm.ChangeState("Patrol");
-                    break;
-                // Pawn
-                case EventType.Dead:
-                    GameObject enemy1 = (mcEvent as MCEventWEntity)!.entity;
-                    targetTrackerComponent.RemoveTarget(enemy1);
-
-                    // Stop attacking, if is attacking
-                    if (handHfsm.current.name == "Attack") {
-                        handHfsm.ChangeState("Idle");
-                    }
                     break;
             }
             return true;

@@ -2,10 +2,11 @@
 using System.Linq;
 using Entities.Abilities.Observer;
 using UnityEngine;
+using EventType = Entities.Abilities.Observer.EventType;
 
 namespace Entities.AI.Abilities.TargetTracker
 {
-    public class TargetTrackerComponent : MonoBehaviour
+    public class TargetTrackerComponent : MonoBehaviour, IObserver
     {
         private SubjectComponent subjectComponent;
 
@@ -21,12 +22,13 @@ namespace Entities.AI.Abilities.TargetTracker
         {
             // Add enemy to enemies list (set)
             enemies.Add(enemy);
-            subjectComponent.NotifyObservers(new MCEventWEntity(Entities.Abilities.Observer.EventType.AcquiredNewTarget, enemy));
-            
+            enemy.GetComponent<SubjectComponent>().AddObserver(this, EventType.Dead);
+            subjectComponent.NotifyObservers(new MCEventWEntity(EventType.AcquiredNewTarget, enemy));
+
             // If there's no target now, lock on this enemy
             if (!target) {
                 target = enemy;
-                subjectComponent.NotifyObservers(new MCEvent(Entities.Abilities.Observer.EventType.AcquiredFirstTarget));
+                subjectComponent.NotifyObservers(new MCEvent(EventType.AcquiredFirstTarget));
             }
         }
 
@@ -43,8 +45,19 @@ namespace Entities.AI.Abilities.TargetTracker
             } else {
                 // If the enemy list is empty, then there's no target at the moment
                 target = null;
-                subjectComponent.NotifyObservers(new MCEvent(Entities.Abilities.Observer.EventType.LostAllTargets));
+                subjectComponent.NotifyObservers(new MCEvent(EventType.LostAllTargets));
             }
+        }
+
+        public bool OnNotify(MCEvent mcEvent)
+        {
+            switch (mcEvent.type) {
+                case EventType.Dead:
+                    GameObject enemy = (mcEvent as MCEventWEntity)!.entity;
+                    RemoveTarget(enemy);
+                    break;
+            }
+            return true;
         }
     }
 }

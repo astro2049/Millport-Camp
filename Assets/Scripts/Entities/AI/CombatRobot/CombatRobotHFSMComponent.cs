@@ -71,11 +71,11 @@ namespace Entities.AI.CombatRobot
                 // Pawn
                 case EventType.Dead:
                     GameObject enemy1 = (mcEvent as MCEventWEntity)!.entity;
-                    targetTrackerComponent.RemoveTarget(enemy1);
-
-                    // Stop evading, if is evading
-                    if (movementHfsm.combatFsm.current.name == "Evade") {
-                        movementHfsm.combatFsm.ChangeState("Idle");
+                    // Stop evading from the dead target, if is evading
+                    if (enemy1 == targetTrackerComponent.target) {
+                        if (movementHfsm.combatFsm.current.name == "Evade") {
+                            movementHfsm.combatFsm.ChangeState("Idle");
+                        }
                     }
                     break;
                 // Gun

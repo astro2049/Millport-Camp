@@ -1,10 +1,9 @@
-﻿using Entities.AI.Abilities.Perception;
 using Entities.AI.Abilities.TargetTracker;
 using UnityEngine;
 
-namespace Entities.AI.Zombie
+namespace Entities.AI.Abilities.Perception
 {
-    public class ZombiePerceptionComponent : PerceptionComponent
+    public class NPCPerceptionComponent : PerceptionComponent
     {
         private TargetTrackerComponent targetTrackerComponent;
 
@@ -18,7 +17,8 @@ namespace Entities.AI.Zombie
 
         public override void OnPerceptionTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("Zombie")) {
+            // Ignore own kind
+            if (other.gameObject.CompareTag(gameObject.tag)) {
                 return;
             }
             targetTrackerComponent.AddTarget(other.gameObject);
@@ -26,7 +26,8 @@ namespace Entities.AI.Zombie
 
         public override void OnPerceptionTriggerExit(Collider other)
         {
-            if (other.gameObject.CompareTag("Zombie")) {
+            // Ignore own kind
+            if (other.gameObject.CompareTag(gameObject.tag)) {
                 return;
             }
             targetTrackerComponent.RemoveTarget(other.gameObject);
