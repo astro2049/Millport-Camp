@@ -5,15 +5,12 @@ namespace Entities.AI.CombatRobot.States
 {
     public class GunHfsm : HFSMState<CombatRobotStateComponent>
     {
-        public readonly TriggerFsm triggerFsm;
-
         public GunHfsm(CombatRobotStateComponent owner, HFSMStateType type, string name, HFSMState<CombatRobotStateComponent> parentState)
             : base(owner, type, name, parentState)
         {
-            triggerFsm = new TriggerFsm(owner, HFSMStateType.Branch, "Trigger", this);
+            TriggerFsm triggerFsm = new TriggerFsm(owner, HFSMStateType.Branch, "Trigger", this);
             ReloadState reloadState = new ReloadState(owner, HFSMStateType.Leaf, "Reload", this);
-            subStates.Add(triggerFsm.name, triggerFsm);
-            subStates.Add(reloadState.name, reloadState);
+            AddSubStates(triggerFsm, reloadState);
             current = subStates["Trigger"];
         }
     }
@@ -25,8 +22,7 @@ namespace Entities.AI.CombatRobot.States
         {
             TriggerIdleState idleState = new TriggerIdleState(owner, HFSMStateType.Leaf, "Idle", this);
             FireState fireState = new FireState(owner, HFSMStateType.Leaf, "Fire", this);
-            subStates.Add(idleState.name, idleState);
-            subStates.Add(fireState.name, fireState);
+            AddSubStates(idleState, fireState);
             current = subStates["Idle"];
         }
 

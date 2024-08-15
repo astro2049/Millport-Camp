@@ -10,8 +10,7 @@ namespace Entities.AI.Turret.States
         {
             TurretBaseIdleState idleState = new TurretBaseIdleState(owner, HFSMStateType.Leaf, "Idle", this);
             TurretTrackState trackState = new TurretTrackState(owner, HFSMStateType.Leaf, "Track", this);
-            subStates.Add(idleState.name, idleState);
-            subStates.Add(trackState.name, trackState);
+            AddSubStates(idleState, trackState);
             current = subStates["Idle"];
         }
     }

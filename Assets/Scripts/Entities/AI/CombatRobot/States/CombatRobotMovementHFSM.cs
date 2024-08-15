@@ -12,8 +12,7 @@ namespace Entities.AI.CombatRobot.States
         {
             MovementPatrolFsm patrolFsm = new MovementPatrolFsm(owner, HFSMStateType.Branch, "Patrol", this);
             combatFsm = new MovementCombatFsm(owner, HFSMStateType.Branch, "Combat", this);
-            subStates.Add(patrolFsm.name, patrolFsm);
-            subStates.Add(combatFsm.name, combatFsm);
+            AddSubStates(patrolFsm, combatFsm);
             current = subStates["Patrol"];
         }
     }
@@ -24,8 +23,7 @@ namespace Entities.AI.CombatRobot.States
         {
             MoveToPatrolPointState moveToPatrolPointState = new MoveToPatrolPointState(owner, HFSMStateType.Leaf, "MoveToPatrolPoint", this);
             WaitState waitState = new WaitState(owner, HFSMStateType.Leaf, "Wait", this);
-            subStates.Add(moveToPatrolPointState.name, moveToPatrolPointState);
-            subStates.Add(waitState.name, waitState);
+            AddSubStates(moveToPatrolPointState, waitState);
             current = subStates["MoveToPatrolPoint"];
         }
     }
@@ -50,7 +48,7 @@ namespace Entities.AI.CombatRobot.States
 
         protected override void Execute(float deltaTime)
         {
-            if (owner.navMeshAgent.remainingDistance <= owner.navMeshAgent.stoppingDistance) {
+            if (!owner.navMeshAgent.pathPending && owner.navMeshAgent.remainingDistance <= owner.navMeshAgent.stoppingDistance) {
                 parentState.ChangeState("Wait");
             }
         }
@@ -91,8 +89,7 @@ namespace Entities.AI.CombatRobot.States
         {
             IdleState idleState = new IdleState(owner, HFSMStateType.Leaf, "Idle", this);
             EvadeState evadeState = new EvadeState(owner, HFSMStateType.Leaf, "Evade", this);
-            subStates.Add(idleState.name, idleState);
-            subStates.Add(evadeState.name, evadeState);
+            AddSubStates(idleState, evadeState);
             current = subStates["Idle"];
         }
 

@@ -24,7 +24,7 @@ namespace Entities.AI.Abilities.HFSM
     public abstract class HFSMState<T> where T : StateComponent
     {
         /*
-         * 0.0 Common fields
+         * 0. Common fields
          */
         public readonly string name; // Name of the state, e.g. "Idle", "Fire", "Gun"
         private readonly bool isBranch;
@@ -32,10 +32,17 @@ namespace Entities.AI.Abilities.HFSM
         protected readonly HFSMState<T> parentState; // Parent branch state i.e. state machine
 
         /*
-         * 0.1 State Machine fields
+         * 1. State Machine fields
          */
         public HFSMState<T> current;
         protected readonly Dictionary<string, HFSMState<T>> subStates = new Dictionary<string, HFSMState<T>>();
+
+        protected void AddSubStates(params HFSMState<T>[] states)
+        {
+            foreach (HFSMState<T> state in states) {
+                subStates.Add(state.name, state);
+            }
+        }
 
         protected HFSMState(T owner, HFSMStateType type, string name, HFSMState<T> parentState)
         {
@@ -46,16 +53,16 @@ namespace Entities.AI.Abilities.HFSM
         }
 
         /*
-         * 1.0 State methods
-         * These (3) methods are left for derived classes to implement.
+         * 2. State methods
+         * These 3 methods are left for derived classes to implement.
          */
         protected virtual void Enter() { }
         protected virtual void Execute(float deltaTime) { }
         protected virtual void Exit() { }
 
         /*
-         * 1.1 State Machine methods
-         * These (4) methods should never be changed.
+         * 3. State Machine methods
+         * These 4 methods are fixed.
          */
         private void EnterBranch()
         {

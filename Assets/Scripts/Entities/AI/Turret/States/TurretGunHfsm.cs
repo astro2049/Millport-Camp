@@ -10,8 +10,7 @@ namespace Entities.AI.Turret.States
         {
             TurretTriggerFsm triggerFsm = new TurretTriggerFsm(owner, HFSMStateType.Branch, "Trigger", this);
             TurretReloadState reloadState = new TurretReloadState(owner, HFSMStateType.Leaf, "Reload", this);
-            subStates.Add(triggerFsm.name, triggerFsm);
-            subStates.Add(reloadState.name, reloadState);
+            AddSubStates(triggerFsm, reloadState);
             current = subStates["Trigger"];
         }
     }
@@ -23,8 +22,7 @@ namespace Entities.AI.Turret.States
         {
             TurretTriggerIdleState idleState = new TurretTriggerIdleState(owner, HFSMStateType.Leaf, "Idle", this);
             TurretFireState fireState = new TurretFireState(owner, HFSMStateType.Leaf, "Fire", this);
-            subStates.Add(idleState.name, idleState);
-            subStates.Add(fireState.name, fireState);
+            AddSubStates(idleState, fireState);
             current = subStates["Idle"];
         }
 

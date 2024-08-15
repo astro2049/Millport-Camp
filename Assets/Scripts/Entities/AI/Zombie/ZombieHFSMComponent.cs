@@ -1,29 +1,25 @@
 ﻿using Entities.Abilities.Observer;
-using Entities.AI.Abilities.Gunner;
 using Entities.AI.Abilities.HFSM;
 using Entities.AI.Abilities.TargetTracker;
-using Entities.AI.CombatRobot.States;
+using Entities.AI.Zombie.States;
 using UnityEngine;
 using EventType = Entities.Abilities.Observer.EventType;
 
-
-namespace Entities.AI.CombatRobot
+namespace Entities.AI.Zombie
 {
-    public class CombatRobotHFSMComponent : HFSMComponent, IObserver
+    public class ZombieHFSMComponent : HFSMComponent, IObserver
     {
         private TargetTrackerComponent targetTrackerComponent;
         private SubjectComponent subjectComponent;
-        private GunnerComponent gunnerComponent;
 
-        // HFSMs: Gun, Movement
-        private GunHfsm gunHfsm;
+        // HFSMs: Hand, Movement
+        public HandHfsm handHfsm;
         private MovementHfsm movementHfsm;
 
         private void Awake()
         {
             targetTrackerComponent = GetComponent<TargetTrackerComponent>();
             subjectComponent = GetComponent<SubjectComponent>();
-            gunnerComponent = GetComponent<GunnerComponent>();
 
             // Subscribe to target tracker events
             subjectComponent.AddObserver(this,
@@ -31,21 +27,16 @@ namespace Entities.AI.CombatRobot
                 EventType.AcquiredNewTarget,
                 EventType.LostAllTargets
             );
-            // Subscribe to gun events
-            gunnerComponent.gun.GetComponent<SubjectComponent>().AddObserver(this,
-                EventType.MagEmpty,
-                EventType.Reloaded
-            );
 
             // Initialize HFSMs
-            CombatRobotStateComponent combatRobotStateComponent = GetComponent<CombatRobotStateComponent>();
-            gunHfsm = new GunHfsm(combatRobotStateComponent, HFSMStateType.Branch, "Gun", null);
-            movementHfsm = new MovementHfsm(combatRobotStateComponent, HFSMStateType.Branch, "Movement", null);
+            ZombieStateComponent zombieStateComponent = GetComponent<ZombieStateComponent>();
+            handHfsm = new HandHfsm(zombieStateComponent, HFSMStateType.Branch, "Hand", null);
+            movementHfsm = new MovementHfsm(zombieStateComponent, HFSMStateType.Branch, "Movement", null);
         }
 
         private void Update()
         {
-            gunHfsm.ExecuteBranch(Time.deltaTime);
+            handHfsm.ExecuteBranch(Time.deltaTime);
             movementHfsm.ExecuteBranch(Time.deltaTime);
         }
 
@@ -58,7 +49,7 @@ namespace Entities.AI.CombatRobot
                     enemy.GetComponent<SubjectComponent>().AddObserver(this, EventType.PawnDead);
                     break;
                 case EventType.AcquiredFirstTarget:
-                    movementHfsm.ChangeState("Combat");
+                    movementHfsm.ChangeState("Chase");
                     break;
                 case EventType.LostAllTargets:
                     movementHfsm.ChangeState("Patrol");
@@ -68,17 +59,10 @@ namespace Entities.AI.CombatRobot
                     GameObject enemy1 = (mcEvent as MCEventWEntity)!.entity;
                     targetTrackerComponent.RemoveTarget(enemy1);
 
-                    // Stop evading, if is evading
-                    if (movementHfsm.combatFsm.current.name == "Evade") {
-                        movementHfsm.combatFsm.ChangeState("Idle");
+                    // Stop attacking, if is attacking
+                    if (handHfsm.current.name == "Attack") {
+                        handHfsm.ChangeState("Idle");
                     }
-                    break;
-                // Gun
-                case EventType.MagEmpty:
-                    gunHfsm.ChangeState("Reload");
-                    break;
-                case EventType.Reloaded:
-                    gunHfsm.ChangeState("Trigger");
                     break;
             }
             return true;

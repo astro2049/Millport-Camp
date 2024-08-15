@@ -9,7 +9,7 @@ using EventType = Entities.Abilities.Observer.EventType;
 
 namespace Entities.AI.Turret
 {
-    public class TurretHFSMComponent : MonoBehaviour, IObserver
+    public class TurretHFSMComponent : HFSMComponent, IObserver
     {
         private TargetTrackerComponent targetTrackerComponent;
         private SubjectComponent subjectComponent;

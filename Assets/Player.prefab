@@ -555,7 +555,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4885386086854501295, guid: fbfc5490f1f8e4f43bda0629a7dc403a, type: 3}
       propertyPath: m_Name
-      value: Prefab_Health_Bar
+      value: Health_Bar
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
