@@ -24,9 +24,6 @@ namespace Managers.GameManager
 
     public class GameManager : MonoBehaviour, IObserver
     {
-        [Header("Prefabs")]
-        [SerializeField] private GameObject playerPrefab;
-
         [Header("Cursor")]
         [SerializeField] private Texture2D combatCursorTexture;
         [SerializeField] private Texture2D UICursorTexture;
@@ -41,8 +38,6 @@ namespace Managers.GameManager
         [SerializeField] private UIManager uiManager;
         [SerializeField] private InventoryManager inventoryManager;
         [SerializeField] private LevelGenerator levelGenerator;
-        private MinimapGenerator minimapGenerator;
-        private QuestManager questManager;
 
         [HideInInspector] public PlayerMode playerMode = PlayerMode.Combat;
 
@@ -85,46 +80,21 @@ namespace Managers.GameManager
 
         private void Awake()
         {
-            // Get components
-            minimapGenerator = GetComponent<MinimapGenerator>();
-            questManager = GetComponent<QuestManager>();
-
             // Set world time flowing speed to normal (for reloading level)
             Time.timeScale = 1f;
 
-            // Subscribe to minimap generator event: minimapGenerated
-            minimapGenerator.minimapGenerated.AddListener(mapTexture2D => uiManager.RenderMapUIs(mapTexture2D));
-
+            levelGenerator.levelGenerated.AddListener(SetPlayer);
             // Generate the world
             levelGenerator.Generate();
-
-            // Wait for the current frame to finish. This is because there are Destroy() calls in levelGenerator.Generate()
-            StartCoroutine(OnLevelGenerationComplete());
         }
 
-        private IEnumerator OnLevelGenerationComplete()
-        {
-            yield return new WaitForEndOfFrame();
-
-            // Take a bird's eye view shot of the map (for in-game minimap and outputting png)
-            minimapGenerator.StreamWorldToMinimap(WorldConfigurations.s_worldGridSize * WorldConfigurations.c_chunkSize);
-
-            // Spawn the player
-            SpawnPlayer();
-
-            // Start the first quest
-            if (questManager.quests.Length > 0) {
-                questManager.StartStory();
-            }
-            questLocationIndicatorComponent.enabled = true;
-        }
-
-        private void SpawnPlayer()
+        private void SetPlayer(GameObject go)
         {
             // Spawn player and focus camera
-            player = Instantiate(playerPrefab);
+            player = go;
             playerCamera.Follow = player.transform;
             SwitchControlActor(player);
+            questLocationIndicatorComponent.enabled = true;
 
             // Subscribe self and UI manager to player events
             SubjectComponent playerSubject = player.GetComponent<SubjectComponent>();

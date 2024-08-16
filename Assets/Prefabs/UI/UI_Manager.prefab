@@ -175,6 +175,8 @@ MonoBehaviour:
   magAmmoText: {fileID: 4664563386725354225}
   equippedGunNameText: {fileID: 6982360631154740221}
   overlappingObjectsText: {fileID: 5099798298993379386}
+  pauseMenuBackground: {fileID: 7802502328208001337}
+  pauseMenuTitle: {fileID: 1076679305201866734}
   resumeButton: {fileID: 3443651862971224909}
   FPSText: {fileID: 600608677071693733}
   questNameText: {fileID: 2520907188936981285}
@@ -859,6 +861,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72c69f3e692400c4bb42a1d202d1584f, type: 3}
+--- !u!114 &1076679305201866734 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3270726317392849986, guid: 72c69f3e692400c4bb42a1d202d1584f, type: 3}
+  m_PrefabInstance: {fileID: 2563346837447293868}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3443651862971224909 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 889629434425485537, guid: 72c69f3e692400c4bb42a1d202d1584f, type: 3}
@@ -880,6 +893,17 @@ Canvas:
   m_CorrespondingSourceObject: {fileID: 5456271661086504946, guid: 72c69f3e692400c4bb42a1d202d1584f, type: 3}
   m_PrefabInstance: {fileID: 2563346837447293868}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7802502328208001337 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5754149901476147861, guid: 72c69f3e692400c4bb42a1d202d1584f, type: 3}
+  m_PrefabInstance: {fileID: 2563346837447293868}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2964858971035251705
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1968,6 +1992,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2328021754896785621, guid: 53be9b99c8d1bee47af03a7bbaa895d9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4630985337046745468, guid: 53be9b99c8d1bee47af03a7bbaa895d9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 1a785448c98c843469bb27fcac03e3a9, type: 3}
+    - target: {fileID: 4630985337046745468, guid: 53be9b99c8d1bee47af03a7bbaa895d9, type: 3}
+      propertyPath: m_Color.b
+      value: 0.5277295
+      objectReference: {fileID: 0}
+    - target: {fileID: 4630985337046745468, guid: 53be9b99c8d1bee47af03a7bbaa895d9, type: 3}
+      propertyPath: m_Color.g
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

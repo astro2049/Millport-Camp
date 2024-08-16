@@ -1,16 +1,16 @@
 ﻿using System.IO;
+using Managers;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Gameplay
 {
     public class MinimapGenerator : MonoBehaviour
     {
-        [HideInInspector] public UnityEvent<Texture2D> minimapGenerated = new UnityEvent<Texture2D>();
-
         [SerializeField] private string pngName = "minimap.png";
         [SerializeField] private int pngResolution = 1080;
         [SerializeField] private Camera mapCamera;
+
+        [SerializeField] private UIManager uiManager;
 
         // Reference: https://discussions.unity.com/t/rendering-screenshot-larger-than-screen-resolution/542549/6
         public void StreamWorldToMinimap(int worldSize)
@@ -39,8 +39,7 @@ namespace Gameplay
             byte[] bytes = mapTexture2D.EncodeToPNG();
             File.WriteAllBytes(Path.Combine(Application.dataPath, pngName), bytes);
 
-            // Tell ui manager minimap is generated, and passing it
-            minimapGenerated.Invoke(mapTexture2D);
+            uiManager.RenderMapUIs(mapTexture2D);
         }
     }
 }

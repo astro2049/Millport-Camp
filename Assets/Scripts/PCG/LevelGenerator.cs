@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Entities.Abilities.ClearingDistance;
+using Gameplay;
 using Gameplay.Quests;
 using Managers;
 using PCG.BiomeData;
@@ -8,6 +10,7 @@ using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions;
+using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
 namespace PCG
@@ -26,6 +29,8 @@ namespace PCG
         private const int c_chunkSubCellSize = 1; // m, Unity unit
 
         private GridComponent gridComponent;
+        private MinimapGenerator minimapGenerator;
+        private NavMeshSurface navMeshSurface;
 
         private Transform environmentParent;
         private Transform floorsParent;
@@ -50,16 +55,16 @@ namespace PCG
         [Header("Biomes")]
         public Biome[] biomes;
 
-        // [Header("NavMesh")]
-        private NavMeshSurface navMeshSurface;
-
         // Placement
         private readonly HashSet<Chunk> baseChunks = new HashSet<Chunk>();
+
+        [HideInInspector] public UnityEvent<GameObject> levelGenerated = new UnityEvent<GameObject>();
 
         private void Awake()
         {
             // Get components
             gridComponent = GetComponent<GridComponent>();
+            minimapGenerator = GetComponent<MinimapGenerator>();
             navMeshSurface = GetComponent<NavMeshSurface>();
 
             // Initialize biomes parameters
@@ -130,12 +135,31 @@ namespace PCG
             PlacePlants();
             PlaceBases();
 
+            // Wait for the current frame to finish. This is because there are Destroy() calls in Generate()
+            StartCoroutine(LevelGenerationPart2());
+        }
+
+        private IEnumerator LevelGenerationPart2()
+        {
+            yield return new WaitForEndOfFrame();
+
             // Build nav mesh
             navMeshSurface.BuildNavMesh();
+
+            // Take a bird's eye view shot of the map (for in-game minimap and outputting png)
+            minimapGenerator.StreamWorldToMinimap(WorldConfigurations.s_worldGridSize * WorldConfigurations.c_chunkSize);
 
             PlaceZombies();
             PlaceCombatRobots();
             PlaceVehicles();
+            GameObject player = PlacePlayer();
+
+            levelGenerated.Invoke(player);
+
+            // Start the first quest
+            if (questManager.quests.Length > 0) {
+                questManager.StartStory();
+            }
         }
 
         private void GenerateFloors()
@@ -374,6 +398,30 @@ namespace PCG
                     }
                 }
             }
+        }
+
+        [Header("Player")]
+        [SerializeField] private GameObject playerPrefab;
+
+        private GameObject PlacePlayer()
+        {
+            // Place player in the woodland biome, in the bottom right corner
+            Biome woodlandBiome = biomes[BiomeType.Woodland.GetHashCode()];
+
+            int spawnChunkIndex = woodlandBiome.chunks.Count / 3 * 2;
+            // Not to place on the base chunk
+            if (spawnChunkIndex == woodlandBiome.chunks.Count / 2) {
+                spawnChunkIndex--;
+            }
+
+            Chunk chunk = woodlandBiome.chunks[spawnChunkIndex];
+            Vector3 chunkCenter = gridComponent.GetChunkCenterWorld(chunk);
+            NavMesh.SamplePosition(chunkCenter, out NavMeshHit hit, 20f, NavMesh.AllAreas);
+            if (hit.hit) {
+                GameObject player = Instantiate(playerPrefab, hit.position, Quaternion.identity, null);
+                return player;
+            }
+            return null;
         }
     }
 }

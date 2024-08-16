@@ -1,5 +1,4 @@
-﻿using Entities.AI.Abilities.HFSM;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Entities.Abilities.NPCActivationDistance
 {
@@ -8,19 +7,13 @@ namespace Entities.Abilities.NPCActivationDistance
         private void OnTriggerEnter(Collider other)
         {
             // Activate NPC
-            HFSMComponent hfsmComponent = other.gameObject.GetComponent<HFSMComponent>();
-            if (hfsmComponent) {
-                hfsmComponent.enabled = true;
-            }
+            other.transform.parent.GetComponent<NPCActivatorComponent>().Activate();
         }
 
         private void OnTriggerExit(Collider other)
         {
             // Deactivate NPC
-            HFSMComponent hfsmComponent = other.gameObject.GetComponent<HFSMComponent>();
-            if (hfsmComponent) {
-                hfsmComponent.enabled = false;
-            }
+            other.transform.parent.GetComponent<NPCActivatorComponent>().Deactivate();
         }
     }
 }

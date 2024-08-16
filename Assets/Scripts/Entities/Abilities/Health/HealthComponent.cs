@@ -6,16 +6,7 @@ namespace Entities.Abilities.Health
     {
         public float health = 100f;
         public float maxHealth = 100f;
-        [HideInInspector] public HealthBarComponent healthBarComponent;
-
-        // Start is called before the first frame update
-        private void Start()
-        {
-            Transform healthBarTransform = transform.Find("Health_Bar");
-            if (healthBarTransform) {
-                healthBarComponent = healthBarTransform.GetComponent<HealthBarComponent>();
-            }
-        }
+        public HealthBarComponent healthBarComponent;
 
         public void changeHealth(float x)
         {
@@ -32,9 +23,7 @@ namespace Entities.Abilities.Health
                 health = 0;
             }
             // Update health bar
-            if (healthBarComponent) {
-                healthBarComponent.greenBar.fillAmount = health / maxHealth;
-            }
+            healthBarComponent.greenBar.fillAmount = health / maxHealth;
 
             // Trigger death if health is 0
             if (health == 0) {
