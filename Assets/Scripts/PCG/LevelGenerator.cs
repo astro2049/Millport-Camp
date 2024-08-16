@@ -33,6 +33,7 @@ namespace PCG
         private Transform basesParent;
         private Transform zombiesParent;
         private Transform combatRobotsParent;
+        private Transform vehiclesParent;
 
         [SerializeField] private GameObject floorPrefab;
         [SerializeField] private GameObject oceanWallCubePrefab;
@@ -112,6 +113,8 @@ namespace PCG
             zombiesParent.parent = transform;
             combatRobotsParent = new GameObject("Combat Robots").transform;
             combatRobotsParent.parent = transform;
+            vehiclesParent = new GameObject("Vehicles").transform;
+            vehiclesParent.parent = transform;
 
             // Clear biomes cells
             foreach (Biome biome in biomes) {
@@ -132,6 +135,7 @@ namespace PCG
 
             PlaceZombies();
             PlaceCombatRobots();
+            PlaceVehicles();
         }
 
         private void GenerateFloors()
@@ -265,15 +269,17 @@ namespace PCG
         // Zombies
         [Header("Zombies")]
         [SerializeField] private GameObject zombiePrefab;
-        [SerializeField] private BiomeType[] zombieBiomes;
         [SerializeField] [Range(0f, 1f)] private float zombieChunkOccurence;
         [SerializeField] private int zombieMinCountPerChunk;
         [SerializeField] private int zombieMaxCountPerChunk;
 
         private void PlaceZombies()
         {
-            foreach (BiomeType biomeType in zombieBiomes) {
-                Biome biome = biomes[biomeType.GetHashCode()];
+            foreach (Biome biome in biomes) {
+                if (biome.biomeType == BiomeType.Ocean || biome.biomeType == BiomeType.Mountain) {
+                    continue;
+                }
+
                 foreach (Chunk chunk in biome.chunks) {
                     if (baseChunks.Contains(chunk)) {
                         continue;
@@ -334,6 +340,37 @@ namespace PCG
                     NavMesh.SamplePosition(sampleCenter + new Vector3(offset.x, 0, offset.y), out NavMeshHit hit, navmeshPlacementSampleDistance, NavMesh.AllAreas);
                     if (hit.hit) {
                         GameObject combatRobot = Instantiate(combatRobotPrefab, hit.position, Quaternion.identity, combatRobotsParent);
+                    }
+                }
+            }
+        }
+
+        [Header("Vehicles")]
+        [SerializeField] private GameObject vehiclePrefab;
+        [SerializeField] private Material[] vehicleMaterials;
+        [SerializeField] [Range(0f, 1f)] private float vehicleChunkOccurence = 0.1f;
+
+        private void PlaceVehicles()
+        {
+            foreach (Biome biome in biomes) {
+                if (biome.biomeType == BiomeType.Ocean || biome.biomeType == BiomeType.Mountain) {
+                    continue;
+                }
+
+                foreach (Chunk chunk in biome.chunks) {
+                    if (baseChunks.Contains(chunk)) {
+                        continue;
+                    }
+                    if (Random.Range(0f, 1f) >= vehicleChunkOccurence) {
+                        continue;
+                    }
+
+                    Vector3 chunkCenter = gridComponent.GetChunkCenterWorld(chunk);
+                    Vector2 offset = Random.insideUnitCircle * Random.Range(0f, WorldConfigurations.c_chunkSize / 4f);
+                    NavMesh.SamplePosition(chunkCenter + new Vector3(offset.x, 0, offset.y) + new Vector3(offset.x, 0, offset.y), out NavMeshHit hit, navmeshPlacementSampleDistance, NavMesh.AllAreas);
+                    if (hit.hit) {
+                        GameObject vehicle = Instantiate(vehiclePrefab, hit.position, Quaternion.identity, vehiclesParent);
+                        vehicle.GetComponent<MeshRenderer>().material = vehicleMaterials[Random.Range(0, vehicleMaterials.Length)];
                     }
                 }
             }

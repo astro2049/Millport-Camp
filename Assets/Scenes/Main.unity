@@ -668,13 +668,27 @@ MonoBehaviour:
   - biomeType: 7
     biomeData: {fileID: 11400000, guid: 735282c0f1fad3444b59de726168ba31, type: 2}
   zombiePrefab: {fileID: 5105231151093237616, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
-  zombieBiomes: 010000000200000003000000040000000500000006000000
   zombieChunkOccurence: 0.5
   zombieMinCountPerChunk: 1
   zombieMaxCountPerChunk: 5
   combatRobotPrefab: {fileID: 3272280871037772915, guid: 3ad495d8e73834841861a3adcc4b65c6, type: 3}
   combatRobotSectorMinCount: 8
   combatRobotSectorMaxCount: 15
+  vehiclePrefab: {fileID: 261278061893848929, guid: 2179bee3a6ef28b438ac36351c7a7304, type: 3}
+  vehicleMaterials:
+  - {fileID: 2100000, guid: 62e25ef75a2216f418d06453c9ad15cb, type: 2}
+  - {fileID: 2100000, guid: a8e32d2cd442e564aa46c99f0ae7c0c8, type: 2}
+  - {fileID: 2100000, guid: c01b7c8cb1175b54aab24b670c2d58dd, type: 2}
+  - {fileID: 2100000, guid: 49ef76ea47782eb4b93ac08b234fd6c3, type: 2}
+  - {fileID: 2100000, guid: ee26ded8aeae32044836748251f93891, type: 2}
+  - {fileID: 2100000, guid: f145fd98abc7a354f83c3a2e8df80a75, type: 2}
+  - {fileID: 2100000, guid: 97942cb5527e6f24eb8b8f5c86f8744d, type: 2}
+  - {fileID: 2100000, guid: ae4870cba172f524491e4431ce936a9d, type: 2}
+  - {fileID: 2100000, guid: ac4517348fefb604bbf10afeb378a491, type: 2}
+  - {fileID: 2100000, guid: ee5d59fcc8497a641905c26644c20880, type: 2}
+  - {fileID: 2100000, guid: 912f300affe60c543ac3ac40ef980902, type: 2}
+  - {fileID: 2100000, guid: bb694a94be4a3c64ca9ef44c62415782, type: 2}
+  vehicleChunkOccurence: 0.05
 --- !u!156049354 &313731510
 Grid:
   m_ObjectHideFlags: 0
@@ -725,7 +739,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_CollectObjects: 0
+  m_CollectObjects: 2
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
