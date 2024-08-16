@@ -17,9 +17,8 @@ namespace Entities.Player
     public class PlayerStateComponent : StateComponent
     {
         public InteractableComponent currentInteractable;
-        private Transform handTransform;
+        [SerializeField] private Transform handTransform;
         public GunStateComponent equippedGun;
-        public GunStateComponent primaryGun;
         public bool isReloading;
 
         private PlayerObserverComponent playerObserverComponent;
@@ -27,8 +26,6 @@ namespace Entities.Player
 
         private void Awake()
         {
-            handTransform = transform.Find("Hand");
-
             playerObserverComponent = GetComponent<PlayerObserverComponent>();
             subjectComponent = GetComponent<SubjectComponent>();
         }

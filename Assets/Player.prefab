@@ -389,8 +389,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentInteractable: {fileID: 0}
+  handTransform: {fileID: 2885129988751529895}
   equippedGun: {fileID: 0}
-  primaryGun: {fileID: 0}
   isReloading: 0
 --- !u!114 &6291882367588290925
 MonoBehaviour:

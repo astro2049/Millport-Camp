@@ -18,6 +18,7 @@ namespace Entities.Gun
     {
         // Components
         private SubjectComponent subjectComponent;
+        private AudioSource audioSource;
 
         // Stats & Configuration
         public GunData stats;
@@ -45,6 +46,7 @@ namespace Entities.Gun
         private void Awake()
         {
             subjectComponent = GetComponent<SubjectComponent>();
+            audioSource = GetComponent<AudioSource>();
 
             Init();
         }
@@ -98,7 +100,7 @@ namespace Entities.Gun
                     }
                 } else {
                     // Mag empty SFX
-                    AudioManager.GetAudioSource().PlayOneShot(magEmptySound, 0.65f);
+                    audioSource.PlayOneShot(magEmptySound, 0.6f);
                 }
             }
         }
@@ -142,11 +144,11 @@ namespace Entities.Gun
             // SFX
             if (magAmmo > 0) {
                 // Normal shot SFX
-                AudioManager.GetAudioSource().PlayOneShot(fireSound, 0.4f);
+                audioSource.PlayOneShot(fireSound, 0.35f);
             }
             if (magAmmo == 0) {
                 // Mag empty SFX
-                AudioManager.GetAudioSource().PlayOneShot(magEmptySound, 0.65f);
+                audioSource.PlayOneShot(magEmptySound, 0.6f);
                 // Additionally, tell UI manager / turret that mag is empty
                 subjectComponent.NotifyObservers(new MCEvent(EventType.MagEmpty));
             }
@@ -198,7 +200,7 @@ namespace Entities.Gun
         public IEnumerator StartReloading()
         {
             // SFX
-            AudioManager.GetAudioSource().PlayOneShot(releaseMagSound, 0.45f);
+            audioSource.PlayOneShot(releaseMagSound, 0.4f);
             yield return new WaitForSeconds(stats.reloadTime);
             // TODO: Use this. However, need to trim down the audio length first...
             // yield return new WaitForSeconds(chargingBoltSoundPlayTimestamp);
@@ -207,7 +209,7 @@ namespace Entities.Gun
 
         private IEnumerator StartChargingBolt()
         {
-            AudioManager.GetAudioSource().PlayOneShot(chargingBoltSound, 0.5f);
+            audioSource.PlayOneShot(chargingBoltSound, 0.4f);
             yield return new WaitForSeconds(0f);
             // TODO: Use this. However, need to trim down the audio length first...
             // yield return new WaitForSeconds(chargingBoltSound.length);

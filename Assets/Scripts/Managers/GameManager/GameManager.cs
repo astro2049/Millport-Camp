@@ -33,6 +33,7 @@ namespace Managers.GameManager
         [SerializeField] private GameObject currentActor;
         [SerializeField] private CinemachineVirtualCamera playerCamera;
         [SerializeField] private CinemachineVirtualCamera vehicleCamera;
+        [SerializeField] private AudioClip closeDoorClip;
 
         [Header("Managers")]
         [SerializeField] private UIManager uiManager;
@@ -59,6 +60,9 @@ namespace Managers.GameManager
                 subject.RemoveObserver(this, EventType.Dead);
                 subject.RemoveObserver(uiManager, EventType.Dead);
                 subject.NotifyObservers(new MCEventWEntity(EventType.NotControlledByPlayer, currentActor));
+
+                // Remove AudioListener component
+                Destroy(currentActor.GetComponent<AudioListener>());
             }
 
             // Assign current actor to currentControllingActor
@@ -69,6 +73,9 @@ namespace Managers.GameManager
             subject = currentActor.GetComponent<SubjectComponent>();
             subject.AddObserver(this, EventType.Dead);
             subject.AddObserver(uiManager, EventType.Dead);
+
+            // Add AudioListener component
+            currentActor.AddComponent<AudioListener>();
 
             // Attach NPC activation collider
             npcActivationCollider.transform.parent = currentActor.transform;
@@ -195,6 +202,9 @@ namespace Managers.GameManager
 
             // Configure clearing distance collider according to vehicle camera
             Camera.main.GetComponent<ClearingDistanceColliderComponent>().ConfigureCollider(vehicleCamera.m_Lens.OrthographicSize);
+
+            // Play close door SFX
+            AudioManager.GetAudioSource().PlayOneShot(closeDoorClip);
         }
 
         private void TeleportActor(GameObject actor, Vector3 position)
@@ -219,6 +229,9 @@ namespace Managers.GameManager
 
             // Configure clearing distance collider according to player camera
             Camera.main.GetComponent<ClearingDistanceColliderComponent>().ConfigureCollider(playerCamera.m_Lens.OrthographicSize);
+
+            // Play close door SFX
+            AudioManager.GetAudioSource().PlayOneShot(closeDoorClip);
         }
 
         public void OpenPauseMenu(bool pause)
