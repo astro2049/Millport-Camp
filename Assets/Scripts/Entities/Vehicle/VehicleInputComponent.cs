@@ -29,21 +29,13 @@ namespace Entities.Vehicle
             vehicleActionMap.Disable();
         }
 
-        public void OnMove(InputAction.CallbackContext context)
+        public void OnMove(InputValue inputValue)
         {
-            if (context.phase != InputActionPhase.Performed && context.phase != InputActionPhase.Canceled) {
-                return;
-            }
-
-            moveInput = context.ReadValue<Vector2>();
+            moveInput = inputValue.Get<Vector2>();
         }
 
-        public void OnInteract(InputAction.CallbackContext context)
+        public void OnInteract()
         {
-            if (context.phase != InputActionPhase.Performed) {
-                return;
-            }
-
             // Broadcast event: Player exits vehicle
             vehicleStateComponent.driver.GetComponent<SubjectComponent>().NotifyObservers(new MCEventWEntity(EventType.ExitedVehicle, gameObject));
             // Clear driver reference

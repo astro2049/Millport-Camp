@@ -56,6 +56,7 @@ namespace Managers.GameManager
             if (currentActor) {
                 currentActor.tag = "Untagged";
                 currentActor.GetComponent<InputComponent>().enabled = false;
+                currentActor.GetComponent<PlayerInput>().enabled = false;
                 subject = currentActor.GetComponent<SubjectComponent>();
                 subject.RemoveObserver(this, EventType.Dead);
                 subject.RemoveObserver(uiManager, EventType.Dead);
@@ -70,6 +71,7 @@ namespace Managers.GameManager
             currentActor.tag = "Player";
             // Switch inputs, and subscribe to Dead event
             currentActor.GetComponent<InputComponent>().enabled = true;
+            currentActor.GetComponent<PlayerInput>().enabled = true;
             subject = currentActor.GetComponent<SubjectComponent>();
             subject.AddObserver(this, EventType.Dead);
             subject.AddObserver(uiManager, EventType.Dead);

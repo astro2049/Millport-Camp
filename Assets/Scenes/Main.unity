@@ -961,6 +961,7 @@ MonoBehaviour:
   currentActor: {fileID: 0}
   playerCamera: {fileID: 766872915}
   vehicleCamera: {fileID: 5066611}
+  closeDoorClip: {fileID: 8300000, guid: 660469e81d7caca429a35011cd587855, type: 3}
   uiManager: {fileID: 595848169}
   inventoryManager: {fileID: 899652132}
   levelGenerator: {fileID: 313731509}
