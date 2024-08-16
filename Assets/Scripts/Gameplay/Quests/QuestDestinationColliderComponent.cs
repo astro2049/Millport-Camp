@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
-namespace PCG
+namespace Gameplay.Quests
 {
-    public class QuestDestinationComponent : MonoBehaviour
+    public class QuestDestinationColliderComponent : MonoBehaviour
     {
         [HideInInspector] public UnityEvent reachedByPlayer = new UnityEvent();
 
