@@ -8,7 +8,6 @@ using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace PCG
@@ -36,6 +35,7 @@ namespace PCG
         private Transform combatRobotsParent;
 
         [SerializeField] private GameObject floorPrefab;
+        [SerializeField] private GameObject oceanWallCubePrefab;
 
         [SerializeField] private WhittakerBiomes whittakerBiomes = new WhittakerBiomes();
 
@@ -78,6 +78,8 @@ namespace PCG
 
             // Resize the ocean
             ResizeOcean();
+            // Resize ocean invisible wall cube
+            oceanWallCubePrefab.transform.localScale = Vector3.one * WorldConfigurations.c_chunkSize;
         }
 
         private void ResizeOcean()
@@ -125,7 +127,7 @@ namespace PCG
             // Build nav mesh
             navMeshSurface.BuildNavMesh();
 
-            // PlaceZombies();
+            PlaceZombies();
             PlaceCombatRobots();
         }
 
@@ -142,6 +144,7 @@ namespace PCG
 
                     // Spawn a floor tile if it's not Ocean
                     if (biomeType == BiomeType.Ocean) {
+                        Instantiate(oceanWallCubePrefab, gridComponent.GetChunkCenterWorld(chunk), Quaternion.identity, environmentParent);
                         continue;
                     }
                     GameObject floor = Instantiate(floorPrefab, gridComponent.GetChunkCenterWorld(chunk), Quaternion.identity, floorsParent);
