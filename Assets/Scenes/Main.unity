@@ -672,6 +672,9 @@ MonoBehaviour:
   zombieChunkOccurence: 0.5
   zombieMinCountPerChunk: 1
   zombieMaxCountPerChunk: 5
+  combatRobotPrefab: {fileID: 3272280871037772915, guid: 3ad495d8e73834841861a3adcc4b65c6, type: 3}
+  combatRobotSectorMinCount: 8
+  combatRobotSectorMaxCount: 15
 --- !u!156049354 &313731510
 Grid:
   m_ObjectHideFlags: 0
@@ -727,7 +730,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 9280
+    m_Bits: 9216
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_GenerateLinks: 0
