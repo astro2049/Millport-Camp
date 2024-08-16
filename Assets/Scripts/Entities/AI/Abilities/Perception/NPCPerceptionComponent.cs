@@ -65,5 +65,10 @@ namespace Entities.AI.Abilities.Perception
                 return false;
             }
         }
+
+        private void OnDestroy()
+        {
+            Destroy(sensorGameObject);
+        }
     }
 }

@@ -14,9 +14,9 @@ namespace Entities.AI.Abilities.Health
             base.Die();
 
             // Shut down perception, behaviors and navmesh agent
-            GetComponent<PerceptionComponent>().enabled = false;
-            GetComponent<HFSMComponent>().enabled = false;
-            GetComponent<NavMeshAgent>().enabled = false;
+            Destroy(GetComponent<PerceptionComponent>());
+            Destroy(GetComponent<HFSMComponent>());
+            Destroy(GetComponent<NavMeshAgent>());
 
             // StartCoroutine(SinkUnderMap());
         }

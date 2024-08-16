@@ -5,12 +5,14 @@ namespace Entities.AI.Abilities.Perception
     public abstract class PerceptionComponent : MonoBehaviour
     {
         [Header("Perception")]
-        public float radius;
-        public LayerMask includeLayers;
+        [SerializeField] protected float radius;
+        [SerializeField] protected LayerMask includeLayers;
+
+        protected GameObject sensorGameObject;
 
         protected void CreateSensorCollider()
         {
-            GameObject sensorGameObject = new GameObject("Sensor Collider") {
+            sensorGameObject = new GameObject("Sensor Collider") {
                 transform = {
                     parent = transform,
                     localPosition = Vector3.zero
