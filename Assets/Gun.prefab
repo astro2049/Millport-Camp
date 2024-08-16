@@ -84,7 +84,7 @@ MonoBehaviour:
   magAmmo: 0
   raycastLayers:
     serializedVersion: 2
-    m_Bits: 2496
+    m_Bits: 3520
   damageLayers:
     serializedVersion: 2
     m_Bits: 2432

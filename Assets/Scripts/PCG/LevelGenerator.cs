@@ -56,7 +56,7 @@ namespace PCG
         public Biome[] biomes;
 
         // Placement
-        private readonly HashSet<Chunk> baseChunks = new HashSet<Chunk>();
+        private readonly HashSet<Chunk> humanActivityChunks = new HashSet<Chunk>();
 
         [HideInInspector] public UnityEvent<GameObject> levelGenerated = new UnityEvent<GameObject>();
 
@@ -149,10 +149,10 @@ namespace PCG
             // Take a bird's eye view shot of the map (for in-game minimap and outputting png)
             minimapGenerator.StreamWorldToMinimap(WorldConfigurations.s_worldGridSize * WorldConfigurations.c_chunkSize);
 
-            PlaceZombies();
             PlaceCombatRobots();
             PlaceVehicles();
             GameObject player = PlacePlayer();
+            PlaceZombies();
 
             levelGenerated.Invoke(player);
 
@@ -258,7 +258,7 @@ namespace PCG
             foreach (Quest quest in questManager.quests) {
                 List<Chunk> chunks = biomes[quest.baseBiome.GetHashCode()].chunks;
                 Chunk chunk = chunks[chunks.Count / 2];
-                baseChunks.Add(chunk);
+                humanActivityChunks.Add(chunk);
 
                 // Get chunk center world coordinate
                 Vector3 chunkCenter = gridComponent.GetChunkCenterWorld(chunk);
@@ -290,6 +290,83 @@ namespace PCG
 
         private readonly float navmeshPlacementSampleDistance = 1f;
 
+        [Header("Combat Robots")]
+        [SerializeField] private GameObject combatRobotPrefab;
+        [SerializeField] private int combatRobotSectorMinCount = 8;
+        [SerializeField] private int combatRobotSectorMaxCount = 15;
+
+        private void PlaceCombatRobots()
+        {
+            foreach (Quest quest in questManager.quests) {
+                Vector3 sampleCenter = quest.destinationGo.transform.position;
+                int combatRobotCount = Random.Range(combatRobotSectorMinCount, combatRobotSectorMaxCount);
+
+                for (int i = 0; i < combatRobotCount; i++) {
+                    Vector2 offset = Random.insideUnitCircle.normalized * Random.Range(7f, WorldConfigurations.c_chunkSize / 2f + 5);
+                    NavMesh.SamplePosition(sampleCenter + new Vector3(offset.x, 0, offset.y), out NavMeshHit hit, navmeshPlacementSampleDistance, NavMesh.AllAreas);
+                    if (hit.hit) {
+                        GameObject combatRobot = Instantiate(combatRobotPrefab, hit.position, Quaternion.identity, combatRobotsParent);
+                    }
+                }
+            }
+        }
+
+        [Header("Vehicles")]
+        [SerializeField] private GameObject vehiclePrefab;
+        [SerializeField] private Material[] vehicleMaterials;
+        [SerializeField] [Range(0f, 1f)] private float vehicleChunkOccurence = 0.1f;
+
+        private void PlaceVehicles()
+        {
+            foreach (Biome biome in biomes) {
+                if (biome.biomeType == BiomeType.Ocean || biome.biomeType == BiomeType.Mountain) {
+                    continue;
+                }
+
+                foreach (Chunk chunk in biome.chunks) {
+                    if (humanActivityChunks.Contains(chunk)) {
+                        continue;
+                    }
+                    if (Random.Range(0f, 1f) >= vehicleChunkOccurence) {
+                        continue;
+                    }
+
+                    Vector3 chunkCenter = gridComponent.GetChunkCenterWorld(chunk);
+                    Vector2 offset = Random.insideUnitCircle * Random.Range(0f, WorldConfigurations.c_chunkSize / 4f);
+                    NavMesh.SamplePosition(chunkCenter + new Vector3(offset.x, 0, offset.y) + new Vector3(offset.x, 0, offset.y), out NavMeshHit hit, navmeshPlacementSampleDistance, NavMesh.AllAreas);
+                    if (hit.hit) {
+                        GameObject vehicle = Instantiate(vehiclePrefab, hit.position, Random.rotation, vehiclesParent);
+                        vehicle.GetComponent<MeshRenderer>().material = vehicleMaterials[Random.Range(0, vehicleMaterials.Length)];
+                    }
+                }
+            }
+        }
+
+        [Header("Player")]
+        [SerializeField] private GameObject playerPrefab;
+
+        private GameObject PlacePlayer()
+        {
+            // Place player in the woodland biome, in the bottom right corner
+            Biome woodlandBiome = biomes[BiomeType.Woodland.GetHashCode()];
+
+            int spawnChunkIndex = woodlandBiome.chunks.Count / 3 * 2;
+            // Not to place on the base chunk
+            if (spawnChunkIndex == woodlandBiome.chunks.Count / 2) {
+                spawnChunkIndex--;
+            }
+
+            Chunk chunk = woodlandBiome.chunks[spawnChunkIndex];
+            humanActivityChunks.Add(chunk);
+            Vector3 chunkCenter = gridComponent.GetChunkCenterWorld(chunk);
+            NavMesh.SamplePosition(chunkCenter, out NavMeshHit hit, 20f, NavMesh.AllAreas);
+            if (hit.hit) {
+                GameObject player = Instantiate(playerPrefab, hit.position, Quaternion.identity, null);
+                return player;
+            }
+            return null;
+        }
+
         // Zombies
         [Header("Zombies")]
         [SerializeField] private GameObject zombiePrefab;
@@ -305,7 +382,7 @@ namespace PCG
                 }
 
                 foreach (Chunk chunk in biome.chunks) {
-                    if (baseChunks.Contains(chunk)) {
+                    if (humanActivityChunks.Contains(chunk)) {
                         continue;
                     }
                     if (Random.Range(0f, 1f) >= zombieChunkOccurence) {
@@ -346,82 +423,6 @@ namespace PCG
                     }
                 }
             }
-        }
-
-        [Header("Combat Robots")]
-        [SerializeField] private GameObject combatRobotPrefab;
-        [SerializeField] private int combatRobotSectorMinCount = 8;
-        [SerializeField] private int combatRobotSectorMaxCount = 15;
-
-        private void PlaceCombatRobots()
-        {
-            foreach (Quest quest in questManager.quests) {
-                Vector3 sampleCenter = quest.destinationGo.transform.position;
-                int combatRobotCount = Random.Range(combatRobotSectorMinCount, combatRobotSectorMaxCount);
-
-                for (int i = 0; i < combatRobotCount; i++) {
-                    Vector2 offset = Random.insideUnitCircle.normalized * Random.Range(7f, WorldConfigurations.c_chunkSize / 2f + 5);
-                    NavMesh.SamplePosition(sampleCenter + new Vector3(offset.x, 0, offset.y), out NavMeshHit hit, navmeshPlacementSampleDistance, NavMesh.AllAreas);
-                    if (hit.hit) {
-                        GameObject combatRobot = Instantiate(combatRobotPrefab, hit.position, Quaternion.identity, combatRobotsParent);
-                    }
-                }
-            }
-        }
-
-        [Header("Vehicles")]
-        [SerializeField] private GameObject vehiclePrefab;
-        [SerializeField] private Material[] vehicleMaterials;
-        [SerializeField] [Range(0f, 1f)] private float vehicleChunkOccurence = 0.1f;
-
-        private void PlaceVehicles()
-        {
-            foreach (Biome biome in biomes) {
-                if (biome.biomeType == BiomeType.Ocean || biome.biomeType == BiomeType.Mountain) {
-                    continue;
-                }
-
-                foreach (Chunk chunk in biome.chunks) {
-                    if (baseChunks.Contains(chunk)) {
-                        continue;
-                    }
-                    if (Random.Range(0f, 1f) >= vehicleChunkOccurence) {
-                        continue;
-                    }
-
-                    Vector3 chunkCenter = gridComponent.GetChunkCenterWorld(chunk);
-                    Vector2 offset = Random.insideUnitCircle * Random.Range(0f, WorldConfigurations.c_chunkSize / 4f);
-                    NavMesh.SamplePosition(chunkCenter + new Vector3(offset.x, 0, offset.y) + new Vector3(offset.x, 0, offset.y), out NavMeshHit hit, navmeshPlacementSampleDistance, NavMesh.AllAreas);
-                    if (hit.hit) {
-                        GameObject vehicle = Instantiate(vehiclePrefab, hit.position, Quaternion.identity, vehiclesParent);
-                        vehicle.GetComponent<MeshRenderer>().material = vehicleMaterials[Random.Range(0, vehicleMaterials.Length)];
-                    }
-                }
-            }
-        }
-
-        [Header("Player")]
-        [SerializeField] private GameObject playerPrefab;
-
-        private GameObject PlacePlayer()
-        {
-            // Place player in the woodland biome, in the bottom right corner
-            Biome woodlandBiome = biomes[BiomeType.Woodland.GetHashCode()];
-
-            int spawnChunkIndex = woodlandBiome.chunks.Count / 3 * 2;
-            // Not to place on the base chunk
-            if (spawnChunkIndex == woodlandBiome.chunks.Count / 2) {
-                spawnChunkIndex--;
-            }
-
-            Chunk chunk = woodlandBiome.chunks[spawnChunkIndex];
-            Vector3 chunkCenter = gridComponent.GetChunkCenterWorld(chunk);
-            NavMesh.SamplePosition(chunkCenter, out NavMeshHit hit, 20f, NavMesh.AllAreas);
-            if (hit.hit) {
-                GameObject player = Instantiate(playerPrefab, hit.position, Quaternion.identity, null);
-                return player;
-            }
-            return null;
         }
     }
 }

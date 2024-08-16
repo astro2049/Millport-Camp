@@ -138,12 +138,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dbb3e56fe69d4547a24346cc741c8d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 6
   lookPoint: {x: 0, y: 0, z: 0}
   turretPrefab: {fileID: 1665573947308029565, guid: bd2b48b6b8b6789449a226f02452d3e4, type: 3}
   lookAtCombatModeLayers:
     serializedVersion: 2
-    m_Bits: 3392
+    m_Bits: 2368
   lookAtBuildModeLayers:
     serializedVersion: 2
     m_Bits: 64
