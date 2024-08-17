@@ -1,5 +1,6 @@
 using Entities.Abilities.Input;
 using Entities.Abilities.Observer;
+using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using EventType = Entities.Abilities.Observer.EventType;
@@ -15,26 +16,32 @@ namespace Entities.Vehicle
 
         private void Awake()
         {
-            vehicleActionMap = GetComponent<PlayerInput>().actions.FindActionMap("Vehicle");
             vehicleStateComponent = GetComponent<VehicleStateComponent>();
+            vehicleActionMap = InputManager.instance.gameplayActionMaps.FindActionMap("Vehicle");
         }
 
         private void OnEnable()
         {
+            vehicleActionMap.FindAction("Move").performed += OnMove;
+            vehicleActionMap.FindAction("Move").canceled += OnMove;
+            vehicleActionMap.FindAction("Interact").performed += OnInteract;
             vehicleActionMap.Enable();
         }
 
         private void OnDisable()
         {
+            vehicleActionMap.FindAction("Move").performed -= OnMove;
+            vehicleActionMap.FindAction("Move").canceled += OnMove;
+            vehicleActionMap.FindAction("Interact").performed -= OnInteract;
             vehicleActionMap.Disable();
         }
 
-        public void OnMove(InputValue inputValue)
+        public void OnMove(InputAction.CallbackContext context)
         {
-            moveInput = inputValue.Get<Vector2>();
+            moveInput = context.ReadValue<Vector2>();
         }
 
-        public void OnInteract()
+        public void OnInteract(InputAction.CallbackContext context)
         {
             // Broadcast event: Player exits vehicle
             vehicleStateComponent.driver.GetComponent<SubjectComponent>().NotifyObservers(new MCEventWEntity(EventType.ExitedVehicle, gameObject));

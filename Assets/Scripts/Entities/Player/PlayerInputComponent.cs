@@ -1,7 +1,9 @@
+using System;
 using Entities.Abilities.Buildable;
 using Entities.Abilities.Input;
 using Entities.Abilities.Interactable;
 using Entities.Abilities.Observer;
+using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using EventType = Entities.Abilities.Observer.EventType;
@@ -12,44 +14,38 @@ namespace Entities.Player
 {
     public class PlayerInputComponent : InputComponent
     {
-        /*
-         * Public fields
-         */
-        [Header("Movement Settings")]
-        public float moveSpeed = 5f; // 5m/s
-        public Vector3 lookPoint;
-        // Build Mode
-        public GameObject turretPrefab;
+        [Header("Movement")]
+        [SerializeField] private float moveSpeed = 5f; // 5m/s
+        [SerializeField] private Vector3 lookPoint;
+        [Header("Build Mode")]
+        [SerializeField] private GameObject turretPrefab;
         private GameObject turretToPlace;
-        // Mouse Look at - Layer Masks
-        public LayerMask lookAtCombatModeLayers;
-        public LayerMask lookAtBuildModeLayers;
+        [Header("Mouse Look At")]
+        [SerializeField] private LayerMask lookAtCombatModeLayers;
+        [SerializeField] private LayerMask lookAtBuildModeLayers;
 
         // movement
         private Vector2 moveInput;
         private Vector3 velocity;
 
-        /*
-         * Pre-stored private fields
-         */
+        // Components
         private Camera followCamera;
-        private InputActionMap movementActions, combatActions, buildActions;
         private Vector3 cameraForward, cameraRight;
         private Rigidbody rb;
         private PlayerStateComponent playerStateComponent;
         private SubjectComponent subjectComponent;
-        private PlayerInput playerInput;
+
+        // Action maps
+        private InputActionMap movementActions, combatActions, buildActions;
 
         private void Awake()
         {
-            playerInput = GetComponent<PlayerInput>();
-            movementActions = playerInput.actions.FindActionMap("Movement");
-            combatActions = playerInput.actions.FindActionMap("Combat");
-            buildActions = playerInput.actions.FindActionMap("Build");
+            // Get action maps
+            movementActions = InputManager.instance.gameplayActionMaps.FindActionMap("Movement");
+            combatActions = InputManager.instance.gameplayActionMaps.FindActionMap("Combat");
+            buildActions = InputManager.instance.gameplayActionMaps.FindActionMap("Build");
 
-            /*
-             * Precalculate camera forward and right vectors
-             */
+            // Precalculate camera forward and right vectors
             followCamera = Camera.main;
             cameraForward = followCamera.transform.forward;
             cameraRight = followCamera.transform.right;
@@ -60,40 +56,73 @@ namespace Entities.Player
             cameraForward.Normalize();
             cameraRight.Normalize();
 
+            // Get components
             rb = GetComponent<Rigidbody>();
-            // Components
             playerStateComponent = GetComponent<PlayerStateComponent>();
             subjectComponent = GetComponent<SubjectComponent>();
         }
 
         private void OnEnable()
         {
+            // Bind actions to inputs
+            BindInputActions();
+
             movementActions.Enable();
             combatActions.Enable();
+            // buildActions.Enable();
         }
 
         private void OnDisable()
         {
-            playerInput.actions.Disable();
+            // UnBind actions to inputs
+            UnBindInputActions();
+
+            movementActions.Disable();
+            combatActions.Disable();
+            buildActions.Disable();
+        }
+
+        private void BindInputActions()
+        {
+            movementActions.FindAction("Move").performed += OnMove;
+            movementActions.FindAction("Move").canceled += OnMove;
+
+            combatActions.FindAction("Look").performed += OnCombatLook;
+            combatActions.FindAction("Attack").performed += OnStartAttack;
+            combatActions.FindAction("Attack").canceled += OnStopAttack;
+            combatActions.FindAction("Reload").performed += OnReload;
+            combatActions.FindAction("Interact").performed += OnInteract;
+            combatActions.FindAction("Build").performed += EnterBuildMode;
+
+            buildActions.FindAction("Look").performed += OnBuildLook;
+            buildActions.FindAction("Look").performed += StructureOnCursor;
+            buildActions.FindAction("Place").performed += PlaceTurret;
+            buildActions.FindAction("Rotate").performed += RotateTurret;
+            buildActions.FindAction("Quit Build").performed += QuitBuildMode;
+        }
+
+        private void UnBindInputActions()
+        {
+            movementActions.FindAction("Move").performed -= OnMove;
+            movementActions.FindAction("Move").canceled -= OnMove;
+
+            combatActions.FindAction("Look").performed -= OnCombatLook;
+            combatActions.FindAction("Attack").performed -= OnStartAttack;
+            combatActions.FindAction("Attack").canceled -= OnStopAttack;
+            combatActions.FindAction("Reload").performed -= OnReload;
+            combatActions.FindAction("Interact").performed -= OnInteract;
+            combatActions.FindAction("Build").performed -= EnterBuildMode;
+
+            buildActions.FindAction("Look").performed -= OnBuildLook;
+            buildActions.FindAction("Look").performed -= StructureOnCursor;
+            buildActions.FindAction("Place").performed -= PlaceTurret;
+            buildActions.FindAction("Rotate").performed -= RotateTurret;
+            buildActions.FindAction("Quit Build").performed -= QuitBuildMode;
         }
 
         private void FixedUpdate()
         {
             Move();
-        }
-
-        /*
-         * Movement Actions
-         */
-        public void OnMove(InputAction.CallbackContext context)
-        {
-            if (context.phase != InputActionPhase.Performed && context.phase != InputActionPhase.Canceled) {
-                return;
-            }
-
-            moveInput = context.ReadValue<Vector2>();
-            Vector3 moveDirection = (moveInput.y * cameraForward + moveInput.x * cameraRight).normalized;
-            velocity = moveDirection * moveSpeed;
         }
 
         private void Move()
@@ -110,7 +139,17 @@ namespace Entities.Player
             rb.velocity = velocity;
         }
 
-        private bool PlayerLookAt(Vector2 lookInput, LayerMask lookAtLayers)
+        /*
+         * Movement Actions
+         */
+        private void OnMove(InputAction.CallbackContext context)
+        {
+            moveInput = context.ReadValue<Vector2>();
+            Vector3 moveDirection = (moveInput.y * cameraForward + moveInput.x * cameraRight).normalized;
+            velocity = moveDirection * moveSpeed;
+        }
+
+        private bool LookAt(Vector2 lookInput, LayerMask lookAtLayers)
         {
             /*
              * Get mouse position in the 3D world, referenced:
@@ -137,14 +176,10 @@ namespace Entities.Player
          * Combat Actions
          */
         // Look at where the mouse is, horizontally
-        public void OnCombatLook(InputAction.CallbackContext context)
+        private void OnCombatLook(InputAction.CallbackContext context)
         {
-            if (context.phase != InputActionPhase.Performed) {
-                return;
-            }
-
             Vector2 lookInput = context.ReadValue<Vector2>();
-            if (PlayerLookAt(lookInput, lookAtCombatModeLayers)) {
+            if (LookAt(lookInput, lookAtCombatModeLayers)) {
                 // TODO: This 'if' is hacky
                 if (!playerStateComponent.equippedGun) {
                     return;
@@ -153,32 +188,29 @@ namespace Entities.Player
             }
         }
 
-        public void OnAttack(InputAction.CallbackContext context)
+        private void OnStartAttack(InputAction.CallbackContext context)
         {
-            if (context.phase == InputActionPhase.Performed) {
-                // TODO: This 'if' is hacky
-                if (!playerStateComponent.equippedGun) {
-                    return;
-                }
-                if (playerStateComponent.isReloading) {
-                    return;
-                }
-                playerStateComponent.equippedGun.SetIsTriggerDown(true);
-            } else if (context.phase == InputActionPhase.Canceled) {
-                // TODO: This 'if' is hacky
-                if (!playerStateComponent.equippedGun) {
-                    return;
-                }
-                playerStateComponent.equippedGun.SetIsTriggerDown(false);
-            }
-        }
-
-        public void OnReload(InputAction.CallbackContext context)
-        {
-            if (context.phase != InputActionPhase.Performed) {
+            // TODO: This 'if' is hacky
+            if (!playerStateComponent.equippedGun) {
                 return;
             }
+            if (playerStateComponent.isReloading) {
+                return;
+            }
+            playerStateComponent.equippedGun.SetIsTriggerDown(true);
+        }
 
+        private void OnStopAttack(InputAction.CallbackContext context)
+        {
+            // TODO: This 'if' is hacky
+            if (!playerStateComponent.equippedGun) {
+                return;
+            }
+            playerStateComponent.equippedGun.SetIsTriggerDown(false);
+        }
+
+        private void OnReload(InputAction.CallbackContext context)
+        {
             // TODO: This 'if' is hacky
             if (!playerStateComponent.equippedGun) {
                 return;
@@ -192,24 +224,16 @@ namespace Entities.Player
             StartCoroutine(playerStateComponent.equippedGun.StartReloading());
         }
 
-        public void OnInteract(InputAction.CallbackContext context)
+        private void OnInteract(InputAction.CallbackContext context)
         {
-            if (context.phase != InputActionPhase.Performed) {
-                return;
-            }
-
             InteractableComponent currentInteractable = GetComponent<PlayerStateComponent>().currentInteractable;
             if (currentInteractable) {
                 currentInteractable.Interact(gameObject);
             }
         }
 
-        public void EnterBuildMode(InputAction.CallbackContext context)
+        private void EnterBuildMode(InputAction.CallbackContext context)
         {
-            if (context.phase != InputActionPhase.Performed) {
-                return;
-            }
-
             // Tell UI manager about the event
             subjectComponent.NotifyObservers(new MCEvent(EventType.EnteredBuildMode));
 
@@ -225,26 +249,18 @@ namespace Entities.Player
          * Build Actions
          */
         // Look at where the mouse is, horizontally
-        public void OnBuildLook(InputAction.CallbackContext context)
+        private void OnBuildLook(InputAction.CallbackContext context)
         {
-            if (context.phase != InputActionPhase.Performed) {
-                return;
-            }
-
             Vector2 lookInput = context.ReadValue<Vector2>();
-            PlayerLookAt(lookInput, lookAtBuildModeLayers);
+            LookAt(lookInput, lookAtBuildModeLayers);
         }
 
-        public void StructureOnCursor(InputAction.CallbackContext context)
+        private void StructureOnCursor(InputAction.CallbackContext context)
         {
-            if (context.phase != InputActionPhase.Performed) {
-                return;
-            }
-
             turretToPlace.transform.position = lookPoint;
         }
 
-        public void CreateTurret()
+        private void CreateTurret()
         {
             turretToPlace = Instantiate(turretPrefab);
             turretToPlace.GetComponent<BuildableComponent>().EnterBuildMode();
@@ -252,22 +268,14 @@ namespace Entities.Player
             subjectComponent.NotifyObservers(new MCEventWEntity(EventType.PlacingStructure, turretToPlace));
         }
 
-        public void RotateTurret(InputAction.CallbackContext context)
+        private void RotateTurret(InputAction.CallbackContext context)
         {
-            if (context.phase != InputActionPhase.Performed) {
-                return;
-            }
-
             // Up and Down are on y axis, 120.0/-120.0
             turretToPlace.transform.Rotate(Vector3.up, -90f * (context.ReadValue<Vector2>().y / 120f));
         }
 
-        public void PlaceTurret(InputAction.CallbackContext context)
+        private void PlaceTurret(InputAction.CallbackContext context)
         {
-            if (context.phase != InputActionPhase.Performed) {
-                return;
-            }
-
             BuildableComponent buildableComponent = turretToPlace.GetComponent<BuildableComponent>();
             if (buildableComponent.isOkToPlace) {
                 buildableComponent.Place();
@@ -276,12 +284,8 @@ namespace Entities.Player
             }
         }
 
-        public void QuitBuildMode(InputAction.CallbackContext context)
+        private void QuitBuildMode(InputAction.CallbackContext context)
         {
-            if (context.phase != InputActionPhase.Performed) {
-                return;
-            }
-
             // Tell UI manager about the event
             subjectComponent.NotifyObservers(new MCEvent(EventType.ExitedBuildMode));
 
