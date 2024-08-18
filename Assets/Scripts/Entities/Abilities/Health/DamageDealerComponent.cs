@@ -19,7 +19,7 @@ namespace Entities.Abilities.Health
         public void DealDamage(GameObject other, float damage)
         {
             // Debug.Log(other.name);
-            other.GetComponent<HealthComponent>().changeHealth(-damage);
+            other.GetComponent<HealthComponent>().ReceiveDamage(damage);
         }
     }
 }

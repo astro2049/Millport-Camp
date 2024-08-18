@@ -161,6 +161,10 @@ MonoBehaviour:
   health: 100
   maxHealth: 100
   healthBarComponent: {fileID: 3520848013523251847}
+  regen: 1
+  regenLag: 3
+  regenHealthPerTime: 20
+  regenInterval: 1
 --- !u!114 &1273189440757738412
 MonoBehaviour:
   m_ObjectHideFlags: 0
