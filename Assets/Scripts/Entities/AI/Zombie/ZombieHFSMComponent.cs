@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Entities.Abilities.Observer;
+using Entities.AI.Abilities.Health;
 using Entities.AI.Abilities.HFSM;
 using Entities.AI.Zombie.States;
 using TMPro;
@@ -11,6 +12,7 @@ namespace Entities.AI.Zombie
     public class ZombieHFSMComponent : HFSMComponent, IObserver
     {
         private SubjectComponent subjectComponent;
+        private NPCPawnComponent npcPawnComponent;
 
         // HFSMs: Hand, Movement
         public HandHfsm handHfsm;
@@ -19,6 +21,7 @@ namespace Entities.AI.Zombie
         private void Awake()
         {
             subjectComponent = GetComponent<SubjectComponent>();
+            npcPawnComponent = GetComponent<NPCPawnComponent>();
 
             // Subscribe to target tracker events
             subjectComponent.AddObserver(this,
@@ -37,8 +40,11 @@ namespace Entities.AI.Zombie
 
         private void Update()
         {
-            handHfsm.ExecuteBranch(Time.deltaTime);
-            movementHfsm.ExecuteBranch(Time.deltaTime);
+            // TODO: This is hacky, but this is the best I can do. I don't really know how to properly shut down the HFSM at this point.
+            if (npcPawnComponent.isAlive) {
+                handHfsm.ExecuteBranch(Time.deltaTime);
+                movementHfsm.ExecuteBranch(Time.deltaTime);
+            }
 
             hfsmActiveBranchText.text = handHfsm.GetActiveBranch(new List<string>());
         }

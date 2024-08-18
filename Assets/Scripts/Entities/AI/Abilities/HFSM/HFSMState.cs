@@ -37,6 +37,9 @@ namespace Entities.AI.Abilities.HFSM
         public HFSMState<T> current;
         private readonly Dictionary<string, HFSMState<T>> subStates = new Dictionary<string, HFSMState<T>>();
 
+        private bool requestedToChangeState = false;
+        private HFSMState<T> next;
+
         protected void AddSubStates(params HFSMState<T>[] states)
         {
             foreach (HFSMState<T> state in states) {
@@ -76,6 +79,15 @@ namespace Entities.AI.Abilities.HFSM
         public void ExecuteBranch(float deltaTime)
         {
             Execute(deltaTime);
+
+            // Potential change of active child state
+            if (requestedToChangeState) {
+                requestedToChangeState = false;
+                current.ExitBranch();
+                current = next;
+                current.EnterBranch();
+            }
+
             if (isBranch) {
                 current.ExecuteBranch(deltaTime);
             }
@@ -89,12 +101,10 @@ namespace Entities.AI.Abilities.HFSM
             Exit();
         }
 
-        // Change of state within this state state machine
         public void ChangeState(string name)
         {
-            current.ExitBranch();
-            current = subStates[name];
-            current.EnterBranch();
+            requestedToChangeState = true;
+            next = subStates[name];
         }
 
         /*

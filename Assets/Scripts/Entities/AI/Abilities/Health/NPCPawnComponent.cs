@@ -9,6 +9,8 @@ namespace Entities.AI.Abilities.Health
 {
     public class NPCPawnComponent : PawnComponent
     {
+        public bool isAlive = true;
+
         public override void Die()
         {
             base.Die();

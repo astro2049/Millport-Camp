@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Entities.Abilities.Observer;
 using Entities.AI.Abilities.Gunner;
+using Entities.AI.Abilities.Health;
 using Entities.AI.Abilities.HFSM;
 using Entities.AI.Abilities.TargetTracker;
 using Entities.AI.CombatRobot.States;
@@ -15,6 +16,7 @@ namespace Entities.AI.CombatRobot
         private TargetTrackerComponent targetTrackerComponent;
         private SubjectComponent subjectComponent;
         private GunnerComponent gunnerComponent;
+        private NPCPawnComponent npcPawnComponent;
 
         // HFSMs: Gun, Movement
         private GunHfsm gunHfsm;
@@ -25,6 +27,7 @@ namespace Entities.AI.CombatRobot
             targetTrackerComponent = GetComponent<TargetTrackerComponent>();
             subjectComponent = GetComponent<SubjectComponent>();
             gunnerComponent = GetComponent<GunnerComponent>();
+            npcPawnComponent = GetComponent<NPCPawnComponent>();
 
             // Subscribe to target tracker events
             subjectComponent.AddObserver(this,
@@ -48,8 +51,11 @@ namespace Entities.AI.CombatRobot
 
         private void Update()
         {
-            gunHfsm.ExecuteBranch(Time.deltaTime);
-            movementHfsm.ExecuteBranch(Time.deltaTime);
+            // TODO: This is hacky, but this is the best I can do. I don't really know how to properly shut down the HFSM at this point.
+            if (npcPawnComponent.isAlive) {
+                gunHfsm.ExecuteBranch(Time.deltaTime);
+                movementHfsm.ExecuteBranch(Time.deltaTime);
+            }
 
             hfsmActiveBranchText.text = movementHfsm.GetActiveBranch(new List<string>());
         }
