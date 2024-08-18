@@ -4,39 +4,43 @@ namespace Entities.AI.Zombie.States
 {
     public class HandHfsm : HFSMState<ZombieStateComponent>
     {
-        public HandHfsm(ZombieStateComponent owner, HFSMStateType type, string name, HFSMState<ZombieStateComponent> parentState) : base(owner, type, name, parentState)
+        public HandHfsm(ZombieStateComponent owner, HFSMState<ZombieStateComponent> parentState) : base(owner, parentState)
         {
-            IdleState idleState = new IdleState(owner, HFSMStateType.Leaf, "Idle", this);
-            AttackFsm attackFsm = new AttackFsm(owner, HFSMStateType.Branch, "Attack", this);
+            name = "Hand";
+
+            IdleState idleState = new IdleState(owner, this);
+            AttackFsm attackFsm = new AttackFsm(owner, this);
             AddSubStates(idleState, attackFsm);
-            current = subStates["Idle"];
+            current = idleState;
         }
     }
 
     public class IdleState : HFSMState<ZombieStateComponent>
     {
-        public IdleState(ZombieStateComponent owner, HFSMStateType type, string name, HFSMState<ZombieStateComponent> parentState) : base(owner, type, name, parentState)
+        public IdleState(ZombieStateComponent owner, HFSMState<ZombieStateComponent> parentState) : base(owner, parentState)
         {
-
+            name = "Idle";
         }
     }
 
     public class AttackFsm : HFSMState<ZombieStateComponent>
     {
-        public AttackFsm(ZombieStateComponent owner, HFSMStateType type, string name, HFSMState<ZombieStateComponent> parentState) : base(owner, type, name, parentState)
+        public AttackFsm(ZombieStateComponent owner, HFSMState<ZombieStateComponent> parentState) : base(owner, parentState)
         {
-            AttackState attackState = new AttackState(owner, HFSMStateType.Leaf, "Attack", this);
-            AttackWaitState attackWaitState = new AttackWaitState(owner, HFSMStateType.Leaf, "Wait", this);
+            name = "Attack";
+
+            AttackState attackState = new AttackState(owner, this);
+            AttackWaitState attackWaitState = new AttackWaitState(owner, this);
             AddSubStates(attackState, attackWaitState);
-            current = subStates["Attack"];
+            current = attackState;
         }
     }
 
     public class AttackState : HFSMState<ZombieStateComponent>
     {
-        public AttackState(ZombieStateComponent owner, HFSMStateType type, string name, HFSMState<ZombieStateComponent> parentState) : base(owner, type, name, parentState)
+        public AttackState(ZombieStateComponent owner, HFSMState<ZombieStateComponent> parentState) : base(owner, parentState)
         {
-
+            name = "Attack";
         }
 
         protected override void Execute(float deltaTime)
@@ -50,9 +54,9 @@ namespace Entities.AI.Zombie.States
     {
         private float timer;
 
-        public AttackWaitState(ZombieStateComponent owner, HFSMStateType type, string name, HFSMState<ZombieStateComponent> parentState) : base(owner, type, name, parentState)
+        public AttackWaitState(ZombieStateComponent owner, HFSMState<ZombieStateComponent> parentState) : base(owner, parentState)
         {
-
+            name = "Wait";
         }
 
         protected override void Enter()

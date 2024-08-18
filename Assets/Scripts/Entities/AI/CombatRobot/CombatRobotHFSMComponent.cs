@@ -40,8 +40,8 @@ namespace Entities.AI.CombatRobot
 
             // Initialize HFSMs
             CombatRobotStateComponent combatRobotStateComponent = GetComponent<CombatRobotStateComponent>();
-            gunHfsm = new GunHfsm(combatRobotStateComponent, HFSMStateType.Branch, "Gun", null);
-            movementHfsm = new MovementHfsm(combatRobotStateComponent, HFSMStateType.Branch, "Movement", null);
+            gunHfsm = new GunHfsm(combatRobotStateComponent, null);
+            movementHfsm = new MovementHfsm(combatRobotStateComponent, null);
         }
 
         [SerializeField] private TextMeshPro hfsmActiveBranchText;

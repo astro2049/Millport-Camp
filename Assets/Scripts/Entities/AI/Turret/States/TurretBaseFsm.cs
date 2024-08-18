@@ -5,24 +5,32 @@ namespace Entities.AI.Turret.States
 {
     public class TurretBaseFsm : HFSMState<TurretStateComponent>
     {
-        public TurretBaseFsm(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState)
-            : base(owner, type, name, parentState)
+        public TurretBaseFsm(TurretStateComponent owner, HFSMState<TurretStateComponent> parentState)
+            : base(owner, parentState)
         {
-            TurretBaseIdleState idleState = new TurretBaseIdleState(owner, HFSMStateType.Leaf, "Idle", this);
-            TurretTrackState trackState = new TurretTrackState(owner, HFSMStateType.Leaf, "Track", this);
+            name = "Base";
+
+            TurretBaseIdleState idleState = new TurretBaseIdleState(owner, this);
+            TurretTrackState trackState = new TurretTrackState(owner, this);
             AddSubStates(idleState, trackState);
-            current = subStates["Idle"];
+            current = idleState;
         }
     }
 
     public class TurretBaseIdleState : HFSMState<TurretStateComponent>
     {
-        public TurretBaseIdleState(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState) : base(owner, type, name, parentState) { }
+        public TurretBaseIdleState(TurretStateComponent owner, HFSMState<TurretStateComponent> parentState) : base(owner, parentState)
+        {
+            name = "Idle";
+        }
     }
 
     public class TurretTrackState : HFSMState<TurretStateComponent>
     {
-        public TurretTrackState(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState) : base(owner, type, name, parentState) { }
+        public TurretTrackState(TurretStateComponent owner, HFSMState<TurretStateComponent> parentState) : base(owner, parentState)
+        {
+            name = "Track";
+        }
 
         protected override void Execute(float deltaTime)
         {

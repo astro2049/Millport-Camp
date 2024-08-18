@@ -6,31 +6,35 @@ namespace Entities.AI.Zombie.States
 {
     public class MovementHfsm : HFSMState<ZombieStateComponent>
     {
-        public MovementHfsm(ZombieStateComponent owner, HFSMStateType type, string name, HFSMState<ZombieStateComponent> parentState) : base(owner, type, name, parentState)
+        public MovementHfsm(ZombieStateComponent owner, HFSMState<ZombieStateComponent> parentState) : base(owner, parentState)
         {
-            PatrolFsm patrolFsm = new PatrolFsm(owner, HFSMStateType.Branch, "Patrol", this);
-            ChaseState chaseState = new ChaseState(owner, HFSMStateType.Leaf, "Chase", this);
+            name = "Movement";
+
+            PatrolFsm patrolFsm = new PatrolFsm(owner, this);
+            ChaseState chaseState = new ChaseState(owner, this);
             AddSubStates(patrolFsm, chaseState);
-            current = subStates["Patrol"];
+            current = patrolFsm;
         }
     }
 
     public class PatrolFsm : HFSMState<ZombieStateComponent>
     {
-        public PatrolFsm(ZombieStateComponent owner, HFSMStateType type, string name, HFSMState<ZombieStateComponent> parentState) : base(owner, type, name, parentState)
+        public PatrolFsm(ZombieStateComponent owner, HFSMState<ZombieStateComponent> parentState) : base(owner, parentState)
         {
-            MoveToPatrolPointState moveToPatrolPointState = new MoveToPatrolPointState(owner, HFSMStateType.Leaf, "MoveToPatrolPoint", this);
-            PatrolWaitState waitState = new PatrolWaitState(owner, HFSMStateType.Leaf, "Wait", this);
+            name = "Patrol";
+
+            MoveToPatrolPointState moveToPatrolPointState = new MoveToPatrolPointState(owner, this);
+            PatrolWaitState waitState = new PatrolWaitState(owner, this);
             AddSubStates(moveToPatrolPointState, waitState);
-            current = subStates["MoveToPatrolPoint"];
+            current = moveToPatrolPointState;
         }
     }
 
     public class MoveToPatrolPointState : HFSMState<ZombieStateComponent>
     {
-        public MoveToPatrolPointState(ZombieStateComponent owner, HFSMStateType type, string name, HFSMState<ZombieStateComponent> parentState) : base(owner, type, name, parentState)
+        public MoveToPatrolPointState(ZombieStateComponent owner, HFSMState<ZombieStateComponent> parentState) : base(owner, parentState)
         {
-
+            name = "MoveToPatrolPoint";
         }
 
         protected override void Enter()
@@ -58,9 +62,9 @@ namespace Entities.AI.Zombie.States
     {
         private float timer;
 
-        public PatrolWaitState(ZombieStateComponent owner, HFSMStateType type, string name, HFSMState<ZombieStateComponent> parentState) : base(owner, type, name, parentState)
+        public PatrolWaitState(ZombieStateComponent owner, HFSMState<ZombieStateComponent> parentState) : base(owner, parentState)
         {
-
+            name = "Wait";
         }
 
         protected override void Enter()
@@ -79,9 +83,9 @@ namespace Entities.AI.Zombie.States
 
     public class ChaseState : HFSMState<ZombieStateComponent>
     {
-        public ChaseState(ZombieStateComponent owner, HFSMStateType type, string name, HFSMState<ZombieStateComponent> parentState) : base(owner, type, name, parentState)
+        public ChaseState(ZombieStateComponent owner, HFSMState<ZombieStateComponent> parentState) : base(owner, parentState)
         {
-
+            name = "Chase";
         }
 
         protected override void Enter()

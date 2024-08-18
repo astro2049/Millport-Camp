@@ -29,8 +29,8 @@ namespace Entities.AI.Zombie
 
             // Initialize HFSMs
             ZombieStateComponent zombieStateComponent = GetComponent<ZombieStateComponent>();
-            handHfsm = new HandHfsm(zombieStateComponent, HFSMStateType.Branch, "Hand", null);
-            movementHfsm = new MovementHfsm(zombieStateComponent, HFSMStateType.Branch, "Movement", null);
+            handHfsm = new HandHfsm(zombieStateComponent, null);
+            movementHfsm = new MovementHfsm(zombieStateComponent, null);
         }
 
         [SerializeField] private TextMeshPro hfsmActiveBranchText;

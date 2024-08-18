@@ -42,8 +42,8 @@ namespace Entities.AI.Turret
 
             // Initialize (H)FSMs
             TurretStateComponent turretStateComponent = GetComponent<TurretStateComponent>();
-            gunHfsm = new TurretGunHfsm(turretStateComponent, HFSMStateType.Branch, "Gun", null);
-            baseFsm = new TurretBaseFsm(turretStateComponent, HFSMStateType.Branch, "Base", null);
+            gunHfsm = new TurretGunHfsm(turretStateComponent, null);
+            baseFsm = new TurretBaseFsm(turretStateComponent, null);
         }
 
         private void Update()

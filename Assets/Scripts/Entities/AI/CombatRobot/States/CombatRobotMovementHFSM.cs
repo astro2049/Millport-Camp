@@ -8,30 +8,35 @@ namespace Entities.AI.CombatRobot.States
     {
         public readonly MovementCombatFsm combatFsm;
 
-        public MovementHfsm(CombatRobotStateComponent owner, HFSMStateType type, string name, HFSMState<CombatRobotStateComponent> parentState) : base(owner, type, name, parentState)
+        public MovementHfsm(CombatRobotStateComponent owner, HFSMState<CombatRobotStateComponent> parentState) : base(owner, parentState)
         {
-            PatrolFsm patrolFsm = new PatrolFsm(owner, HFSMStateType.Branch, "Patrol", this);
-            combatFsm = new MovementCombatFsm(owner, HFSMStateType.Branch, "Combat", this);
+            name = "Fire";
+
+            PatrolFsm patrolFsm = new PatrolFsm(owner, this);
+            combatFsm = new MovementCombatFsm(owner, this);
             AddSubStates(patrolFsm, combatFsm);
-            current = subStates["Patrol"];
+            current = patrolFsm;
         }
     }
 
     public class PatrolFsm : HFSMState<CombatRobotStateComponent>
     {
-        public PatrolFsm(CombatRobotStateComponent owner, HFSMStateType type, string name, HFSMState<CombatRobotStateComponent> parentState) : base(owner, type, name, parentState)
+        public PatrolFsm(CombatRobotStateComponent owner, HFSMState<CombatRobotStateComponent> parentState) : base(owner, parentState)
         {
-            MoveToPatrolPointState moveToPatrolPointState = new MoveToPatrolPointState(owner, HFSMStateType.Leaf, "MoveToPatrolPoint", this);
-            WaitState waitState = new WaitState(owner, HFSMStateType.Leaf, "Wait", this);
+            name = "Patrol";
+
+            MoveToPatrolPointState moveToPatrolPointState = new MoveToPatrolPointState(owner, this);
+            WaitState waitState = new WaitState(owner, this);
             AddSubStates(moveToPatrolPointState, waitState);
-            current = subStates["MoveToPatrolPoint"];
+            current = moveToPatrolPointState;
         }
     }
 
     public class MoveToPatrolPointState : HFSMState<CombatRobotStateComponent>
     {
-        public MoveToPatrolPointState(CombatRobotStateComponent owner, HFSMStateType type, string name, HFSMState<CombatRobotStateComponent> parentState) : base(owner, type, name, parentState)
+        public MoveToPatrolPointState(CombatRobotStateComponent owner, HFSMState<CombatRobotStateComponent> parentState) : base(owner, parentState)
         {
+            name = "MoveToPatrolPoint";
         }
 
         protected override void Enter()
@@ -63,9 +68,9 @@ namespace Entities.AI.CombatRobot.States
     {
         private float timer;
 
-        public WaitState(CombatRobotStateComponent owner, HFSMStateType type, string name, HFSMState<CombatRobotStateComponent> parentState) : base(owner, type, name, parentState)
+        public WaitState(CombatRobotStateComponent owner, HFSMState<CombatRobotStateComponent> parentState) : base(owner, parentState)
         {
-
+            name = "Wait";
         }
 
         protected override void Enter()
@@ -84,13 +89,15 @@ namespace Entities.AI.CombatRobot.States
 
     public class MovementCombatFsm : HFSMState<CombatRobotStateComponent>
     {
-        public MovementCombatFsm(CombatRobotStateComponent owner, HFSMStateType type, string name, HFSMState<CombatRobotStateComponent> parentState)
-            : base(owner, type, name, parentState)
+        public MovementCombatFsm(CombatRobotStateComponent owner, HFSMState<CombatRobotStateComponent> parentState)
+            : base(owner, parentState)
         {
-            IdleState idleState = new IdleState(owner, HFSMStateType.Leaf, "Idle", this);
-            EvadeState evadeState = new EvadeState(owner, HFSMStateType.Leaf, "Evade", this);
+            name = "Combat";
+
+            IdleState idleState = new IdleState(owner, this);
+            EvadeState evadeState = new EvadeState(owner, this);
             AddSubStates(idleState, evadeState);
-            current = subStates["Idle"];
+            current = idleState;
         }
 
         protected override void Execute(float deltaTime)
@@ -103,7 +110,10 @@ namespace Entities.AI.CombatRobot.States
 
     public class IdleState : HFSMState<CombatRobotStateComponent>
     {
-        public IdleState(CombatRobotStateComponent owner, HFSMStateType type, string name, HFSMState<CombatRobotStateComponent> parentState) : base(owner, type, name, parentState) { }
+        public IdleState(CombatRobotStateComponent owner, HFSMState<CombatRobotStateComponent> parentState) : base(owner, parentState)
+        {
+            name = "Idle";
+        }
 
         protected override void Execute(float deltaTime)
         {
@@ -115,7 +125,10 @@ namespace Entities.AI.CombatRobot.States
 
     public class EvadeState : HFSMState<CombatRobotStateComponent>
     {
-        public EvadeState(CombatRobotStateComponent owner, HFSMStateType type, string name, HFSMState<CombatRobotStateComponent> parentState) : base(owner, type, name, parentState) { }
+        public EvadeState(CombatRobotStateComponent owner, HFSMState<CombatRobotStateComponent> parentState) : base(owner, parentState)
+        {
+            name = "Evade";
+        }
 
         protected override void Enter()
         {

@@ -5,25 +5,29 @@ namespace Entities.AI.Turret.States
 {
     public class TurretGunHfsm : HFSMState<TurretStateComponent>
     {
-        public TurretGunHfsm(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState)
-            : base(owner, type, name, parentState)
+        public TurretGunHfsm(TurretStateComponent owner, HFSMState<TurretStateComponent> parentState)
+            : base(owner, parentState)
         {
-            TurretTriggerFsm triggerFsm = new TurretTriggerFsm(owner, HFSMStateType.Branch, "Trigger", this);
-            TurretReloadState reloadState = new TurretReloadState(owner, HFSMStateType.Leaf, "Reload", this);
+            name = "Gun";
+
+            TurretTriggerFsm triggerFsm = new TurretTriggerFsm(owner, this);
+            TurretReloadState reloadState = new TurretReloadState(owner, this);
             AddSubStates(triggerFsm, reloadState);
-            current = subStates["Trigger"];
+            current = triggerFsm;
         }
     }
 
     public class TurretTriggerFsm : HFSMState<TurretStateComponent>
     {
-        public TurretTriggerFsm(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState)
-            : base(owner, type, name, parentState)
+        public TurretTriggerFsm(TurretStateComponent owner, HFSMState<TurretStateComponent> parentState)
+            : base(owner, parentState)
         {
-            TurretTriggerIdleState idleState = new TurretTriggerIdleState(owner, HFSMStateType.Leaf, "Idle", this);
-            TurretFireState fireState = new TurretFireState(owner, HFSMStateType.Leaf, "Fire", this);
+            name = "Trigger";
+
+            TurretTriggerIdleState idleState = new TurretTriggerIdleState(owner, this);
+            TurretFireState fireState = new TurretFireState(owner, this);
             AddSubStates(idleState, fireState);
-            current = subStates["Idle"];
+            current = idleState;
         }
 
         protected override void Exit()
@@ -35,7 +39,10 @@ namespace Entities.AI.Turret.States
 
     public class TurretTriggerIdleState : HFSMState<TurretStateComponent>
     {
-        public TurretTriggerIdleState(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState) : base(owner, type, name, parentState) { }
+        public TurretTriggerIdleState(TurretStateComponent owner, HFSMState<TurretStateComponent> parentState) : base(owner, parentState)
+        {
+            name = "Idle";
+        }
 
         protected override void Execute(float deltaTime)
         {
@@ -48,7 +55,10 @@ namespace Entities.AI.Turret.States
     // TODO: Currently the turret only works with AUTO mode guns
     public class TurretFireState : HFSMState<TurretStateComponent>
     {
-        public TurretFireState(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState) : base(owner, type, name, parentState) { }
+        public TurretFireState(TurretStateComponent owner, HFSMState<TurretStateComponent> parentState) : base(owner, parentState)
+        {
+            name = "Fire";
+        }
 
         protected override void Enter()
         {
@@ -73,7 +83,10 @@ namespace Entities.AI.Turret.States
 
     public class TurretReloadState : HFSMState<TurretStateComponent>
     {
-        public TurretReloadState(TurretStateComponent owner, HFSMStateType type, string name, HFSMState<TurretStateComponent> parentState) : base(owner, type, name, parentState) { }
+        public TurretReloadState(TurretStateComponent owner, HFSMState<TurretStateComponent> parentState) : base(owner, parentState)
+        {
+            name = "Reload";
+        }
 
         protected override void Enter()
         {

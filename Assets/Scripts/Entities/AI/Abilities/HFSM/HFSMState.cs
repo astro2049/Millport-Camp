@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Entities.Abilities.State;
-using UnityEngine;
 
 namespace Entities.AI.Abilities.HFSM
 {
@@ -27,8 +26,8 @@ namespace Entities.AI.Abilities.HFSM
         /*
          * 0. Common fields
          */
-        public readonly string name; // Name of the state, e.g. "Idle", "Fire", "Gun"
-        private readonly bool isBranch;
+        public string name; // Name of the state, e.g. "Idle", "Fire", "Gun"
+        private bool isBranch = false;
         protected readonly T owner; // Owner game object's state component, manages context
         protected readonly HFSMState<T> parentState; // Parent branch state i.e. state machine
 
@@ -36,20 +35,21 @@ namespace Entities.AI.Abilities.HFSM
          * 1. State Machine fields
          */
         public HFSMState<T> current;
-        protected readonly Dictionary<string, HFSMState<T>> subStates = new Dictionary<string, HFSMState<T>>();
+        private readonly Dictionary<string, HFSMState<T>> subStates = new Dictionary<string, HFSMState<T>>();
 
         protected void AddSubStates(params HFSMState<T>[] states)
         {
             foreach (HFSMState<T> state in states) {
                 subStates.Add(state.name, state);
             }
+            if (subStates.Count > 0) {
+                isBranch = true;
+            }
         }
 
-        protected HFSMState(T owner, HFSMStateType type, string name, HFSMState<T> parentState)
+        protected HFSMState(T owner, HFSMState<T> parentState)
         {
             this.owner = owner;
-            isBranch = type == HFSMStateType.Branch;
-            this.name = name;
             this.parentState = parentState;
         }
 
@@ -97,6 +97,9 @@ namespace Entities.AI.Abilities.HFSM
             current.EnterBranch();
         }
 
+        /*
+         * 4. Debug methods
+         */
         public string GetActiveBranch(List<string> stateNames)
         {
             stateNames.Add(name);

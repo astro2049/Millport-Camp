@@ -5,25 +5,29 @@ namespace Entities.AI.CombatRobot.States
 {
     public class GunHfsm : HFSMState<CombatRobotStateComponent>
     {
-        public GunHfsm(CombatRobotStateComponent owner, HFSMStateType type, string name, HFSMState<CombatRobotStateComponent> parentState)
-            : base(owner, type, name, parentState)
+        public GunHfsm(CombatRobotStateComponent owner, HFSMState<CombatRobotStateComponent> parentState)
+            : base(owner, parentState)
         {
-            TriggerFsm triggerFsm = new TriggerFsm(owner, HFSMStateType.Branch, "Trigger", this);
-            ReloadState reloadState = new ReloadState(owner, HFSMStateType.Leaf, "Reload", this);
+            name = "Gun";
+
+            TriggerFsm triggerFsm = new TriggerFsm(owner, this);
+            ReloadState reloadState = new ReloadState(owner, this);
             AddSubStates(triggerFsm, reloadState);
-            current = subStates["Trigger"];
+            current = triggerFsm;
         }
     }
 
     public class TriggerFsm : HFSMState<CombatRobotStateComponent>
     {
-        public TriggerFsm(CombatRobotStateComponent owner, HFSMStateType type, string name, HFSMState<CombatRobotStateComponent> parentState)
-            : base(owner, type, name, parentState)
+        public TriggerFsm(CombatRobotStateComponent owner, HFSMState<CombatRobotStateComponent> parentState)
+            : base(owner, parentState)
         {
-            TriggerIdleState idleState = new TriggerIdleState(owner, HFSMStateType.Leaf, "Idle", this);
-            FireState fireState = new FireState(owner, HFSMStateType.Leaf, "Fire", this);
+            name = "Trigger";
+
+            TriggerIdleState idleState = new TriggerIdleState(owner, this);
+            FireState fireState = new FireState(owner, this);
             AddSubStates(idleState, fireState);
-            current = subStates["Idle"];
+            current = idleState;
         }
 
         protected override void Exit()
@@ -35,7 +39,10 @@ namespace Entities.AI.CombatRobot.States
 
     public class ReloadState : HFSMState<CombatRobotStateComponent>
     {
-        public ReloadState(CombatRobotStateComponent owner, HFSMStateType type, string name, HFSMState<CombatRobotStateComponent> parentState) : base(owner, type, name, parentState) { }
+        public ReloadState(CombatRobotStateComponent owner, HFSMState<CombatRobotStateComponent> parentState) : base(owner, parentState)
+        {
+            name = "Reload";
+        }
 
         protected override void Enter()
         {
@@ -45,7 +52,10 @@ namespace Entities.AI.CombatRobot.States
 
     public class TriggerIdleState : HFSMState<CombatRobotStateComponent>
     {
-        public TriggerIdleState(CombatRobotStateComponent owner, HFSMStateType type, string name, HFSMState<CombatRobotStateComponent> parentState) : base(owner, type, name, parentState) { }
+        public TriggerIdleState(CombatRobotStateComponent owner, HFSMState<CombatRobotStateComponent> parentState) : base(owner, parentState)
+        {
+            name = "Idle";
+        }
 
         protected override void Execute(float deltaTime)
         {
@@ -58,7 +68,10 @@ namespace Entities.AI.CombatRobot.States
     // TODO: Currently only works with AUTO mode guns
     public class FireState : HFSMState<CombatRobotStateComponent>
     {
-        public FireState(CombatRobotStateComponent owner, HFSMStateType type, string name, HFSMState<CombatRobotStateComponent> parentState) : base(owner, type, name, parentState) { }
+        public FireState(CombatRobotStateComponent owner, HFSMState<CombatRobotStateComponent> parentState) : base(owner, parentState)
+        {
+            name = "Fire";
+        }
 
         protected override void Enter()
         {
