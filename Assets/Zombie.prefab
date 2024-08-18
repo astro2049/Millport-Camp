@@ -382,9 +382,9 @@ MonoBehaviour:
   roamPointRadius: 10
   roamWaitTime: 2
   chaseSpeed: 4
-  attackDamage: 30
+  attackDamage: 24
   attackRange: 3
-  attackInterval: 0.5
+  attackInterval: 0.75
   navMeshAgent: {fileID: 0}
   damageDealerComponent: {fileID: 0}
   targetTrackerComponent: {fileID: 0}

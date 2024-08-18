@@ -323,7 +323,8 @@ namespace PCG
                     Vector2 offset = Random.insideUnitCircle * Random.Range(0f, WorldConfigurations.c_chunkSize / 4f);
                     NavMesh.SamplePosition(chunkCenter + new Vector3(offset.x, 0, offset.y) + new Vector3(offset.x, 0, offset.y), out NavMeshHit hit, navmeshPlacementSampleDistance, NavMesh.AllAreas);
                     if (hit.hit) {
-                        GameObject vehicle = Instantiate(vehiclePrefab, hit.position, Random.rotation, vehiclesParent);
+                        GameObject vehicle = Instantiate(vehiclePrefab, hit.position, Quaternion.identity, vehiclesParent);
+                        vehicle.transform.Rotate(Vector3.up, Random.Range(0, 180));
                         vehicle.GetComponent<MeshRenderer>().material = vehicleMaterials[Random.Range(0, vehicleMaterials.Length)];
                     }
                 }
