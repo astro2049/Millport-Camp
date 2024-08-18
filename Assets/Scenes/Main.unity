@@ -744,7 +744,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: ee5d59fcc8497a641905c26644c20880, type: 2}
   - {fileID: 2100000, guid: 912f300affe60c543ac3ac40ef980902, type: 2}
   - {fileID: 2100000, guid: bb694a94be4a3c64ca9ef44c62415782, type: 2}
-  vehicleChunkOccurence: 0.5
+  vehicleChunkOccurence: 0.05
   playerPrefab: {fileID: 6239351062438321205, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
   zombiePrefab: {fileID: 4518514029979985939, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
   zombieChunkOccurence: 0.5
@@ -1154,15 +1154,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiManager: {fileID: 595848169}
   quests:
-  - name: Research Station 1
+  - name: '[1/3] Hideout'
     description: Go to the research station in the woodland biome.
     baseBiome: 5
-    basePrefab: {fileID: 8153363081382670942, guid: ca6cb4757026f764cb58dccbd49d9123, type: 3}
+    basePrefab: {fileID: 162356, guid: 56c812ba01809a649a7f0667b2f02e0f, type: 3}
     destinationGo: {fileID: 0}
     questFinished:
       m_PersistentCalls:
         m_Calls: []
-  - name: Research Station 2
+  - name: '[2/3] Radar Station'
     description: Go to the research station in the taiga biome.
     baseBiome: 3
     basePrefab: {fileID: 3166029889146373948, guid: d1ab5cece426b234693e4cd5235226f1, type: 3}
@@ -1170,10 +1170,10 @@ MonoBehaviour:
     questFinished:
       m_PersistentCalls:
         m_Calls: []
-  - name: Research Station 3
+  - name: '[3/3]  The Old Shop'
     description: Go to the research station in the snow biome.
     baseBiome: 1
-    basePrefab: {fileID: 9114555402583503517, guid: 06495a71460b0ba41a3bf455616d92e7, type: 3}
+    basePrefab: {fileID: 109168, guid: ade248290e90bae40b4a349101c343c8, type: 3}
     destinationGo: {fileID: 0}
     questFinished:
       m_PersistentCalls:

@@ -255,6 +255,7 @@ namespace PCG
 
         private void PlaceBases()
         {
+            int i = 0;
             foreach (Quest quest in questManager.quests) {
                 List<Chunk> chunks = biomes[quest.baseBiome.GetHashCode()].chunks;
                 Chunk chunk = chunks[chunks.Count / 2];
@@ -271,8 +272,17 @@ namespace PCG
 
                 // Place base in the center
                 GameObject researchBase = Instantiate(quest.basePrefab, chunkCenter, Quaternion.identity, basesParent);
+                if (i == 1) {
+                    researchBase.transform.rotation = Quaternion.Euler(0, 120, 0);
+                } else if (i == 2) {
+                    researchBase.transform.Translate(new Vector3(-2.5f, 0, -2.5f));
+                    researchBase.transform.rotation = Quaternion.Euler(0, 180, 0);
+                }
+
                 // Assign this research base to the corresponding quest
                 quest.AssignDestinationGo(researchBase);
+
+                i++;
             }
         }
 
@@ -294,6 +304,7 @@ namespace PCG
                     NavMesh.SamplePosition(sampleCenter + new Vector3(offset.x, 0, offset.y), out NavMeshHit hit, navmeshPlacementSampleDistance, NavMesh.AllAreas);
                     if (hit.hit) {
                         GameObject combatRobot = Instantiate(combatRobotPrefab, hit.position, Quaternion.identity, combatRobotsParent);
+                        combatRobot.transform.Rotate(Vector3.up, Random.Range(0, 180));
                     }
                 }
             }
@@ -408,6 +419,7 @@ namespace PCG
                         NavMesh.SamplePosition(sampleLocation, out NavMeshHit hit, navmeshPlacementSampleDistance, NavMesh.AllAreas);
                         if (hit.hit) {
                             GameObject zombie = Instantiate(zombiePrefab, hit.position, Quaternion.identity, zombiesParent);
+                            zombie.transform.Rotate(Vector3.up, Random.Range(0, 180));
                         }
                     }
                 }

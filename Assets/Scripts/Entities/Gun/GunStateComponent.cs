@@ -200,7 +200,7 @@ namespace Entities.Gun
         public IEnumerator StartReloading()
         {
             // SFX
-            audioSource.PlayOneShot(releaseMagSound, 0.4f);
+            audioSource.PlayOneShot(releaseMagSound, 0.35f);
             yield return new WaitForSeconds(stats.reloadTime);
             // TODO: Use this. However, need to trim down the audio length first...
             // yield return new WaitForSeconds(chargingBoltSoundPlayTimestamp);
