@@ -307,7 +307,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3955899066424185597, guid: 56dff96b14dd74944bdd844a916a9701, type: 3}
       propertyPath: m_Name
-      value: NPC_Activation_Collider
+      value: Actor_Activation_Collider
       objectReference: {fileID: 0}
     - target: {fileID: 6000838646726715099, guid: 56dff96b14dd74944bdd844a916a9701, type: 3}
       propertyPath: m_Radius
@@ -730,7 +730,7 @@ MonoBehaviour:
   combatRobotPrefab: {fileID: 4886593432694679711, guid: 3ad495d8e73834841861a3adcc4b65c6, type: 3}
   combatRobotSectorMinCount: 8
   combatRobotSectorMaxCount: 15
-  vehiclePrefab: {fileID: 261278061893848929, guid: 2179bee3a6ef28b438ac36351c7a7304, type: 3}
+  vehiclePrefab: {fileID: 2279717203299683378, guid: 2179bee3a6ef28b438ac36351c7a7304, type: 3}
   vehicleMaterials:
   - {fileID: 2100000, guid: 62e25ef75a2216f418d06453c9ad15cb, type: 2}
   - {fileID: 2100000, guid: a8e32d2cd442e564aa46c99f0ae7c0c8, type: 2}
@@ -744,7 +744,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: ee5d59fcc8497a641905c26644c20880, type: 2}
   - {fileID: 2100000, guid: 912f300affe60c543ac3ac40ef980902, type: 2}
   - {fileID: 2100000, guid: bb694a94be4a3c64ca9ef44c62415782, type: 2}
-  vehicleChunkOccurence: 0.05
+  vehicleChunkOccurence: 0.5
   playerPrefab: {fileID: 6239351062438321205, guid: 983d9fc73489e8a4caff07973dc20046, type: 3}
   zombiePrefab: {fileID: 4518514029979985939, guid: 4dac8c2fba5ba994ebd5a1f3048436e2, type: 3}
   zombieChunkOccurence: 0.5
@@ -1018,7 +1018,7 @@ MonoBehaviour:
   levelGenerator: {fileID: 313731509}
   playerMode: 0
   questLocationIndicatorComponent: {fileID: 1963124303}
-  npcActivationCollider: {fileID: 159720079}
+  actorActivationCollider: {fileID: 159720079}
 --- !u!114 &481963319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3873,7 +3873,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 2179bee3a6ef28b438ac36351c7a7304, type: 3}
 --- !u!4 &3089303584156569742 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 220133789957247056, guid: 2179bee3a6ef28b438ac36351c7a7304, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3547471505113345977, guid: 2179bee3a6ef28b438ac36351c7a7304, type: 3}
   m_PrefabInstance: {fileID: 3089303584156569741}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6401855864992513659

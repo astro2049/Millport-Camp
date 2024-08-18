@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace Entities.Abilities.NPCActivationDistance
+namespace Entities.Abilities.ActorActivationDistance
 {
-    public class NPCActivatorComponent : MonoBehaviour
+    public class ActivateeComponent : MonoBehaviour
     {
         [SerializeField] private GameObject pawn;
 

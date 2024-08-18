@@ -1,12 +1,12 @@
-using System.Collections;
 using Cinemachine;
+using Entities.Abilities.ActorActivationDistance;
 using Entities.Abilities.ClearingDistance;
 using Entities.Abilities.Input;
 using Entities.Abilities.Observer;
 using Entities.Player;
-using Gameplay;
 using Gameplay.Quests;
 using PCG;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -20,6 +20,12 @@ namespace Managers.GameManager
         Inventory = 1,
         PauseMenu = 2,
         Map = 3
+    }
+
+    public enum ActorType
+    {
+        Player = 0,
+        Vehicle = 1
     }
 
     public class GameManager : MonoBehaviour, IObserver
@@ -47,43 +53,7 @@ namespace Managers.GameManager
         [SerializeField] private QuestLocationIndicatorComponent questLocationIndicatorComponent;
 
         [Header("Misc")]
-        [SerializeField] private GameObject npcActivationCollider;
-
-        private void SwitchControlActor(GameObject actor)
-        {
-            SubjectComponent subject;
-
-            if (currentActor) {
-                currentActor.tag = "Untagged";
-                currentActor.GetComponent<InputComponent>().enabled = false;
-                subject = currentActor.GetComponent<SubjectComponent>();
-                subject.RemoveObserver(this, EventType.Dead);
-                subject.RemoveObserver(uiManager, EventType.Dead);
-                subject.NotifyObservers(new MCEventWEntity(EventType.NotControlledByPlayer, currentActor));
-
-                // Remove AudioListener component
-                Destroy(currentActor.GetComponent<AudioListener>());
-            }
-
-            // Assign current actor to currentControllingActor
-            currentActor = actor;
-            currentActor.tag = "Player";
-            // Switch inputs, and subscribe to Dead event
-            currentActor.GetComponent<InputComponent>().enabled = true;
-            subject = currentActor.GetComponent<SubjectComponent>();
-            subject.AddObserver(this, EventType.Dead);
-            subject.AddObserver(uiManager, EventType.Dead);
-
-            // Add AudioListener component
-            currentActor.AddComponent<AudioListener>();
-
-            // Attach NPC activation collider
-            npcActivationCollider.transform.parent = currentActor.transform;
-            npcActivationCollider.transform.localPosition = Vector3.zero;
-
-            // Set actor for destinationIndicatorComponent
-            questLocationIndicatorComponent.SetActor(currentActor);
-        }
+        [SerializeField] private GameObject actorActivationCollider;
 
         private void Awake()
         {
@@ -93,6 +63,20 @@ namespace Managers.GameManager
             levelGenerator.levelGenerated.AddListener(SetPlayer);
             // Generate the world
             levelGenerator.Generate();
+
+            SetCursor(combatCursorTexture);
+        }
+
+        // https://docs.unity3d.com/2022.3/Documentation/ScriptReference/Cursor.SetCursor.html
+        private void SetCursor(Texture2D texture)
+        {
+            if (texture == combatCursorTexture) {
+                // Crosshair center
+                Cursor.SetCursor(texture, new Vector2(texture.width / 2f, texture.height / 2f), CursorMode.Auto);
+            } else if (texture == UICursorTexture) {
+                // Mouse tip on top left
+                Cursor.SetCursor(texture, Vector2.zero, CursorMode.Auto);
+            }
         }
 
         private void SetPlayer(GameObject go)
@@ -124,28 +108,40 @@ namespace Managers.GameManager
             inventoryManager.SetPlayerInventoryComponent(player.GetComponent<PlayerInventoryComponent>());
         }
 
-        // Start is called before the first frame update
-        private void Start()
+        private void SwitchControlActor(GameObject actor)
         {
-            SetCursor(combatCursorTexture);
-        }
+            SubjectComponent subject;
 
-        // https://docs.unity3d.com/2022.3/Documentation/ScriptReference/Cursor.SetCursor.html
-        private void SetCursor(Texture2D texture)
-        {
-            if (texture == combatCursorTexture) {
-                // Crosshair center
-                Cursor.SetCursor(texture, new Vector2(texture.width / 2f, texture.height / 2f), CursorMode.Auto);
-            } else if (texture == UICursorTexture) {
-                // Mouse tip on top left
-                Cursor.SetCursor(texture, Vector2.zero, CursorMode.Auto);
+            if (currentActor) {
+                currentActor.tag = "Untagged";
+                currentActor.GetComponent<InputComponent>().enabled = false;
+                subject = currentActor.GetComponent<SubjectComponent>();
+                subject.RemoveObserver(this, EventType.Dead);
+                subject.RemoveObserver(uiManager, EventType.Dead);
+                subject.NotifyObservers(new MCEventWEntity(EventType.NotControlledByPlayer, currentActor));
+
+                // Remove AudioListener component
+                Destroy(currentActor.GetComponent<AudioListener>());
             }
-        }
 
-        // Update is called once per frame
-        private void Update()
-        {
+            // Assign current actor to currentControllingActor
+            currentActor = actor;
+            currentActor.tag = "Player";
+            // Switch inputs, and subscribe to Dead event
+            currentActor.GetComponent<InputComponent>().enabled = true;
+            subject = currentActor.GetComponent<SubjectComponent>();
+            subject.AddObserver(this, EventType.Dead);
+            subject.AddObserver(uiManager, EventType.Dead);
 
+            // Add AudioListener component
+            currentActor.AddComponent<AudioListener>();
+
+            // Attach actor activation collider
+            actorActivationCollider.transform.parent = currentActor.transform;
+            actorActivationCollider.transform.localPosition = Vector3.zero;
+
+            // Set actor for destinationIndicatorComponent
+            questLocationIndicatorComponent.SetActor(currentActor);
         }
 
         // Handle events

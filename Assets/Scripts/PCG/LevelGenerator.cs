@@ -325,7 +325,7 @@ namespace PCG
                     if (hit.hit) {
                         GameObject vehicle = Instantiate(vehiclePrefab, hit.position, Quaternion.identity, vehiclesParent);
                         vehicle.transform.Rotate(Vector3.up, Random.Range(0, 180));
-                        vehicle.GetComponent<MeshRenderer>().material = vehicleMaterials[Random.Range(0, vehicleMaterials.Length)];
+                        vehicle.transform.Find("Actor").GetComponent<MeshRenderer>().material = vehicleMaterials[Random.Range(0, vehicleMaterials.Length)];
                     }
                 }
             }
