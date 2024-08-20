@@ -20,6 +20,11 @@ namespace Entities.Abilities.Buildable
 
         private void OnTriggerEnter(Collider other)
         {
+            // Ignores the clearing distance collider on the main camera
+            if (other.CompareTag("MainCamera")) {
+                return;
+            }
+
             overlappingGameObjectsCount++;
             if (overlappingGameObjectsCount == 1) {
                 buildableComponent.SetIsOkToPlace(false);
@@ -28,6 +33,11 @@ namespace Entities.Abilities.Buildable
 
         private void OnTriggerExit(Collider other)
         {
+            // Ignores the clearing distance collider on the main camera
+            if (other.CompareTag("MainCamera")) {
+                return;
+            }
+
             overlappingGameObjectsCount--;
             if (overlappingGameObjectsCount == 0) {
                 buildableComponent.SetIsOkToPlace(true);
