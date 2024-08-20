@@ -1,12 +1,10 @@
 using Cinemachine;
-using Entities.Abilities.ActorActivationDistance;
 using Entities.Abilities.ClearingDistance;
 using Entities.Abilities.Input;
 using Entities.Abilities.Observer;
 using Entities.Player;
 using Gameplay.Quests;
 using PCG;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;

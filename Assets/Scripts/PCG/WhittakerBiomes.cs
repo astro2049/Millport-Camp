@@ -69,7 +69,7 @@ namespace PCG
         }
 
         // Randomize perlin noises sample region
-        public void RandomizePerlinNoisesOffsets()
+        private void RandomizePerlinNoisesOffsets()
         {
             heightPerlinNoiseOffset = Random.Range(0f, 10f);
             humidityPerlinNoiseOffset = Random.Range(0f, 10f);

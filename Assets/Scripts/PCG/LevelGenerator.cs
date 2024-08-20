@@ -32,13 +32,13 @@ namespace PCG
         private MinimapGenerator minimapGenerator;
         private NavMeshSurface navMeshSurface;
 
-        private Transform environmentParent;
-        private Transform floorsParent;
-        private Transform foliageParent;
-        private Transform basesParent;
-        private Transform zombiesParent;
-        private Transform combatRobotsParent;
-        private Transform vehiclesParent;
+        [SerializeField] private Transform invisibleWallsParent;
+        [SerializeField] private Transform floorsParent;
+        [SerializeField] private Transform basesParent;
+        [SerializeField] private Transform foliageParent;
+        [SerializeField] private Transform combatRobotsParent;
+        [SerializeField] private Transform vehiclesParent;
+        [SerializeField] private Transform zombiesParent;
 
         [SerializeField] private GameObject floorPrefab;
         [SerializeField] private GameObject oceanWallCubePrefab;
@@ -100,40 +100,13 @@ namespace PCG
             ocean.GetComponent<MeshRenderer>().material.SetFloat("_RippleDensity", rippleDensity * WorldConfigurations.s_worldGridSize);
         }
 
+        /* Generate the game world */
         public void Generate()
         {
-            // Destroy previous world map
-            if (environmentParent) {
-                Destroy(environmentParent.gameObject);
-            }
-            environmentParent = new GameObject("Environment").transform;
-            environmentParent.parent = transform;
-            floorsParent = new GameObject("Floors").transform;
-            floorsParent.parent = environmentParent;
-            foliageParent = new GameObject("Foliage").transform;
-            foliageParent.parent = environmentParent;
-            basesParent = new GameObject("Bases").transform;
-            basesParent.parent = environmentParent;
-            zombiesParent = new GameObject("Zombies").transform;
-            zombiesParent.parent = transform;
-            combatRobotsParent = new GameObject("Combat Robots").transform;
-            combatRobotsParent.parent = transform;
-            vehiclesParent = new GameObject("Vehicles").transform;
-            vehiclesParent.parent = transform;
-
-            // Clear biomes cells
-            foreach (Biome biome in biomes) {
-                biome.chunks.Clear();
-            }
-
-            /* Generate the game world */
-            // Get a new random value for biomes generation perlin noises
-            whittakerBiomes.RandomizePerlinNoisesOffsets();
-
             // Generate the world map
             GenerateFloors();
-            PlacePlants();
             PlaceBases();
+            PlacePlants();
 
             // Wait for the current frame to finish. This is because there are Destroy() calls in Generate()
             StartCoroutine(LevelGenerationPart2());
@@ -175,7 +148,7 @@ namespace PCG
 
                     // Spawn a floor tile if it's not Ocean
                     if (biomeType == BiomeType.Ocean) {
-                        Instantiate(oceanWallCubePrefab, gridComponent.GetChunkCenterWorld(chunk), Quaternion.identity, environmentParent);
+                        Instantiate(oceanWallCubePrefab, gridComponent.GetChunkCenterWorld(chunk), Quaternion.identity, invisibleWallsParent);
                         continue;
                     }
                     GameObject floor = Instantiate(floorPrefab, gridComponent.GetChunkCenterWorld(chunk), Quaternion.identity, floorsParent);
@@ -184,10 +157,45 @@ namespace PCG
             }
         }
 
+        private void PlaceBases()
+        {
+            int i = 0;
+            foreach (Quest quest in questManager.quests) {
+                List<Chunk> chunks = biomes[quest.baseBiome.GetHashCode()].chunks;
+                Chunk chunk = chunks[chunks.Count / 2];
+                humanActivityChunks.Add(chunk);
+
+                // Get chunk center world coordinate
+                Vector3 chunkCenter = gridComponent.GetChunkCenterWorld(chunk);
+
+                // Place base in the center
+                GameObject researchBase = Instantiate(quest.basePrefab, chunkCenter, Quaternion.identity, basesParent);
+                if (i == 1) {
+                    researchBase.transform.rotation = Quaternion.Euler(0, 120, 0);
+                } else if (i == 2) {
+                    researchBase.transform.Translate(new Vector3(-2.5f, 0, -2.5f));
+                    researchBase.transform.rotation = Quaternion.Euler(0, 180, 0);
+                }
+
+                // Assign this research base to the corresponding quest
+                quest.AssignDestinationGo(researchBase);
+
+                i++;
+            }
+        }
+
         private void PlacePlants()
         {
             foreach (Biome biome in biomes) {
+                if (biome.biomeType == BiomeType.Ocean || biome.biomeType == BiomeType.Mountain) {
+                    continue;
+                }
+
                 foreach (Chunk chunk in biome.chunks) {
+                    if (humanActivityChunks.Contains(chunk)) {
+                        continue;
+                    }
+
                     // Precalculate chunk bottom left world coordinate
                     Vector3 chunkBottomLeft = gridComponent.GetChunkBottomLeftCornerWorld(chunk);
 
@@ -251,39 +259,6 @@ namespace PCG
             go.layer = LayerMask.NameToLayer("Structure");
             // Add component MaterialShifter
             go.AddComponent<MaterialShifterComponent>();
-        }
-
-        private void PlaceBases()
-        {
-            int i = 0;
-            foreach (Quest quest in questManager.quests) {
-                List<Chunk> chunks = biomes[quest.baseBiome.GetHashCode()].chunks;
-                Chunk chunk = chunks[chunks.Count / 2];
-                humanActivityChunks.Add(chunk);
-
-                // Get chunk center world coordinate
-                Vector3 chunkCenter = gridComponent.GetChunkCenterWorld(chunk);
-
-                // Clear all foliage in chunk
-                Collider[] hitColliders = Physics.OverlapBox(chunkCenter, Vector3.one * (WorldConfigurations.c_chunkSize / 2f), Quaternion.identity, LayerMask.GetMask("Structure"));
-                foreach (Collider hitCollider in hitColliders) {
-                    Destroy(hitCollider.gameObject);
-                }
-
-                // Place base in the center
-                GameObject researchBase = Instantiate(quest.basePrefab, chunkCenter, Quaternion.identity, basesParent);
-                if (i == 1) {
-                    researchBase.transform.rotation = Quaternion.Euler(0, 120, 0);
-                } else if (i == 2) {
-                    researchBase.transform.Translate(new Vector3(-2.5f, 0, -2.5f));
-                    researchBase.transform.rotation = Quaternion.Euler(0, 180, 0);
-                }
-
-                // Assign this research base to the corresponding quest
-                quest.AssignDestinationGo(researchBase);
-
-                i++;
-            }
         }
 
         private readonly float navmeshPlacementSampleDistance = 1f;
