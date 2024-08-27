@@ -262,7 +262,7 @@ namespace Entities.Player
 
         private void CreateTurret()
         {
-            turretToPlace = Instantiate(turretPrefab);
+            turretToPlace = Instantiate(turretPrefab, lookPoint, Quaternion.identity);
             turretToPlace.GetComponent<BuildableComponent>().EnterBuildMode();
             // Tell UI manager about the turret
             subjectComponent.NotifyObservers(new MCEventWEntity(EventType.PlacingStructure, turretToPlace));
@@ -290,7 +290,8 @@ namespace Entities.Player
             subjectComponent.NotifyObservers(new MCEvent(EventType.ExitedBuildMode));
 
             // Destroy unplaced turret
-            Destroy(turretToPlace);
+            // TODO: Destroying parent is hacky
+            Destroy(turretToPlace.transform.parent.gameObject);
 
             // Switch action maps
             combatActions.Enable();

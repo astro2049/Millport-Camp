@@ -13,7 +13,7 @@ namespace Entities.Abilities.ActorActivationDistance
             }
 
             // Activate NPC
-            other.transform.parent.GetComponent<ActivateeComponent>().Activate();
+            other.transform.parent.GetComponent<ActivateeSwitchComponent>().Activate();
         }
 
         private void OnTriggerExit(Collider other)
@@ -25,7 +25,7 @@ namespace Entities.Abilities.ActorActivationDistance
             }
 
             // Deactivate NPC
-            other.transform.parent.GetComponent<ActivateeComponent>().Deactivate();
+            other.transform.parent.GetComponent<ActivateeSwitchComponent>().Deactivate();
         }
     }
 }
