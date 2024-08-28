@@ -184,7 +184,7 @@ namespace Entities.Player
                 if (!playerStateComponent.equippedGun) {
                     return;
                 }
-                playerStateComponent.equippedGun.lookPoint = lookPoint;
+                playerStateComponent.equippedGun.transform.rotation = Quaternion.LookRotation(lookPoint - playerStateComponent.equippedGun.transform.position);
             }
         }
 

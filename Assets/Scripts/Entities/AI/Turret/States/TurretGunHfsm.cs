@@ -72,7 +72,7 @@ namespace Entities.AI.Turret.States
                 return;
             }
             // Set gun look point to target's chest center
-            owner.gunnerComponent.gun.lookPoint = owner.targetTrackerComponent.target.transform.position + new Vector3(0, 1, 0);
+            owner.gunnerComponent.gun.transform.rotation = Quaternion.LookRotation(owner.targetTrackerComponent.target.transform.position + new Vector3(0, 1, 0) - owner.gunnerComponent.gun.transform.position);
         }
 
         protected override void Exit()
