@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Zombie
   - CombatRobot
+  - Turret
   layers:
   - Default
   - TransparentFX

@@ -289,6 +289,10 @@ MonoBehaviour:
   includeLayers:
     serializedVersion: 2
     m_Bits: 2432
+  tags:
+  - Player
+  - Zombie
+  - Turret
 --- !u!114 &2274982516493084711
 MonoBehaviour:
   m_ObjectHideFlags: 0

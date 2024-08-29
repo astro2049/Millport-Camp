@@ -461,6 +461,10 @@ MonoBehaviour:
   includeLayers:
     serializedVersion: 2
     m_Bits: 2432
+  tags:
+  - Player
+  - CombatRobot
+  - Turret
 --- !u!114 &8078900993173044651
 MonoBehaviour:
   m_ObjectHideFlags: 0
