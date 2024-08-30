@@ -34,6 +34,12 @@ namespace Managers
 
         [Header("Debug")]
         [SerializeField] private TextMeshProUGUI FPSText;
+        [SerializeField] private TextMeshProUGUI versionText;
+
+        private void Awake()
+        {
+            versionText.text = Application.version;
+        }
 
         // Handle events
         // Player events are subscribed in GameManager.Awake(), and
