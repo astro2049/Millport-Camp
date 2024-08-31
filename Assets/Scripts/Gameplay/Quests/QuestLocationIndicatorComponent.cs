@@ -11,11 +11,17 @@ namespace Gameplay.Quests
         public void SetActor(GameObject actor)
         {
             actorTransform = actor.transform;
+            if (actorTransform && destinationTransform) {
+                enabled = true;
+            }
         }
 
         public void SetDestination(GameObject destination)
         {
             destinationTransform = destination.transform;
+            if (actorTransform && destinationTransform) {
+                enabled = true;
+            }
         }
 
         private void Update()

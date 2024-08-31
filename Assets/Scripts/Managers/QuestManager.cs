@@ -1,6 +1,6 @@
 ﻿using Gameplay.Quests;
+using Managers.GameManager;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Managers
 {
@@ -11,10 +11,8 @@ namespace Managers
         public Quest[] quests;
         private int currentQuestNumber = 0;
 
-        // Quest Destination Indicator
-        [FormerlySerializedAs("destinationIndicatorComponent")]
-        [Header("Destination Indicator")]
-        [SerializeField] private QuestLocationIndicatorComponent questLocationIndicatorComponent;
+        [Header("Gameplay")]
+        [SerializeField] private GameplayData gameplayData;
 
         public void StartStory()
         {
@@ -34,7 +32,7 @@ namespace Managers
             uiManager.UpdateQuest(quest);
 
             // Set destination for destinationIndicatorComponent
-            questLocationIndicatorComponent.SetDestination(quest.destinationGo);
+            gameplayData.questLocationIndicator.SetDestination(quest.destinationGo);
         }
 
         private void FinishCurrentQuest()

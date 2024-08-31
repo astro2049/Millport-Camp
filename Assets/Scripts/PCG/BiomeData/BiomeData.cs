@@ -17,7 +17,7 @@ namespace PCG.BiomeData
         public GameObject[] prefabs;
     }
 
-    [CreateAssetMenu(fileName = "BiomeData", menuName = "Scriptable Objects/BiomeData", order = 2)]
+    [CreateAssetMenu(fileName = "Biome Data", menuName = "Scriptable Objects/Biome Data", order = 2)]
     public class BiomeData : ScriptableObject
     {
         public Material floorMaterial;

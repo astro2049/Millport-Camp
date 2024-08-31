@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Entities.Gun
 {
-    [CreateAssetMenu(fileName = "GunData", menuName = "Scriptable Objects/GunData", order = 1)]
+    [CreateAssetMenu(fileName = "Gun Data", menuName = "Scriptable Objects/Gun Data", order = 1)]
     public class GunData : ScriptableObject
     {
         public new string name;

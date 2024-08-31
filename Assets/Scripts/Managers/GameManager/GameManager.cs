@@ -2,6 +2,7 @@ using Cinemachine;
 using Entities.Abilities.ClearingDistance;
 using Entities.Abilities.Input;
 using Entities.Abilities.Observer;
+using Entities.Ocean;
 using Entities.Player;
 using Gameplay.Quests;
 using PCG;
@@ -32,8 +33,12 @@ namespace Managers.GameManager
         [SerializeField] private Texture2D combatCursorTexture;
         [SerializeField] private Texture2D UICursorTexture;
 
+        [Header("Gameplay Data")]
+        [SerializeField] private GameplayData gameplayData;
+        [SerializeField] private GameObject playerPrefab;
+        [SerializeField] private QuestLocationIndicatorComponent questLocationIndicator;
+
         [Header("Gameplay")]
-        [SerializeField] private GameObject player;
         [SerializeField] private GameObject currentActor;
         [SerializeField] private CinemachineVirtualCamera playerCamera;
         [SerializeField] private CinemachineVirtualCamera vehicleCamera;
@@ -46,47 +51,51 @@ namespace Managers.GameManager
 
         [HideInInspector] public PlayerMode playerMode = PlayerMode.Combat;
 
-        // Quest Destination Indicator
-        [Header("Destination Indicator")]
-        [SerializeField] private QuestLocationIndicatorComponent questLocationIndicatorComponent;
-
         [Header("Misc")]
         [SerializeField] private GameObject actorActivationCollider;
+
+        [Header("PCG")]
+        [SerializeField] private bool usePCGLevel = true;
+
+        [Header("Scene")]
+        [SerializeField] private GameObject testingGround;
+        [SerializeField] private OceanComponent ocean;
 
         private void Awake()
         {
             // Set world time flowing speed to normal (for reloading level)
             Time.timeScale = 1f;
 
-            levelGenerator.levelGenerated.AddListener(SetPlayer);
+            InitializeGameplayData();
+
             // Generate the world
-            levelGenerator.Generate();
+            if (usePCGLevel) {
+                testingGround.SetActive(false);
+                testingGround.transform.position = new Vector3(0, -100, 0);
+                levelGenerator.Generate();
+            } else {
+                ocean.Resize(ocean.transform.localScale.x * 10f);
+            }
 
             SetCursor(combatCursorTexture);
         }
 
-        // https://docs.unity3d.com/2022.3/Documentation/ScriptReference/Cursor.SetCursor.html
-        private void SetCursor(Texture2D texture)
+        private void InitializeGameplayData()
         {
-            if (texture == combatCursorTexture) {
-                // Crosshair center
-                Cursor.SetCursor(texture, new Vector2(texture.width / 2f, texture.height / 2f), CursorMode.Auto);
-            } else if (texture == UICursorTexture) {
-                // Mouse tip on top left
-                Cursor.SetCursor(texture, Vector2.zero, CursorMode.Auto);
-            }
+            gameplayData.questLocationIndicator = questLocationIndicator;
+            SetPlayer(Instantiate(playerPrefab));
         }
 
-        private void SetPlayer(GameObject go)
+        private void SetPlayer(GameObject aPlayer)
         {
-            // Spawn player and focus camera
-            player = go;
-            playerCamera.Follow = player.transform;
-            SwitchControlActor(player);
-            questLocationIndicatorComponent.enabled = true;
+            gameplayData.player = aPlayer;
+
+            // Focus camera, switch input, enable quest location indicator
+            playerCamera.Follow = aPlayer.transform;
+            SwitchControlActor(aPlayer);
 
             // Subscribe self and UI manager to player events
-            SubjectComponent playerSubject = player.GetComponent<SubjectComponent>();
+            SubjectComponent playerSubject = aPlayer.GetComponent<SubjectComponent>();
             playerSubject.AddObserver(this,
                 EventType.WeaponChanged,
                 EventType.EnteredVehicle,
@@ -103,7 +112,19 @@ namespace Managers.GameManager
             );
 
             // TODO: hacky
-            inventoryManager.SetPlayerInventoryComponent(player.GetComponent<PlayerInventoryComponent>());
+            inventoryManager.playerInventoryComponent = aPlayer.GetComponent<PlayerInventoryComponent>();
+        }
+
+        // https://docs.unity3d.com/2022.3/Documentation/ScriptReference/Cursor.SetCursor.html
+        private void SetCursor(Texture2D texture)
+        {
+            if (texture == combatCursorTexture) {
+                // Crosshair center
+                Cursor.SetCursor(texture, new Vector2(texture.width / 2f, texture.height / 2f), CursorMode.Auto);
+            } else if (texture == UICursorTexture) {
+                // Mouse tip on top left
+                Cursor.SetCursor(texture, Vector2.zero, CursorMode.Auto);
+            }
         }
 
         private void SwitchControlActor(GameObject actor)
@@ -139,7 +160,7 @@ namespace Managers.GameManager
             actorActivationCollider.transform.localPosition = Vector3.zero;
 
             // Set actor for destinationIndicatorComponent
-            questLocationIndicatorComponent.SetActor(currentActor);
+            gameplayData.questLocationIndicator.SetActor(currentActor);
         }
 
         // Handle events
@@ -189,9 +210,9 @@ namespace Managers.GameManager
             vehicleCamera.Priority = 20;
 
             // Teleport player to sky
-            TeleportActor(player, new Vector3(0, 100, 0));
+            TeleportActor(gameplayData.player, new Vector3(0, 100, 0));
             // Let player float
-            player.GetComponent<Rigidbody>().useGravity = false;
+            gameplayData.player.GetComponent<Rigidbody>().useGravity = false;
 
             // Configure clearing distance collider according to vehicle camera
             Camera.main.GetComponent<ClearingDistanceColliderComponent>().ConfigureCollider(vehicleCamera.m_Lens.OrthographicSize);
@@ -208,17 +229,17 @@ namespace Managers.GameManager
         private void ExitVehicle(GameObject vehicle)
         {
             // Switch Inputs
-            SwitchControlActor(player);
+            SwitchControlActor(gameplayData.player);
 
             // Switch camera
-            playerCamera.Follow = player.transform;
+            playerCamera.Follow = gameplayData.player.transform;
             playerCamera.Priority = 20;
             vehicleCamera.Priority = 10;
 
             // Teleport player next to door
-            TeleportActor(player, vehicle.transform.Find("Drop Off Point").transform.position);
+            TeleportActor(gameplayData.player, vehicle.transform.Find("Drop Off Point").transform.position);
             // Capture player with gravity again
-            player.GetComponent<Rigidbody>().useGravity = true;
+            gameplayData.player.GetComponent<Rigidbody>().useGravity = true;
 
             // Configure clearing distance collider according to player camera
             Camera.main.GetComponent<ClearingDistanceColliderComponent>().ConfigureCollider(playerCamera.m_Lens.OrthographicSize);

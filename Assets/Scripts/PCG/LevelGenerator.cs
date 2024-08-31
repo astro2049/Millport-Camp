@@ -2,15 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Entities.Abilities.ClearingDistance;
+using Entities.Ocean;
 using Gameplay;
 using Gameplay.Quests;
 using Managers;
+using Managers.GameManager;
 using PCG.BiomeData;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions;
-using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
 namespace PCG
@@ -28,17 +29,20 @@ namespace PCG
         private const int c_chunkSubGridSize = WorldConfigurations.c_chunkSize;
         private const int c_chunkSubCellSize = 1; // m, Unity unit
 
-        private GridComponent gridComponent;
-        private MinimapGenerator minimapGenerator;
-        private NavMeshSurface navMeshSurface;
+        [SerializeField] private GridComponent gridComponent;
+        [SerializeField] private MinimapGenerator minimapGenerator;
+        [SerializeField] private NavMeshSurface navMeshSurface;
 
-        [SerializeField] private Transform invisibleWallsParent;
+        [Header("Environment")]
+        [SerializeField] private Transform levelParent;
         [SerializeField] private Transform floorsParent;
         [SerializeField] private Transform basesParent;
         [SerializeField] private Transform foliageParent;
         [SerializeField] private Transform combatRobotsParent;
         [SerializeField] private Transform vehiclesParent;
         [SerializeField] private Transform zombiesParent;
+        [SerializeField] private Transform invisibleWallsParent;
+        [SerializeField] private OceanComponent ocean;
 
         [SerializeField] private GameObject floorPrefab;
         [SerializeField] private GameObject oceanWallCubePrefab;
@@ -46,8 +50,8 @@ namespace PCG
         [SerializeField] private WhittakerBiomes whittakerBiomes = new WhittakerBiomes();
 
         [Header("Gameplay")]
-        [SerializeField] private GameObject aimPlanePrefab;
-        [SerializeField] private GameObject ocean;
+        [SerializeField] private GameObject aimPlane;
+        [SerializeField] private GameplayData gameplayData;
 
         // Quests
         [SerializeField] private QuestManager questManager;
@@ -58,24 +62,21 @@ namespace PCG
         // Placement
         private readonly HashSet<Chunk> humanActivityChunks = new HashSet<Chunk>();
 
-        [HideInInspector] public UnityEvent<GameObject> levelGenerated = new UnityEvent<GameObject>();
-
-        private void Awake()
+        // TODO: hacky order...
+        private void Initialize()
         {
             // Get components
-            gridComponent = GetComponent<GridComponent>();
             minimapGenerator = GetComponent<MinimapGenerator>();
-            navMeshSurface = GetComponent<NavMeshSurface>();
+            gridComponent.Initialize();
 
             // Initialize biomes parameters
             whittakerBiomes.initializeParameters(WorldConfigurations.s_worldGridSize);
 
             // Adjust floor cell scale according to grid cell size, because prefab is plane
             floorPrefab.transform.localScale = new Vector3(WorldConfigurations.c_chunkSize / 10f, 1, WorldConfigurations.c_chunkSize / 10f);
-            // Offset self to align with world center
-            transform.position = new Vector3(-WorldConfigurations.s_worldGridSize * WorldConfigurations.c_chunkSize / 2f, 0, -WorldConfigurations.s_worldGridSize * WorldConfigurations.c_chunkSize / 2f);
+            // Offset level parent to align with world center
+            levelParent.transform.position = new Vector3(-WorldConfigurations.s_worldGridSize * WorldConfigurations.c_chunkSize / 2f, 0, -WorldConfigurations.s_worldGridSize * WorldConfigurations.c_chunkSize / 2f);
             // Generate aim plane. Same size as the terrain.
-            GameObject aimPlane = Instantiate(aimPlanePrefab);
             aimPlane.transform.localScale = floorPrefab.transform.localScale * WorldConfigurations.s_worldGridSize;
 
             // Make sure biomes array is correct in size and types
@@ -85,24 +86,18 @@ namespace PCG
                 Assert.AreEqual(biomes[i].biomeType, biomeTypeValues.GetValue(i));
             }
 
-            // Resize the ocean
-            ResizeOcean();
             // Resize ocean invisible wall cube
             oceanWallCubePrefab.transform.localScale = Vector3.one * WorldConfigurations.c_chunkSize;
-        }
-
-        private void ResizeOcean()
-        {
-            ocean.transform.localScale = new Vector3(WorldConfigurations.s_worldGridSize * WorldConfigurations.c_chunkSize / 10f, 1, WorldConfigurations.s_worldGridSize * WorldConfigurations.c_chunkSize / 10f);
-            // Adjust ocean's ripple density according to world size
-            // TODO: Kind of hacky
-            float rippleDensity = ocean.GetComponent<MeshRenderer>().material.GetFloat("_RippleDensity");
-            ocean.GetComponent<MeshRenderer>().material.SetFloat("_RippleDensity", rippleDensity * WorldConfigurations.s_worldGridSize);
         }
 
         /* Generate the game world */
         public void Generate()
         {
+            Initialize();
+
+            // Resize the ocean
+            ocean.Resize(WorldConfigurations.s_worldGridSize * WorldConfigurations.c_chunkSize);
+
             // Generate the world map
             GenerateFloors();
             PlaceBases();
@@ -124,10 +119,8 @@ namespace PCG
 
             PlaceCombatRobots();
             PlaceVehicles();
-            GameObject player = PlacePlayer();
+            PlacePlayer();
             PlaceZombies();
-
-            levelGenerated.Invoke(player);
 
             // Start the first quest
             if (questManager.quests.Length > 0) {
@@ -317,10 +310,7 @@ namespace PCG
             }
         }
 
-        [Header("Player")]
-        [SerializeField] private GameObject playerPrefab;
-
-        private GameObject PlacePlayer()
+        private bool PlacePlayer()
         {
             // Place player in the woodland biome, in the bottom right corner
             Biome woodlandBiome = biomes[BiomeType.Woodland.GetHashCode()];
@@ -336,10 +326,10 @@ namespace PCG
             Vector3 chunkCenter = gridComponent.GetChunkCenterWorld(chunk);
             NavMesh.SamplePosition(chunkCenter, out NavMeshHit hit, 20f, NavMesh.AllAreas);
             if (hit.hit) {
-                GameObject player = Instantiate(playerPrefab, hit.position, Quaternion.identity, null);
-                return player;
+                gameplayData.player.transform.position = hit.position;
+                return true;
             }
-            return null;
+            return false;
         }
 
         // Zombies

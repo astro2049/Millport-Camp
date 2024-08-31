@@ -6,7 +6,8 @@ namespace PCG
     {
         private Grid grid;
 
-        private void Awake()
+        // TODO: hacky order...?
+        public void Initialize()
         {
             // Get Grid component
             grid = GetComponent<Grid>();
