@@ -16,10 +16,7 @@ namespace Entities.Abilities.Health
             }
 
             // Disable health bar, if has one
-            HealthBarComponent healthBarComponent = GetComponent<HealthComponent>().healthBarComponent;
-            if (healthBarComponent) {
-                healthBarComponent.enabled = false;
-            }
+            GetComponent<HealthComponent>().healthBarComponent.gameObject.SetActive(false);
         }
     }
 }
