@@ -8,6 +8,11 @@ namespace Gameplay.Quests
         private Transform actorTransform;
         private Transform destinationTransform;
 
+        private void Awake()
+        {
+            enabled = false;
+        }
+
         public void SetActor(GameObject actor)
         {
             actorTransform = actor.transform;

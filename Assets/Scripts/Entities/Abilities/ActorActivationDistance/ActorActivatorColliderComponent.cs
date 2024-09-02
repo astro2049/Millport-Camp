@@ -6,26 +6,14 @@ namespace Entities.Abilities.ActorActivationDistance
     {
         private void OnTriggerEnter(Collider other)
         {
-            // Ignore self collision
-            // TODO: hacky
-            if (other.transform.parent == transform.parent.parent) {
-                return;
-            }
-
             // Activate NPC
-            other.transform.parent.GetComponent<ActivateeSwitchComponent>().Activate();
+            other.transform.GetComponent<ActivateeSwitchComponent>().Activate();
         }
 
         private void OnTriggerExit(Collider other)
         {
-            // Ignore self collision
-            // TODO: hacky
-            if (other.transform.parent == transform.parent.parent) {
-                return;
-            }
-
             // Deactivate NPC
-            other.transform.parent.GetComponent<ActivateeSwitchComponent>().Deactivate();
+            other.transform.GetComponent<ActivateeSwitchComponent>().Deactivate();
         }
     }
 }

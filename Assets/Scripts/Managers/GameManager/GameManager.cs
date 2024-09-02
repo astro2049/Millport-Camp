@@ -43,6 +43,7 @@ namespace Managers.GameManager
         [SerializeField] private CinemachineVirtualCamera playerCamera;
         [SerializeField] private CinemachineVirtualCamera vehicleCamera;
         [SerializeField] private AudioClip closeDoorClip;
+        [SerializeField] private GameObject actorActivationCollider;
 
         [Header("Managers")]
         [SerializeField] private UIManager uiManager;
@@ -50,9 +51,6 @@ namespace Managers.GameManager
         [SerializeField] private LevelGenerator levelGenerator;
 
         [HideInInspector] public PlayerMode playerMode = PlayerMode.Combat;
-
-        [Header("Misc")]
-        [SerializeField] private GameObject actorActivationCollider;
 
         [Header("PCG")]
         [SerializeField] private bool usePCGLevel = true;

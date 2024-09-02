@@ -1975,10 +1975,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 595848169}
     - target: {fileID: 6685458566825218800, guid: d15051a02e0c14d459ab02bdb6c6df5f, type: 3}
-      propertyPath: usePCGLevel
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6685458566825218800, guid: d15051a02e0c14d459ab02bdb6c6df5f, type: 3}
       propertyPath: testingGround
       value: 
       objectReference: {fileID: 5164080748734391608}

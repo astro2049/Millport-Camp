@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6000838646726715099}
   - component: {fileID: 1093866074255475132}
   m_Layer: 14
-  m_Name: NPC_Activation_Collider
+  m_Name: actor activation collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52,7 +52,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 50
+  m_Radius: 36
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1093866074255475132
 MonoBehaviour:
