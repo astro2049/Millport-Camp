@@ -19,6 +19,11 @@ namespace Entities.Abilities.Health
         private Coroutine regenHealthActivator;
         private Coroutine regenHealthOperator;
 
+        private void Awake()
+        {
+            health = maxHealth;
+        }
+
         public void ReceiveDamage(float x)
         {
             // Return if already dead

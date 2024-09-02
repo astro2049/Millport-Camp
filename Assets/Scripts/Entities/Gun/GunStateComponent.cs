@@ -15,23 +15,19 @@ namespace Entities.Gun
 
     public class GunStateComponent : MonoBehaviour
     {
-        // Components
-        private SubjectComponent subjectComponent;
-        private AudioSource audioSource;
-
-        // Stats & Configuration
+        // Properties and Configurations
         public GunData stats;
         public int magAmmo;
         [SerializeField] private LayerMask raycastLayers;
         [SerializeField] private LayerMask damageLayers;
-        // Muzzle
-        public Transform muzzleTransform;
+
         // Sounds
         [SerializeField] private AudioClip fireSound;
         [SerializeField] private AudioClip releaseMagSound;
         [SerializeField] private AudioClip chargingBoltSound;
         private float chargingBoltSoundPlayTimestamp;
         [SerializeField] private AudioClip magEmptySound;
+
         // Tracer
         public GameObject tracerPrefab;
         public float tracerSpeed = 150f; // 150m/s
@@ -40,10 +36,19 @@ namespace Entities.Gun
         private bool isTriggerDown = false;
         private bool isBoltInPosition = true;
 
+        // Muzzle
+        [SerializeField] private Transform muzzleTransform;
+
+        // Components
+        private SubjectComponent subjectComponent;
+        private AudioSource audioSource;
+        private DamageDealerComponent damageDealerComponent;
+
         private void Awake()
         {
             subjectComponent = GetComponent<SubjectComponent>();
             audioSource = GetComponent<AudioSource>();
+            damageDealerComponent = GetComponent<DamageDealerComponent>();
 
             Init();
         }
@@ -154,14 +159,15 @@ namespace Entities.Gun
             Ray ray = new Ray(muzzlePosition, forward);
             TrailRenderer tracerTrail = Instantiate(tracerPrefab, muzzlePosition, Quaternion.LookRotation(forward)).GetComponent<TrailRenderer>();
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, raycastLayers)) {
+                GameObject hitGo = hit.collider.gameObject;
                 // Debug: DrawLine - Green if hit NPC or Player, otherwise cyan
-                Debug.DrawLine(muzzlePosition, hit.point, hit.collider.gameObject.layer == damageLayers ? Color.green : Color.cyan, 5f);
+                Debug.DrawLine(muzzlePosition, hit.point, hitGo.layer == damageLayers ? Color.green : Color.cyan, 5f);
                 // Tracer effect
                 StartCoroutine(SpawnTrail(tracerTrail, hit.distance));
-                LayerMask hitLayer = 1 << hit.collider.gameObject.layer;
+                LayerMask hitLayer = 1 << hitGo.layer;
                 if ((hitLayer & damageLayers) == hitLayer) {
                     // Deal damage
-                    GetComponent<DamageDealerComponent>().DealDamage(hit.collider.gameObject, stats.damage);
+                    damageDealerComponent.DealDamage(hitGo, stats.damage);
                 }
             } else {
                 // Tracer effect, endPoint is arbitrary (100m away, out of screen)
