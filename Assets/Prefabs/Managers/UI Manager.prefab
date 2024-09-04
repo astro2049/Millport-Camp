@@ -257,6 +257,7 @@ GameObject:
   - component: {fileID: 5966378717091982096}
   - component: {fileID: 5139789935533595156}
   - component: {fileID: 6615102060673503044}
+  - component: {fileID: 5238839814484039552}
   m_Layer: 0
   m_Name: UI Manager
   m_TagString: Untagged
@@ -329,24 +330,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50f29adb14524f118f15b22b660db817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventorySlotsTable: {fileID: 3525663144143191675}
-  inventoryItemPrefab: {fileID: 8862898934195778382, guid: bae6f0385e74fb248855a620d231d403, type: 3}
-  gunDatas:
-  - {fileID: 11400000, guid: 3a3a94d55b8030942b3296461f0d332d, type: 2}
-  - {fileID: 11400000, guid: f50c9decaa8a0984d8289ba634093a26, type: 2}
-  - {fileID: 11400000, guid: 8a7c38d0f48b4324cb4d7af0b5e46370, type: 2}
-  - {fileID: 11400000, guid: de39f499e77c9c54b81205f0e5fd3b4b, type: 2}
-  - {fileID: 11400000, guid: efeacb96c6d1f3a439f027f6fa4eab12, type: 2}
-  - {fileID: 11400000, guid: f3d66234bb6b0fc41a1bd3d7c6773500, type: 2}
-  - {fileID: 11400000, guid: 52d3af4929b6e124587e12fd7070d8e1, type: 2}
-  - {fileID: 11400000, guid: 38e8b132f49f49a409b046be9a878c9f, type: 2}
-  gunPrefab: {fileID: 3914916241041140306, guid: f71074109a1ba9f46b36a2adf416ab4f, type: 3}
-  dragTransform: {fileID: 4801457070572122111}
-  selectedItem: {fileID: 0}
+  slotsTable: {fileID: 3525663144143191675}
   equipButton: {fileID: 4476478937556824927}
-  equippedItem: {fileID: 0}
-  craftingOptionsTable: {fileID: 6255770080333177510}
+  dragTransform: {fileID: 4801457070572122111}
+  inventoryManager: {fileID: 0}
+  slotUIPrefab: {fileID: 8862898934195778382, guid: 67d34d3c193dc664b90e3aaf48ce427d, type: 3}
+  itemUIPrefab: {fileID: 6901878843489205809, guid: bcd53aa32ad1f0f46814754272073c8f, type: 3}
+--- !u!114 &5238839814484039552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5953152087105975950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e87f7f5a08d406d8b434c41a59d0f9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  optionsUITable: {fileID: 6255770080333177510}
   craftButton: {fileID: 3239714487802470078}
+  inventoryManager: {fileID: 0}
+  optionUIPrefab: {fileID: 6901878843489205809, guid: 46bedff09c5958c41b32e402f7edd704, type: 3}
 --- !u!1 &6742582064942010633
 GameObject:
   m_ObjectHideFlags: 0
@@ -1236,6 +1241,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 573232267134212633, guid: 516b7ed8d71f24b4bbcff6633c6eccaa, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 405
+      objectReference: {fileID: 0}
+    - target: {fileID: 573232267134212633, guid: 516b7ed8d71f24b4bbcff6633c6eccaa, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -1247,6 +1256,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 6615102060673503044}
+    - target: {fileID: 779748642129126120, guid: 516b7ed8d71f24b4bbcff6633c6eccaa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RequestToEquipItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 779748642129126120, guid: 516b7ed8d71f24b4bbcff6633c6eccaa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Managers.Inventory.InventoryUIManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 1639153362117417045, guid: 516b7ed8d71f24b4bbcff6633c6eccaa, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1268,9 +1285,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1745245508609478409, guid: 516b7ed8d71f24b4bbcff6633c6eccaa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1745245508609478409, guid: 516b7ed8d71f24b4bbcff6633c6eccaa, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6615102060673503044}
+      objectReference: {fileID: 5238839814484039552}
+    - target: {fileID: 1745245508609478409, guid: 516b7ed8d71f24b4bbcff6633c6eccaa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Managers.Inventory.CraftingUIManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 1902592238417163913, guid: 516b7ed8d71f24b4bbcff6633c6eccaa, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1800,6 +1825,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7389006277271776527, guid: 516b7ed8d71f24b4bbcff6633c6eccaa, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7389006277271776527, guid: 516b7ed8d71f24b4bbcff6633c6eccaa, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7389006277271776527, guid: 516b7ed8d71f24b4bbcff6633c6eccaa, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7389006277271776527, guid: 516b7ed8d71f24b4bbcff6633c6eccaa, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -1845,6 +1882,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7389006277271776527, guid: 516b7ed8d71f24b4bbcff6633c6eccaa, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7389006277271776527, guid: 516b7ed8d71f24b4bbcff6633c6eccaa, type: 3}
+      propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7621970331532238533, guid: 516b7ed8d71f24b4bbcff6633c6eccaa, type: 3}

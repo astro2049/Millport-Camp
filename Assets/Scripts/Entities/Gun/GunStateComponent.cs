@@ -16,7 +16,7 @@ namespace Entities.Gun
     public class GunStateComponent : MonoBehaviour
     {
         // Properties and Configurations
-        public GunData stats;
+        public GunStats stats;
         public int magAmmo;
         [SerializeField] private LayerMask raycastLayers;
         [SerializeField] private LayerMask damageLayers;
@@ -53,8 +53,12 @@ namespace Entities.Gun
             Init();
         }
 
-        public void Init()
+        public void Init(GunStats gunStats = null)
         {
+            if (gunStats != null) {
+                stats = gunStats;
+            }
+
             // Initialize appearance (mesh and material) according to gunData (scriptable object)
             Transform meshTransform = transform.Find("Mesh");
             meshTransform.GetComponent<MeshFilter>().mesh = stats.mesh;

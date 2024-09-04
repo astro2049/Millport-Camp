@@ -1,28 +1,24 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace UI.Crafting
+namespace Managers.Inventory.UI
 {
-    public class CraftingOption : MonoBehaviour
+    public class ButtonComponent : MonoBehaviour
     {
         private Button button;
-        [HideInInspector] public new string name;
-        public UnityEvent<CraftingOption> buttonClickedEvent = new UnityEvent<CraftingOption>();
+        [HideInInspector] public UnityEvent<GameObject> buttonClickedEvent = new UnityEvent<GameObject>();
 
         private void Awake()
         {
             button = GetComponent<Button>();
             button.onClick.AddListener(Select);
-
-            name = transform.Find("Text - Name").GetComponent<TextMeshProUGUI>().text;
         }
 
         private void Select()
         {
             button.interactable = false;
-            buttonClickedEvent.Invoke(this);
+            buttonClickedEvent.Invoke(gameObject);
         }
 
         public void Unselect()

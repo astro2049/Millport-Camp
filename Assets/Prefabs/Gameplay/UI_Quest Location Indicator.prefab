@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 2328021754896785621}
   - component: {fileID: 74495245511486614}
   m_Layer: 0
-  m_Name: UI_quest location indicator
+  m_Name: UI_Quest Location Indicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6000838646726715099}
   - component: {fileID: 1093866074255475132}
   m_Layer: 14
-  m_Name: actor activation collider
+  m_Name: Actor Activation Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

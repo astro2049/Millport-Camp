@@ -3,8 +3,8 @@ using Entities.Abilities.ClearingDistance;
 using Entities.Abilities.Input;
 using Entities.Abilities.Observer;
 using Entities.Ocean;
-using Entities.Player;
 using Gameplay.Quests;
+using Managers.Inventory;
 using PCG;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -86,13 +86,14 @@ namespace Managers.GameManager
 
         private void SetPlayer(GameObject aPlayer)
         {
+            // 0. Store player reference to gameplay data scriptable object
             gameplayData.player = aPlayer;
 
-            // Focus camera, switch input, enable quest location indicator
+            // 1. Focus camera, switch input, enable quest location indicator
             playerCamera.Follow = aPlayer.transform;
             SwitchControlActor(aPlayer);
 
-            // Subscribe self and UI manager to player events
+            // 2. Subscribe self and UI manager to player events
             SubjectComponent playerSubject = aPlayer.GetComponent<SubjectComponent>();
             playerSubject.AddObserver(this,
                 EventType.WeaponChanged,
@@ -109,8 +110,9 @@ namespace Managers.GameManager
                 EventType.ExitedBuildMode
             );
 
-            // TODO: hacky
-            inventoryManager.playerInventoryComponent = aPlayer.GetComponent<PlayerInventoryComponent>();
+            // 3. Add a default weapon for the player
+            inventoryManager.CraftItem("Cyclops");
+            inventoryManager.EquipItem(0);
         }
 
         // https://docs.unity3d.com/2022.3/Documentation/ScriptReference/Cursor.SetCursor.html
