@@ -1,18 +1,18 @@
 ﻿using UnityEngine;
 
-namespace PCG
+namespace PCG.Chunks
 {
-    public class GridComponent : MonoBehaviour
+    public class ChunkGridComponent : MonoBehaviour
     {
-        private Grid grid;
+        [SerializeField] private Grid grid;
+
+        [SerializeField] private WorldData worldData;
 
         // TODO: hacky order...?
         public void Initialize()
         {
-            // Get Grid component
-            grid = GetComponent<Grid>();
             // Change grid's cell size accordingly
-            grid.cellSize = new Vector3(WorldConfigurations.c_chunkSize, 1, WorldConfigurations.c_chunkSize);
+            grid.cellSize = new Vector3(worldData.chunkSize, 1, worldData.chunkSize);
         }
 
         public Vector3 GetChunkCenterWorld(Chunk chunk)

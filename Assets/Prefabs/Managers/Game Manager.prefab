@@ -367,7 +367,7 @@ MonoBehaviour:
   inventoryManager: {fileID: 0}
   levelGenerator: {fileID: 0}
   playerMode: 0
-  usePCGLevel: 0
+  usePCGLevel: 1
   testingGround: {fileID: 0}
   ocean: {fileID: 0}
 --- !u!114 &3578265417369715068

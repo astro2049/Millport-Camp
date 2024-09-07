@@ -1,6 +1,7 @@
 using Entities.Abilities.Observer;
 using Entities.Gun;
 using Gameplay.Quests;
+using PCG;
 using TMPro;
 using UI.Map;
 using UnityEngine;
@@ -35,6 +36,9 @@ namespace Managers
         [Header("Debug")]
         [SerializeField] private TextMeshProUGUI FPSText;
         [SerializeField] private TextMeshProUGUI versionText;
+
+        [Header("World Data")]
+        [SerializeField] private WorldData worldData;
 
         private void Awake()
         {
@@ -169,7 +173,7 @@ namespace Managers
 
         public void RenderMapUIs(Texture2D mapTexture2D)
         {
-            mapUIComponent.Initialize(mapTexture2D);
+            mapUIComponent.Initialize(mapTexture2D, worldData.worldSize);
         }
 
         public void OpenMap(Transform playerTransform)

@@ -314,6 +314,7 @@ MonoBehaviour:
   resumeButton: {fileID: 3443651862971224909}
   FPSText: {fileID: 600608677071693733}
   versionText: {fileID: 7755300388271017549}
+  worldData: {fileID: 11400000, guid: c9c24757134e4be4f9f7125a7e7688f4, type: 2}
   questNameText: {fileID: 2520907188936981285}
   questDescriptionText: {fileID: 1035108442630011926}
   endingScreen: {fileID: 3935294753285437212}

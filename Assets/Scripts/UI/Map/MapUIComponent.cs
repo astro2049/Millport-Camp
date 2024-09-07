@@ -1,6 +1,4 @@
-﻿using Gameplay;
-using PCG;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.Map
@@ -12,14 +10,14 @@ namespace UI.Map
 
         private float mapUnit; // in world unit, which is m
 
-        public void Initialize(Texture2D mapTexture2D)
+        public void Initialize(Texture2D mapTexture2D, int worldSize)
         {
             // Set map image's sprite
             Sprite mapSprite = Sprite.Create(mapTexture2D, new Rect(0, 0, mapTexture2D.width, mapTexture2D.height), new Vector2(0.5f, 0.5f));
             mapImage.sprite = mapSprite;
 
             // Precalculate map unit 
-            mapUnit = mapImage.transform.GetComponent<RectTransform>().rect.width / (WorldConfigurations.s_worldGridSize * WorldConfigurations.c_chunkSize);
+            mapUnit = mapImage.transform.GetComponent<RectTransform>().rect.width / worldSize;
         }
 
         public void UpdatePlayerLocation(Transform playerTransform)

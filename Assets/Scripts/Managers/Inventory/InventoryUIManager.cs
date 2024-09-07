@@ -22,7 +22,7 @@ namespace Managers.Inventory
         [SerializeField] private GameObject slotUIPrefab;
         [SerializeField] private GameObject itemUIPrefab;
 
-        private void Awake()
+        public void Initialize()
         {
             InitializeSlots();
             equipButton.interactable = false;
@@ -72,7 +72,19 @@ namespace Managers.Inventory
 
             // Equip item (...?)
             if (inventoryManager.equippedItemSlotNum != -1) {
+                GameObject item = slots[inventoryManager.equippedItemSlotNum].item.gameObject;
+
+                // Disable item button's color fading temporarily
+                Button button = item.GetComponent<Button>();
+                ColorBlock colors = button.colors;
+                colors.fadeDuration = 0f;
+                button.colors = colors;
+
                 EquipItem(inventoryManager.equippedItemSlotNum);
+
+                // Reenable color fading
+                colors.fadeDuration = 0.1f;
+                button.colors = colors;
             }
         }
 

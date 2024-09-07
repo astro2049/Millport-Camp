@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace PCG
+namespace PCG.Chunks
 {
     // 16 * 16 world chunk
     public class Chunk

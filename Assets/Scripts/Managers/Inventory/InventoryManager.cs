@@ -74,9 +74,12 @@ namespace Managers.Inventory
                 items.Add(aSlotNum, itemToSwap);
             }
             items.Add(aNewSlotNum, item);
-            // Caution
+
+            // Swap equipped slot number if either of the items is equipped
             if (equippedItemSlotNum == aSlotNum) {
                 equippedItemSlotNum = aNewSlotNum;
+            } else if (equippedItemSlotNum == aNewSlotNum) {
+                equippedItemSlotNum = aSlotNum;
             }
 
             itemsUpdated.Invoke();
@@ -148,7 +151,8 @@ namespace Managers.Inventory
         {
             string info = "Inventory:\n- " + items.Count + " items -\n";
             foreach (KeyValuePair<int, Item> kv in items) {
-                info += "slot " + kv.Key + ": " + kv.Value.name + "\n";
+                info += "slot " + kv.Key + ": " + kv.Value.name;
+                info += kv.Key == equippedItemSlotNum ? " [Equipped]\n" : "\n";
             }
             Debug.Log(info);
         }

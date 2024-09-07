@@ -9,8 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 412359435958777067}
-  - component: {fileID: 1965596528010601720}
+  - component: {fileID: 1601496258415118063}
   - component: {fileID: 423144321342361336}
+  - component: {fileID: 7012469094657061188}
+  - component: {fileID: 568472557293008292}
   - component: {fileID: 5522350382254727205}
   m_Layer: 0
   m_Name: Level Generator
@@ -34,7 +36,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1965596528010601720
+--- !u!114 &1601496258415118063
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,10 +45,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 49523867688122367}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 181218ebad4646709f952ce67f5a0d53, type: 3}
+  m_Script: {fileID: 11500000, guid: 945f25374c1649c287dc5eea25a052fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldGridSize: 32
+  grid: {fileID: 0}
+  worldData: {fileID: 11400000, guid: c9c24757134e4be4f9f7125a7e7688f4, type: 2}
 --- !u!114 &423144321342361336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,31 +62,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 899b0958245741043b02aa06d730a15b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  navMeshSurface: {fileID: 0}
   levelParent: {fileID: 0}
-  floorsParent: {fileID: 0}
-  basesParent: {fileID: 0}
-  foliageParent: {fileID: 0}
-  combatRobotsParent: {fileID: 0}
-  vehiclesParent: {fileID: 0}
-  zombiesParent: {fileID: 0}
-  invisibleWallsParent: {fileID: 0}
-  ocean: {fileID: 0}
-  floorPrefab: {fileID: 8861129652233209972, guid: e6a94e851c16d3b4f8446571d41df6c1, type: 3}
-  oceanWallCubePrefab: {fileID: 6197499324490765738, guid: ee23606c107c71a428315deb40dd2ebd, type: 3}
-  whittakerBiomes:
-    seaLevelHeight: 0.15
-    heightPerlinNoiseScale: 5
-    heightPerlinNoiseOffset: 0
-    equatorTemperature: 30
-    northPoleTemperature: -10
-    humidityPerlinNoiseScale: 4
-    humidityPerlinNoiseOffset: 0
-    riverPerlinNoiseScale: {x: 4, y: 4}
-    riverPerlinNoiseOffset: 0
-  aimPlanePrefab: {fileID: 396570632468770756, guid: a40e6f1c8a9c34d46a3730b12ab0f438, type: 3}
-  gameplayData: {fileID: 11400000, guid: fa82f7286e7febc4dba488877fe21ac4, type: 2}
-  questManager: {fileID: 0}
+  worldData: {fileID: 11400000, guid: c9c24757134e4be4f9f7125a7e7688f4, type: 2}
   biomes:
   - biomeType: 0
     biomeData: {fileID: 11400000, guid: da470aa0419370146af064cd64125b81, type: 2}
@@ -101,6 +81,57 @@ MonoBehaviour:
     biomeData: {fileID: 11400000, guid: 07decaf1fa01ede449053b80995d91e5, type: 2}
   - biomeType: 7
     biomeData: {fileID: 11400000, guid: 735282c0f1fad3444b59de726168ba31, type: 2}
+  chunkGridComponent: {fileID: 0}
+  navMeshSurface: {fileID: 0}
+  ocean: {fileID: 0}
+  aimPlane: {fileID: 0}
+  levelGenerated:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &7012469094657061188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 49523867688122367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eeef308700641f1946a7ce23ab2a82c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldData: {fileID: 11400000, guid: c9c24757134e4be4f9f7125a7e7688f4, type: 2}
+  floorsParent: {fileID: 0}
+  invisibleWallsParent: {fileID: 0}
+  floorPrefab: {fileID: 8861129652233209972, guid: e6a94e851c16d3b4f8446571d41df6c1, type: 3}
+  oceanWallCubePrefab: {fileID: 6197499324490765738, guid: ee23606c107c71a428315deb40dd2ebd, type: 3}
+  seaLevelHeight: 0.15
+  heightPerlinNoiseScale: 5
+  heightPerlinNoiseOffset: 0
+  equatorTemperature: 30
+  northPoleTemperature: -10
+  humidityPerlinNoiseScale: 4
+  humidityPerlinNoiseOffset: 0
+--- !u!114 &568472557293008292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 49523867688122367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e0a42db4484f8a94de90fd0c3ad5ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questManager: {fileID: 0}
+  gameplayData: {fileID: 11400000, guid: fa82f7286e7febc4dba488877fe21ac4, type: 2}
+  worldData: {fileID: 11400000, guid: c9c24757134e4be4f9f7125a7e7688f4, type: 2}
+  basesParent: {fileID: 0}
+  foliageParent: {fileID: 0}
+  combatRobotsParent: {fileID: 0}
+  vehiclesParent: {fileID: 0}
+  zombiesParent: {fileID: 0}
   combatRobotPrefab: {fileID: 219742794102494621, guid: 26eede86fc0761e449aa1be595cd53c9, type: 3}
   combatRobotSectorMinCount: 8
   combatRobotSectorMaxCount: 15

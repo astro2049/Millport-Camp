@@ -47,8 +47,10 @@ namespace Managers.GameManager
 
         [Header("Managers")]
         [SerializeField] private UIManager uiManager;
+        [SerializeField] private InventoryUIManager inventoryUIManager;
         [SerializeField] private InventoryManager inventoryManager;
         [SerializeField] private LevelGenerator levelGenerator;
+        private QuestManager questManager;
 
         [HideInInspector] public PlayerMode playerMode = PlayerMode.Combat;
 
@@ -61,6 +63,8 @@ namespace Managers.GameManager
 
         private void Awake()
         {
+            questManager = GetComponent<QuestManager>();
+
             // Set world time flowing speed to normal (for reloading level)
             Time.timeScale = 1f;
 
@@ -70,6 +74,7 @@ namespace Managers.GameManager
             if (usePCGLevel) {
                 testingGround.SetActive(false);
                 testingGround.transform.position = new Vector3(0, -100, 0);
+                levelGenerator.levelGenerated.AddListener(StartCampaign);
                 levelGenerator.Generate();
             } else {
                 ocean.Resize(ocean.transform.localScale.x * 10f);
@@ -111,8 +116,17 @@ namespace Managers.GameManager
             );
 
             // 3. Add a default weapon for the player
+            inventoryUIManager.Initialize();
             inventoryManager.CraftItem("Cyclops");
             inventoryManager.EquipItem(0);
+        }
+
+        private void StartCampaign()
+        {
+            // Start the first quest
+            if (questManager.quests.Length > 0) {
+                questManager.StartStory();
+            }
         }
 
         // https://docs.unity3d.com/2022.3/Documentation/ScriptReference/Cursor.SetCursor.html
