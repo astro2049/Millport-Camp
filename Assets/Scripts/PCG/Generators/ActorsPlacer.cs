@@ -4,11 +4,11 @@ using Gameplay.Quests;
 using Managers;
 using Managers.GameManager;
 using PCG.BiomeData;
-using PCG.Chunks;
+using PCG.Generators.Chunks;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace PCG
+namespace PCG.Generators
 {
     public class ActorsPlacer : MonoBehaviour
     {

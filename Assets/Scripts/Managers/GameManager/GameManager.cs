@@ -6,6 +6,7 @@ using Entities.Ocean;
 using Gameplay.Quests;
 using Managers.Inventory;
 using PCG;
+using PCG.Generators;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;

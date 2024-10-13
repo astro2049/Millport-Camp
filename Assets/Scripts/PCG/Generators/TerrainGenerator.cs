@@ -1,10 +1,10 @@
 ﻿using System;
-using PCG.Chunks;
+using PCG.Generators.Chunks;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
 
-namespace PCG
+namespace PCG.Generators
 {
     public enum BiomeType
     {

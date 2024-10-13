@@ -1,5 +1,6 @@
 ﻿using System;
 using PCG;
+using PCG.Generators;
 using UnityEngine;
 using UnityEngine.Events;
 

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace PCG.Chunks
+namespace PCG.Generators.Chunks
 {
     public class ChunkGridComponent : MonoBehaviour
     {

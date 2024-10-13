@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Entities.Ocean;
 using Gameplay;
-using PCG.Chunks;
+using PCG.Generators.Chunks;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.Events;
 using Vector3 = UnityEngine.Vector3;
 
-namespace PCG
+namespace PCG.Generators
 {
     [Serializable]
     public class Biome
