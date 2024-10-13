@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a670a02452fc44d43bf2a805c4da854d, type: 3}
-  m_Name: GD_SVU
+  m_Name: GS_Ivy
   m_EditorClassIdentifier: 
-  name: SVU
-  mesh: {fileID: -6322301886240935113, guid: 1f2bd1c22d3be4c468a13bca7f4a129c, type: 3}
-  material: {fileID: -7126193129781715291, guid: 1f2bd1c22d3be4c468a13bca7f4a129c, type: 3}
-  damage: 55
-  rpm: 78
-  fireInterval: 0.7692308
-  magSize: 6
+  name: Ivy
+  mesh: {fileID: -6418162293601418616, guid: f3c17a0215984b14abdef7e4c67297f1, type: 3}
+  material: {fileID: -7126193129781715291, guid: f3c17a0215984b14abdef7e4c67297f1, type: 3}
+  damage: 20
+  rpm: 384
+  fireInterval: 0.15625
+  magSize: 18
   fireMode: 2
-  reloadTime: 0.66
+  reloadTime: 2.16

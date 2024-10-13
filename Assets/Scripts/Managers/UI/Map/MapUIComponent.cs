@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Map
+namespace Managers.UI.Map
 {
     public class MapUIComponent : MonoBehaviour
     {

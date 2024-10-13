@@ -1,10 +1,10 @@
-﻿using Gameplay.Quests;
-using Managers.GameManager;
+﻿using Managers.GameManager;
+using Managers.UI;
 using UnityEngine;
 
-namespace Managers
+namespace Managers.Quests
 {
-    public class QuestManager : MonoBehaviour
+    public class QuestsManager : MonoBehaviour
     {
         [SerializeField] private UIManager uiManager;
 

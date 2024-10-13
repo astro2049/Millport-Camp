@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a670a02452fc44d43bf2a805c4da854d, type: 3}
-  m_Name: GD_Ivy
+  m_Name: GS_Cyclops
   m_EditorClassIdentifier: 
-  name: Ivy
-  mesh: {fileID: -6418162293601418616, guid: f3c17a0215984b14abdef7e4c67297f1, type: 3}
-  material: {fileID: -7126193129781715291, guid: f3c17a0215984b14abdef7e4c67297f1, type: 3}
-  damage: 20
-  rpm: 384
-  fireInterval: 0.15625
-  magSize: 18
-  fireMode: 2
-  reloadTime: 2.16
+  name: Cyclops
+  mesh: {fileID: -805959276040964406, guid: 4e98271e1c60ef549b3240179519b7bf, type: 3}
+  material: {fileID: -7126193129781715291, guid: 4e98271e1c60ef549b3240179519b7bf, type: 3}
+  damage: 45
+  rpm: 156
+  fireInterval: 0.3846154
+  magSize: 6
+  fireMode: 0
+  reloadTime: 2.1

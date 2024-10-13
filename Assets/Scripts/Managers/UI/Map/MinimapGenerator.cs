@@ -1,8 +1,7 @@
 ﻿using System.IO;
-using Managers;
 using UnityEngine;
 
-namespace Gameplay
+namespace Managers.UI.Map
 {
     public class MinimapGenerator : MonoBehaviour
     {

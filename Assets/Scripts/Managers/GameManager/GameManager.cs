@@ -3,9 +3,10 @@ using Entities.Abilities.ClearingDistance;
 using Entities.Abilities.Input;
 using Entities.Abilities.Observer;
 using Entities.Ocean;
-using Gameplay.Quests;
 using Managers.Inventory;
-using PCG;
+using Managers.Quests;
+using Managers.Quests.UI;
+using Managers.UI;
 using PCG.Generators;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -51,7 +52,7 @@ namespace Managers.GameManager
         [SerializeField] private InventoryUIManager inventoryUIManager;
         [SerializeField] private InventoryManager inventoryManager;
         [SerializeField] private LevelGenerator levelGenerator;
-        private QuestManager questManager;
+        private QuestsManager questsManager;
 
         [HideInInspector] public PlayerMode playerMode = PlayerMode.Combat;
 
@@ -64,7 +65,7 @@ namespace Managers.GameManager
 
         private void Awake()
         {
-            questManager = GetComponent<QuestManager>();
+            questsManager = GetComponent<QuestsManager>();
 
             // Set world time flowing speed to normal (for reloading level)
             Time.timeScale = 1f;
@@ -125,8 +126,8 @@ namespace Managers.GameManager
         private void StartCampaign()
         {
             // Start the first quest
-            if (questManager.quests.Length > 0) {
-                questManager.StartStory();
+            if (questsManager.quests.Length > 0) {
+                questsManager.StartStory();
             }
         }
 

@@ -1,14 +1,14 @@
 using Entities.Abilities.Observer;
 using Entities.Gun;
-using Gameplay.Quests;
+using Managers.Quests;
+using Managers.UI.Map;
 using PCG;
 using TMPro;
-using UI.Map;
 using UnityEngine;
 using UnityEngine.UI;
 using EventType = Entities.Abilities.Observer.EventType;
 
-namespace Managers
+namespace Managers.UI
 {
     public class UIManager : MonoBehaviour, IObserver
     {

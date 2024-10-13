@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gameplay.Quests
+namespace Entities.Abilities.QuestLocation
 {
     public class QuestDestinationColliderComponent : MonoBehaviour
     {

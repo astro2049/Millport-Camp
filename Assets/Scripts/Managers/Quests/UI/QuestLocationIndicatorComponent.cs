@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Gameplay.Quests
+namespace Managers.Quests.UI
 {
     public class QuestLocationIndicatorComponent : MonoBehaviour
     {

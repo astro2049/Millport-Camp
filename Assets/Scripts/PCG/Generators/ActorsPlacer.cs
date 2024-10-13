@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
 using Entities.Abilities.ClearingDistance;
-using Gameplay.Quests;
 using Managers;
 using Managers.GameManager;
+using Managers.Quests;
 using PCG.BiomeData;
 using PCG.Generators.Chunks;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 namespace PCG.Generators
 {
     public class ActorsPlacer : MonoBehaviour
     {
-        [SerializeField] private QuestManager questManager;
+        [FormerlySerializedAs("questManager")] [SerializeField] private QuestsManager questsManager;
 
         [Header("Data")]
         [SerializeField] private GameplayData gameplayData;
@@ -64,7 +65,7 @@ namespace PCG.Generators
         public void PlaceBases()
         {
             int i = 0;
-            foreach (Quest quest in questManager.quests) {
+            foreach (Quest quest in questsManager.quests) {
                 List<Chunk> chunks = biomes[quest.baseBiome.GetHashCode()].chunks;
                 Chunk chunk = chunks[chunks.Count / 2];
                 humanActivityChunks.Add(chunk);
@@ -167,7 +168,7 @@ namespace PCG.Generators
 
         private void PlaceCombatRobots()
         {
-            foreach (Quest quest in questManager.quests) {
+            foreach (Quest quest in questsManager.quests) {
                 Vector3 sampleCenter = quest.destinationGo.transform.position;
                 int combatRobotCount = Random.Range(combatRobotSectorMinCount, combatRobotSectorMaxCount);
 

@@ -2017,6 +2017,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 5442800422915045926, guid: d15051a02e0c14d459ab02bdb6c6df5f, type: 3}
+      propertyPath: m_Name
+      value: UI_Quest Location Indicator
+      objectReference: {fileID: 0}
+    - target: {fileID: 6344165385299053752, guid: d15051a02e0c14d459ab02bdb6c6df5f, type: 3}
+      propertyPath: m_Name
+      value: Actor Activation Collider
+      objectReference: {fileID: 0}
     - target: {fileID: 6685458566825218800, guid: d15051a02e0c14d459ab02bdb6c6df5f, type: 3}
       propertyPath: ocean
       value: 
@@ -2027,7 +2035,7 @@ PrefabInstance:
       objectReference: {fileID: 595848169}
     - target: {fileID: 6685458566825218800, guid: d15051a02e0c14d459ab02bdb6c6df5f, type: 3}
       propertyPath: usePCGLevel
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6685458566825218800, guid: d15051a02e0c14d459ab02bdb6c6df5f, type: 3}
       propertyPath: testingGround
@@ -4028,6 +4036,10 @@ PrefabInstance:
       propertyPath: foliageParent
       value: 
       objectReference: {fileID: 3029731884787848366}
+    - target: {fileID: 568472557293008292, guid: 7cdd9c7bb2524f64aa34c0ef81cbd3cf, type: 3}
+      propertyPath: questsManager
+      value: 
+      objectReference: {fileID: 3710164336539464053}
     - target: {fileID: 568472557293008292, guid: 7cdd9c7bb2524f64aa34c0ef81cbd3cf, type: 3}
       propertyPath: zombiesParent
       value: 

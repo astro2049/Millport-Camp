@@ -1,10 +1,10 @@
 ﻿using System;
-using PCG;
+using Entities.Abilities.QuestLocation;
 using PCG.Generators;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gameplay.Quests
+namespace Managers.Quests
 {
     [Serializable]
     // 'Go to destination' quest

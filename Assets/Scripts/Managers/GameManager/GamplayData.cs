@@ -1,4 +1,4 @@
-﻿using Gameplay.Quests;
+﻿using Managers.Quests.UI;
 using UnityEngine;
 
 namespace Managers.GameManager

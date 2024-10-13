@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Entities.Ocean;
-using Gameplay;
+using Managers.UI.Map;
 using PCG.Generators.Chunks;
 using Unity.AI.Navigation;
 using UnityEngine;

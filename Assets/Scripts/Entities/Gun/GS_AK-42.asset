@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a670a02452fc44d43bf2a805c4da854d, type: 3}
-  m_Name: GD_Cyclops
+  m_Name: GS_AK-42
   m_EditorClassIdentifier: 
-  name: Cyclops
-  mesh: {fileID: -805959276040964406, guid: 4e98271e1c60ef549b3240179519b7bf, type: 3}
-  material: {fileID: -7126193129781715291, guid: 4e98271e1c60ef549b3240179519b7bf, type: 3}
-  damage: 45
-  rpm: 156
-  fireInterval: 0.3846154
-  magSize: 6
+  name: AK-42
+  mesh: {fileID: 1840953673352899479, guid: 7ee290c88843d2c49be639ef4dea8a73, type: 3}
+  material: {fileID: -7126193129781715291, guid: 7ee290c88843d2c49be639ef4dea8a73, type: 3}
+  damage: 18
+  rpm: 600
+  fireInterval: 0.1
+  magSize: 20
   fireMode: 0
-  reloadTime: 2.1
+  reloadTime: 2.4

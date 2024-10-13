@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d759e9e4847560441bcff20536475058, type: 3}
-  m_Name: BiomeData_5_Woodland
+  m_Name: BD_5_Woodland
   m_EditorClassIdentifier: 
   floorMaterial: {fileID: 2100000, guid: 10ee176da59c16f46a77d05d45d2c5f6, type: 2}
   foliageConfigs:
