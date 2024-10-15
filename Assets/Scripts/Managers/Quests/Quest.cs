@@ -1,6 +1,7 @@
 ﻿using System;
 using Entities.Abilities.QuestLocation;
 using PCG.Generators;
+using PCG.Generators.Terrain;
 using UnityEngine;
 using UnityEngine.Events;
 

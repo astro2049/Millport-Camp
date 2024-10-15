@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 
-namespace PCG.Generators.Chunks
+namespace PCG.Generators
 {
-    public class ChunkGridComponent : MonoBehaviour
+    public class GridComponent : MonoBehaviour
     {
-        [SerializeField] private Grid grid;
-
+        public Grid grid;
         [SerializeField] private WorldData worldData;
 
         // TODO: hacky order...?

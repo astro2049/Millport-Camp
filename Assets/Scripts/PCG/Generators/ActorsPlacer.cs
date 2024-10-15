@@ -1,25 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Entities.Abilities.ClearingDistance;
-using Managers;
 using Managers.GameManager;
 using Managers.Quests;
 using PCG.BiomeData;
-using PCG.Generators.Chunks;
+using PCG.Generators.Terrain;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace PCG.Generators
 {
     public class ActorsPlacer : MonoBehaviour
     {
-        [FormerlySerializedAs("questManager")] [SerializeField] private QuestsManager questsManager;
+        [SerializeField] private QuestsManager questsManager;
 
         [Header("Data")]
         [SerializeField] private GameplayData gameplayData;
         [SerializeField] private WorldData worldData;
 
-        private ChunkGridComponent chunkGridComponent;
+        [SerializeField] private GridComponent gridComponent;
         private Biome[] biomes;
 
         [Header("Environment")]
@@ -30,6 +30,7 @@ namespace PCG.Generators
         [SerializeField] private Transform zombiesParent;
 
         private readonly HashSet<Chunk> humanActivityChunks = new HashSet<Chunk>();
+        public List<Vector3> basePositions;
 
         private readonly float navmeshPlacementSampleDistance = 1f;
         [Header("Combat Robots")]
@@ -50,7 +51,6 @@ namespace PCG.Generators
 
         public void Initialize()
         {
-            chunkGridComponent = GetComponent<ChunkGridComponent>();
             biomes = GetComponent<LevelGenerator>().biomes;
         }
 
@@ -71,7 +71,7 @@ namespace PCG.Generators
                 humanActivityChunks.Add(chunk);
 
                 // Get chunk center world coordinate
-                Vector3 chunkCenter = chunkGridComponent.GetChunkCenterWorld(chunk);
+                Vector3 chunkCenter = gridComponent.GetChunkCenterWorld(chunk);
 
                 // Place base in the center
                 GameObject researchBase = Instantiate(quest.basePrefab, chunkCenter, Quaternion.identity, basesParent);
@@ -81,6 +81,7 @@ namespace PCG.Generators
                     researchBase.transform.Translate(new Vector3(-2.5f, 0, -2.5f));
                     researchBase.transform.rotation = Quaternion.Euler(0, 180, 0);
                 }
+                basePositions.Add(researchBase.transform.position);
 
                 // Assign this research base to the corresponding quest
                 quest.AssignDestinationGo(researchBase);
@@ -91,68 +92,52 @@ namespace PCG.Generators
 
         public void PlacePlants()
         {
-            foreach (Biome biome in biomes) {
-                if (biome.biomeType == BiomeType.Ocean || biome.biomeType == BiomeType.Mountain) {
-                    continue;
+            ForEachValidChunk((biome, chunk) =>
+            {
+                // Precalculate chunk bottom left world coordinate
+                Vector3 chunkBottomLeft = gridComponent.GetChunkBottomLeftCornerWorld(chunk);
+
+                // Prepare foliage sub cell choices index list
+                List<int> choices = new List<int>();
+                for (int i = 0; i < worldData.actorGridSize * worldData.actorGridSize; i++) {
+                    choices.Add(i);
                 }
 
-                foreach (Chunk chunk in biome.chunks) {
-                    if (humanActivityChunks.Contains(chunk)) {
+                foreach (FoliageConfig foliageConfig in biome.biomeData.foliageConfigs) {
+                    // Determine if to generate the plant set at all
+                    if (Random.Range(0f, 1f) >= foliageConfig.occurence) {
                         continue;
                     }
 
-                    // Precalculate chunk bottom left world coordinate
-                    Vector3 chunkBottomLeft = chunkGridComponent.GetChunkBottomLeftCornerWorld(chunk);
+                    // Choose the sub-cells to generate this plant randomly
+                    List<int> subCellIndices = GetXElementsFromYElements(foliageConfig.subCellCount, choices);
 
-                    // Prepare foliage sub cell choices index list
-                    List<int> choices = new List<int>();
-                    for (int i = 0; i < worldData.actorGridSize * worldData.actorGridSize; i++) {
-                        choices.Add(i);
-                    }
-                    foreach (FoliageConfig foliageConfig in biome.biomeData.foliageConfigs) {
-                        // Determine if to generate the plant set at all
-                        if (Random.Range(0f, 1f) >= foliageConfig.occurence) {
+                    // Place the plants on the selected sub cells
+                    foreach (int subCellIndex in subCellIndices) {
+                        // Calculate sub cell x, y coordinate (in sub grid)
+                        int x = subCellIndex % worldData.actorGridSize;
+                        int y = subCellIndex / worldData.actorGridSize;
+
+                        // Calculate sub cell bottom left corner world coordinate
+                        Vector3 subCellBottomLeftCoordinate = chunkBottomLeft + new Vector3(x * worldData.actorCellSize, 0, y * worldData.actorCellSize);
+                        // Choose a random location
+                        Vector3 offset = new Vector3(Random.Range(0f, worldData.actorCellSize), 0, Random.Range(0f, worldData.actorCellSize));
+                        Vector3 position = subCellBottomLeftCoordinate + offset;
+
+                        // Test: road below?
+                        Ray ray = new Ray(position + Vector3.up * 1f, Vector3.down);
+                        // Draw the debug ray
+                        // Debug.DrawRay(position + Vector3.up * 1f, Vector3.down * 2f, Color.blue, 10f);
+                        if (Physics.Raycast(ray, out RaycastHit hitInfo, 2f, LayerMask.GetMask("Road"), QueryTriggerInteraction.Collide)) {
                             continue;
                         }
 
-                        // Choose the sub-cells to generate this plant randomly
-                        List<int> subCellIndices = GetXElementsFromYElements(foliageConfig.subCellCount, choices);
-
-                        // Place the plants on the selected sub cells
-                        foreach (int subCellIndex in subCellIndices) {
-                            // Calculate sub cell x, y coordinate (in sub grid)
-                            int x = subCellIndex % worldData.actorGridSize;
-                            int y = subCellIndex / worldData.actorGridSize;
-
-                            // Calculate sub cell bottom left corner world coordinate
-                            Vector3 subCellBottomLeftCoordinate = chunkBottomLeft + new Vector3(x * worldData.actorCellSize, 0, y * worldData.actorCellSize);
-
-                            // Choose a random location within this sub cell, a random scale, and place the plant
-                            Vector3 offset = new Vector3(Random.Range(0f, worldData.actorCellSize), 0, Random.Range(0f, worldData.actorCellSize));
-                            Vector3 scale = Vector3.one * Random.Range(foliageConfig.minSize, foliageConfig.maxSize);
-                            GenerateRandomGameObjectFromList(foliageConfig.prefabs, subCellBottomLeftCoordinate + offset, scale, foliageParent);
-                        }
+                        // Choose a random scale
+                        Vector3 scale = Vector3.one * Random.Range(foliageConfig.minSize, foliageConfig.maxSize);
+                        GenerateRandomGameObjectFromList(foliageConfig.prefabs, position, scale, foliageParent);
                     }
                 }
-            }
-        }
-
-        private List<int> GetXElementsFromYElements(int x, List<int> choices)
-        {
-            List<int> chosenOnes = new List<int>();
-            for (int i = 0; i < x; i++) {
-                // Choose an index (for the element) randomly
-                int index = Random.Range(0, choices.Count - i);
-                // Add this element to the return list
-                chosenOnes.Add(choices[index]);
-
-                // In the choices list, replace this element with the last element
-                choices[index] = choices[choices.Count - 1];
-                // And remove the last element
-                choices.RemoveAt(choices.Count - 1);
-            }
-
-            return chosenOnes;
+            });
         }
 
         private void GenerateRandomGameObjectFromList(GameObject[] options, Vector3 coord, Vector3 scale, Transform parent)
@@ -185,29 +170,23 @@ namespace PCG.Generators
 
         private void PlaceVehicles()
         {
-            foreach (Biome biome in biomes) {
-                if (biome.biomeType == BiomeType.Ocean || biome.biomeType == BiomeType.Mountain) {
-                    continue;
+            ForEachValidChunk((biome, chunk) =>
+            {
+                if (Random.Range(0f, 1f) >= vehicleChunkOccurence) {
+                    return;
                 }
 
-                foreach (Chunk chunk in biome.chunks) {
-                    if (humanActivityChunks.Contains(chunk)) {
-                        continue;
-                    }
-                    if (Random.Range(0f, 1f) >= vehicleChunkOccurence) {
-                        continue;
-                    }
+                Vector3 chunkCenter = gridComponent.GetChunkCenterWorld(chunk);
+                Vector2 offset = Random.insideUnitCircle * Random.Range(0f, worldData.chunkSize / 4f);
+                Vector3 samplePosition = chunkCenter + new Vector3(offset.x, 0, offset.y);
 
-                    Vector3 chunkCenter = chunkGridComponent.GetChunkCenterWorld(chunk);
-                    Vector2 offset = Random.insideUnitCircle * Random.Range(0f, worldData.chunkSize / 4f);
-                    NavMesh.SamplePosition(chunkCenter + new Vector3(offset.x, 0, offset.y) + new Vector3(offset.x, 0, offset.y), out NavMeshHit hit, navmeshPlacementSampleDistance, NavMesh.AllAreas);
-                    if (hit.hit) {
-                        GameObject vehicle = Instantiate(vehiclePrefab, hit.position, Quaternion.identity, vehiclesParent);
-                        vehicle.transform.Rotate(Vector3.up, Random.Range(0, 180));
-                        vehicle.GetComponent<MeshRenderer>().material = vehicleMaterials[Random.Range(0, vehicleMaterials.Length)];
-                    }
+                NavMesh.SamplePosition(samplePosition, out NavMeshHit hit, navmeshPlacementSampleDistance, NavMesh.AllAreas);
+                if (hit.hit) {
+                    GameObject vehicle = Instantiate(vehiclePrefab, hit.position, Quaternion.identity, vehiclesParent);
+                    vehicle.transform.Rotate(Vector3.up, Random.Range(0, 180));
+                    vehicle.GetComponent<MeshRenderer>().material = vehicleMaterials[Random.Range(0, vehicleMaterials.Length)];
                 }
-            }
+            });
         }
 
         private bool PlacePlayer()
@@ -223,7 +202,7 @@ namespace PCG.Generators
 
             Chunk chunk = woodlandBiome.chunks[spawnChunkIndex];
             humanActivityChunks.Add(chunk);
-            Vector3 chunkCenter = chunkGridComponent.GetChunkCenterWorld(chunk);
+            Vector3 chunkCenter = gridComponent.GetChunkCenterWorld(chunk);
             NavMesh.SamplePosition(chunkCenter, out NavMeshHit hit, 20f, NavMesh.AllAreas);
             if (hit.hit) {
                 gameplayData.player.transform.position = hit.position;
@@ -234,6 +213,48 @@ namespace PCG.Generators
 
         private void PlaceZombies()
         {
+            ForEachValidChunk((biome, chunk) =>
+            {
+                if (Random.Range(0f, 1f) >= zombieChunkOccurence) {
+                    return;
+                }
+
+                // Determine zombie count on this chunk
+                int zombieCount = Random.Range(zombieMinCountPerChunk, zombieMaxCountPerChunk);
+                // Precalculate chunk bottom left world coordinate
+                Vector3 chunkBottomLeft = gridComponent.GetChunkBottomLeftCornerWorld(chunk);
+
+                // Prepare sub cell choices index list
+                List<int> subCellIndexChoices = new List<int>();
+                for (int i = 0; i < worldData.actorGridSize * worldData.actorGridSize; i++) {
+                    subCellIndexChoices.Add(i);
+                }
+                // Choose the sub-cells to generate zombies randomly
+                List<int> subCellIndices = GetXElementsFromYElements(zombieCount, subCellIndexChoices);
+
+                // Place the zombies on the selected sub cells
+                foreach (int subCellIndex in subCellIndices) {
+                    // Calculate sub cell x, y coordinate (in sub grid)
+                    int x = subCellIndex % worldData.actorGridSize;
+                    int y = subCellIndex / worldData.actorGridSize;
+
+                    // Calculate sub cell bottom left corner world coordinate
+                    Vector3 subCellBottomLeft = chunkBottomLeft + new Vector3(x * worldData.actorCellSize, 0, y * worldData.actorCellSize);
+                    // Choose a random location within this sub cell, sample closest point on navmesh, and place the zombie
+                    Vector3 offset = new Vector3(Random.Range(0f, worldData.actorCellSize), 0, Random.Range(0f, worldData.actorCellSize));
+                    Vector3 sampleLocation = subCellBottomLeft + offset;
+
+                    NavMesh.SamplePosition(sampleLocation, out NavMeshHit hit, navmeshPlacementSampleDistance, NavMesh.AllAreas);
+                    if (hit.hit) {
+                        GameObject zombie = Instantiate(zombiePrefab, hit.position, Quaternion.identity, zombiesParent);
+                        zombie.transform.Rotate(Vector3.up, Random.Range(0, 180));
+                    }
+                }
+            });
+        }
+
+        private void ForEachValidChunk(Action<Biome, Chunk> action)
+        {
             foreach (Biome biome in biomes) {
                 if (biome.biomeType == BiomeType.Ocean || biome.biomeType == BiomeType.Mountain) {
                     continue;
@@ -243,45 +264,30 @@ namespace PCG.Generators
                     if (humanActivityChunks.Contains(chunk)) {
                         continue;
                     }
-                    if (Random.Range(0f, 1f) >= zombieChunkOccurence) {
-                        continue;
-                    }
 
-                    /* Place zombies */
-                    // Determine zombie count on this chunk
-                    int zombieCount = Random.Range(zombieMinCountPerChunk, zombieMaxCountPerChunk);
-                    // Precalculate chunk bottom left world coordinate
-                    Vector3 chunkBottomLeft = chunkGridComponent.GetChunkBottomLeftCornerWorld(chunk);
-
-                    // TODO: Duplication in PlacePlants()
-                    // Prepare sub cell choices index list
-                    List<int> subCellIndexChoices = new List<int>();
-                    for (int i = 0; i < worldData.actorGridSize * worldData.actorGridSize; i++) {
-                        subCellIndexChoices.Add(i);
-                    }
-                    // Choose the sub-cells to generate zombies randomly
-                    List<int> subCellIndices = GetXElementsFromYElements(zombieCount, subCellIndexChoices);
-
-                    // Place the zombies on the selected sub cells
-                    foreach (int subCellIndex in subCellIndices) {
-                        // Calculate sub cell x, y coordinate (in sub grid)
-                        int x = subCellIndex % worldData.actorGridSize;
-                        int y = subCellIndex / worldData.actorGridSize;
-
-                        // Calculate sub cell bottom left corner world coordinate
-                        Vector3 subCellBottomLeft = chunkBottomLeft + new Vector3(x * worldData.actorCellSize, 0, y * worldData.actorCellSize);
-                        // Choose a random location within this sub cell, sample closest point on navmesh, and place the zombie
-                        Vector3 offset = new Vector3(Random.Range(0f, worldData.actorCellSize), 0, Random.Range(0f, worldData.actorCellSize));
-                        Vector3 sampleLocation = subCellBottomLeft + offset;
-
-                        NavMesh.SamplePosition(sampleLocation, out NavMeshHit hit, navmeshPlacementSampleDistance, NavMesh.AllAreas);
-                        if (hit.hit) {
-                            GameObject zombie = Instantiate(zombiePrefab, hit.position, Quaternion.identity, zombiesParent);
-                            zombie.transform.Rotate(Vector3.up, Random.Range(0, 180));
-                        }
-                    }
+                    action(biome, chunk);
                 }
             }
+        }
+
+        private List<int> GetXElementsFromYElements(int x, List<int> choices)
+        {
+            List<int> chosenOnes = new List<int>();
+            for (int i = 0; i < x; i++) {
+                if (choices.Count == 0) {
+                    break;
+                }
+
+                // Choose an index (for the element) randomly
+                int index = Random.Range(0, choices.Count);
+                // Add this element to the return list
+                chosenOnes.Add(choices[index]);
+
+                // Remove the chosen element
+                choices.RemoveAt(index);
+            }
+
+            return chosenOnes;
         }
     }
 }

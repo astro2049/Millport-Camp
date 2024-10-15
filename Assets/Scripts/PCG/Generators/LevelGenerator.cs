@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Entities.Ocean;
 using Managers.UI.Map;
-using PCG.Generators.Chunks;
+using PCG.Generators.Roads;
+using PCG.Generators.Terrain;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.Events;
@@ -21,9 +22,6 @@ namespace PCG.Generators
 
     public class LevelGenerator : MonoBehaviour
     {
-        [Header("Environment")]
-        [SerializeField] private Transform levelParent;
-
         [Header("World Data")]
         [SerializeField] private WorldData worldData;
 
@@ -33,8 +31,9 @@ namespace PCG.Generators
         [Header("Components")]
         private TerrainGenerator terrainGenerator;
         private ActorsPlacer actorsPlacer;
+        private RoadsGenerator roadsGenerator;
 
-        [SerializeField] private ChunkGridComponent chunkGridComponent;
+        [SerializeField] private GridComponent grid;
         [SerializeField] private NavMeshSurface navMeshSurface;
         private MinimapGenerator minimapGenerator;
         [SerializeField] private OceanComponent ocean;
@@ -48,18 +47,19 @@ namespace PCG.Generators
         private void Initialize()
         {
             // Get components
-            chunkGridComponent = GetComponent<ChunkGridComponent>();
             terrainGenerator = GetComponent<TerrainGenerator>();
             actorsPlacer = GetComponent<ActorsPlacer>();
+            roadsGenerator = GetComponent<RoadsGenerator>();
             minimapGenerator = GetComponent<MinimapGenerator>();
 
             // Initialize components
-            chunkGridComponent.Initialize();
+            worldData.Initialize();
+            grid.Initialize();
             terrainGenerator.Initialize();
             actorsPlacer.Initialize();
 
-            // Offset level parent to align with world center
-            levelParent.transform.position = new Vector3(-worldData.worldSize / 2f, 0, -worldData.worldSize / 2f);
+            // Position grid start to bottom-left of continent
+            grid.transform.position = new Vector3(-worldData.worldSize / 2f, 0, -worldData.worldSize / 2f);
             // Generate aim plane. Same size as the terrain.
             aimPlane.transform.localScale = Vector3.one * worldData.worldSize / 10f;
         }
@@ -75,6 +75,7 @@ namespace PCG.Generators
             // Generate the world map
             terrainGenerator.GenerateTerrainAndBiomes();
             actorsPlacer.PlaceBases();
+            roadsGenerator.PlaceRoadNet();
             actorsPlacer.PlacePlants();
 
             // Wait for the current frame to finish. This is because there are Destroy() calls in Generate()

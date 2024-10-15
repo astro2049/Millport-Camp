@@ -13,7 +13,7 @@ namespace PCG
         public int floorTileGridSize = 4;
         [HideInInspector] public int floorTileSize = 4; // m, Unity unit
 
-        private void OnEnable()
+        public void Initialize()
         {
             worldSize = worldGridSize * chunkSize;
             actorCellSize = chunkSize / actorGridSize;
