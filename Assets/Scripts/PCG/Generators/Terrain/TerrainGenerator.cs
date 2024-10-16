@@ -20,7 +20,7 @@ namespace PCG.Generators.Terrain
     {
         [SerializeField] private WorldData worldData;
         [SerializeField] private GridComponent gridComponent;
-        [SerializeField] private MapFeatures mapFeatures;
+        private MapFeatures mapFeatures;
 
         private Biome[] biomes;
 

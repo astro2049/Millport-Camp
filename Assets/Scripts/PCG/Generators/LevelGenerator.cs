@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Entities.Ocean;
 using Managers.UI.Map;
+using PCG.Generators.POIs;
 using PCG.Generators.Roads;
 using PCG.Generators.Terrain;
 using Unity.AI.Navigation;
@@ -31,7 +32,9 @@ namespace PCG.Generators
         [Header("Components")]
         private TerrainGenerator terrainGenerator;
         private ActorsPlacer actorsPlacer;
-        private RoadsGenerator roadsGenerator;
+        private TownGenerator townGenerator;
+        private RoadNetGenerator roadNetGenerator;
+        private TownRoadsPlacer townRoadsPlacer;
 
         [SerializeField] private GridComponent grid;
         [SerializeField] private NavMeshSurface navMeshSurface;
@@ -49,7 +52,9 @@ namespace PCG.Generators
             // Get components
             terrainGenerator = GetComponent<TerrainGenerator>();
             actorsPlacer = GetComponent<ActorsPlacer>();
-            roadsGenerator = GetComponent<RoadsGenerator>();
+            townGenerator = GetComponent<TownGenerator>();
+            roadNetGenerator = GetComponent<RoadNetGenerator>();
+            townRoadsPlacer = GetComponent<TownRoadsPlacer>();
             minimapGenerator = GetComponent<MinimapGenerator>();
 
             // Initialize components
@@ -75,7 +80,9 @@ namespace PCG.Generators
             // Generate the world map
             terrainGenerator.GenerateTerrainAndBiomes();
             actorsPlacer.PlaceBases();
-            roadsGenerator.PlaceRoadNet();
+            townGenerator.GenerateTowns(actorsPlacer.basePositions);
+            roadNetGenerator.PlaceRoadNet(actorsPlacer.basePositions);
+            townRoadsPlacer.PlaceRoadSegments();
             actorsPlacer.PlacePlants();
 
             // Wait for the current frame to finish. This is because there are Destroy() calls in Generate()

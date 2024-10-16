@@ -67,7 +67,7 @@ namespace PCG.Generators
             int i = 0;
             foreach (Quest quest in questsManager.quests) {
                 List<Chunk> chunks = biomes[quest.baseBiome.GetHashCode()].chunks;
-                Chunk chunk = chunks[chunks.Count / 2];
+                Chunk chunk = chunks[Random.Range(0, chunks.Count)];
                 humanActivityChunks.Add(chunk);
 
                 // Get chunk center world coordinate

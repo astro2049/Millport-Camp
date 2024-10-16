@@ -3,28 +3,23 @@ using UnityEngine;
 
 namespace PCG.Generators.Roads
 {
-    public class RoadsGenerator : MonoBehaviour
+    public class RoadNetGenerator : MonoBehaviour
     {
         [SerializeField] private GridComponent roadGrid;
         [SerializeField] private GameObject roadPrefab;
         [SerializeField] private Transform roadsParent;
 
-        private MapFeatures mapFeatures;
+        [SerializeField] private RoadGridComponent roadGridComponent;
+        [SerializeField] private MapFeatures mapFeatures;
 
-        private void OnEnable()
+        public void PlaceRoadNet(List<Vector3> basePositions)
         {
-            mapFeatures = GetComponent<MapFeatures>();
-        }
-
-        public void PlaceRoadNet()
-        {
-            List<Vector3> basePositions = GetComponent<ActorsPlacer>().basePositions;
             for (int i = 0; i < basePositions.Count - 1; i++) {
-                GenerateRoad(basePositions[i], basePositions[i + 1]);
+                GenerateRoadBetween2Towns(basePositions[i], basePositions[i + 1]);
             }
         }
 
-        private void GenerateRoad(Vector3 startPoint, Vector3 endPoint)
+        private void GenerateRoadBetween2Towns(Vector3 startPoint, Vector3 endPoint)
         {
             Vector3Int startCell = roadGrid.grid.WorldToCell(startPoint);
             Vector3Int endCell = roadGrid.grid.WorldToCell(endPoint);
@@ -33,13 +28,15 @@ namespace PCG.Generators.Roads
 
             for (int i = 1; i < roadCells.Count - 1; i++) {
                 Vector3Int currentCell = roadCells[i];
+                if (roadGridComponent.roadCells.Contains(currentCell)) {
+                    continue;
+                }
                 Vector3Int previousCell = roadCells[i - 1];
 
                 Vector3 currentPosition = roadGrid.grid.GetCellCenterWorld(currentCell);
                 Vector3 previousPosition = roadGrid.grid.GetCellCenterWorld(previousCell);
 
                 Vector3 direction = (currentPosition - previousPosition).normalized;
-                // Adjust rotation if your prefab is not aligned along the Z-axis
                 Quaternion rotation = Quaternion.LookRotation(direction);
 
                 // "Snap" the road to the ground
@@ -71,7 +68,7 @@ namespace PCG.Generators.Roads
                 }
 
                 // Get neighbors of the current node
-                foreach (Vector3Int neighborPosition in GetNeighbors(currentRoadNode.position)) {
+                foreach (Vector3Int neighborPosition in roadGridComponent.GetNeighborCells(currentRoadNode.position)) {
                     if (visited.Contains(neighborPosition)) {
                         continue;
                     }
@@ -103,55 +100,11 @@ namespace PCG.Generators.Roads
             return new List<Vector3Int>();
         }
 
-        private List<Vector3Int> GetNeighbors(Vector3Int cell)
-        {
-            List<Vector3Int> neighbors = new List<Vector3Int>();
-            Vector3Int[] directions = {
-                new Vector3Int(1, 0, 0),
-                new Vector3Int(-1, 0, 0),
-                new Vector3Int(0, 0, 1),
-                new Vector3Int(0, 0, -1)
-            };
-
-            // Walkability checks
-            foreach (Vector3Int direction in directions) {
-                Vector3Int neighborPos = cell + direction;
-                if (IsWalkable(neighborPos)) {
-                    neighbors.Add(neighborPos);
-                }
-            }
-
-            return neighbors;
-        }
-
         private int GetDistance(Vector3Int a, Vector3Int b)
         {
             // Using Manhattan distance as the heuristic
             return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
         }
-
-        private bool IsWalkable(Vector3Int cell)
-        {
-            // A cell is walkable if it's land and below a certain height
-
-            // 0. Land
-            // Get the center of the cell in world coordinates
-            Vector3 cellWorldPosition = roadGrid.grid.GetCellCenterWorld(cell);
-
-            // Start 1 unit above the center of the cell; Direction of the raycast is downwards
-            Ray ray = new Ray(cellWorldPosition + Vector3.up * 1f, Vector3.down);
-            // Draw the debug ray
-            // Debug.DrawRay(rayOrigin, rayDirection * rayLength, Color.red, 10f);
-            if (!Physics.Raycast(ray, out RaycastHit hitInfo, 2f, LayerMask.GetMask("Floor"))) {
-                return false;
-            }
-
-            return true;
-
-            // 1. Not part of a mountain
-            // float height = mapFeatures.GetPointHeight(cellWorldPosition);
-        }
-
 
         private List<Vector3Int> ReconstructPath(RoadNode endRoadNode)
         {

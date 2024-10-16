@@ -1,38 +1,47 @@
 ﻿using System.Collections.Generic;
+using PCG.Generators.Roads;
 using UnityEngine;
 
 namespace PCG.Generators.POIs
 {
     public class TownGenerator : MonoBehaviour
     {
-        public LSystem lSystem;
-        public GameObject roadPrefab;
-        public GameObject buildingPrefab;
-        public int length = 4;
+        [SerializeField] private LSystem lSystem;
+        [SerializeField] private GameObject buildingPrefab;
+        [SerializeField] private int initialLength = 4;
 
-        private void Start()
+        [SerializeField] private RoadGridComponent roadGridComponent;
+
+        public void GenerateTowns(List<Vector3> basePositions)
         {
-            string sentence = lSystem.GenerateSentence();
-            Debug.Log("sentence: " + sentence);
-            GenerateTown(sentence);
+            foreach (Vector3 basePosition in basePositions) {
+                GenerateTown(basePosition);
+            }
         }
 
-        private void GenerateTown(string sentence)
+        private void GenerateTown(Vector3 center)
+        {
+            string sentence = lSystem.GenerateSentence();
+            // Debug.Log("sentence: " + sentence);
+            ParseSentence(sentence, center);
+        }
+
+        private void ParseSentence(string sentence, Vector3 center)
         {
             Stack<TransformInfo> transformStack = new Stack<TransformInfo>();
-            Vector3 position = new Vector3(0, 0.05f, 0);
+            Vector3Int position = roadGridComponent.roadGrid.grid.WorldToCell(center);
             Quaternion rotation = Quaternion.identity;
+            rotation *= Quaternion.Euler(Vector3.up * 90 * Random.Range(0, 4));
+            int length = initialLength;
 
             foreach (char c in sentence) {
                 switch (c) {
                     case 'F':
                         for (int i = 0; i < length; i++) {
-                            GameObject roadLeft = Instantiate(roadPrefab, position, rotation);
-                            roadLeft.transform.Translate(new Vector3(5, 0, 5));
-                            GameObject roadRight = Instantiate(roadPrefab, position, rotation);
-                            roadRight.transform.Translate(new Vector3(-5, 0, 0));
-                            roadRight.transform.Rotate(new Vector3(0, 180, 0));
-                            position += rotation * Vector3.forward * 5;
+                            if (roadGridComponent.IsWalkable(position)) {
+                                roadGridComponent.roadCells.Add(position);
+                            }
+                            position += Vector3Int.RoundToInt(rotation * Vector3.forward);
                         }
                         length -= 1;
                         break;
@@ -50,6 +59,7 @@ namespace PCG.Generators.POIs
                             length = length
                         });
                         break;
+
                     case ']':
                         // Load
                         if (transformStack.Count > 0) {
@@ -71,7 +81,7 @@ namespace PCG.Generators.POIs
 
         private struct TransformInfo
         {
-            public Vector3 position;
+            public Vector3Int position;
             public Quaternion rotation;
             public int length;
         }
