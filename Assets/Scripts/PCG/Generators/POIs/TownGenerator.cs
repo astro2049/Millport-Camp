@@ -59,7 +59,6 @@ namespace PCG.Generators.POIs
                             length = length
                         });
                         break;
-
                     case ']':
                         // Load
                         if (transformStack.Count > 0) {

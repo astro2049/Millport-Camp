@@ -6,11 +6,11 @@ namespace PCG.Generators.Roads
     public class RoadNetGenerator : MonoBehaviour
     {
         [SerializeField] private GridComponent roadGrid;
-        [SerializeField] private GameObject roadPrefab;
+        [SerializeField] private GameObject roadPrefab, debugRoadPrefab, debugRoadPrefab1;
         [SerializeField] private Transform roadsParent;
 
         [SerializeField] private RoadGridComponent roadGridComponent;
-        [SerializeField] private MapFeatures mapFeatures;
+        [SerializeField] private bool showDebugColors = false;
 
         public void PlaceRoadNet(List<Vector3> basePositions)
         {
@@ -28,9 +28,6 @@ namespace PCG.Generators.Roads
 
             for (int i = 1; i < roadCells.Count - 1; i++) {
                 Vector3Int currentCell = roadCells[i];
-                if (roadGridComponent.roadCells.Contains(currentCell)) {
-                    continue;
-                }
                 Vector3Int previousCell = roadCells[i - 1];
 
                 Vector3 currentPosition = roadGrid.grid.GetCellCenterWorld(currentCell);
@@ -38,25 +35,33 @@ namespace PCG.Generators.Roads
 
                 Vector3 direction = (currentPosition - previousPosition).normalized;
                 Quaternion rotation = Quaternion.LookRotation(direction);
-
                 // "Snap" the road to the ground
-                currentPosition.y = 0.01f;
-                Instantiate(roadPrefab, currentPosition, rotation, roadsParent);
+                // TODO: Slightly above town roads atm...
+                currentPosition.y = 0.015f;
+
+                if (showDebugColors) {
+                    Instantiate(!roadGridComponent.roadCells.Contains(currentCell) ? debugRoadPrefab : debugRoadPrefab1, currentPosition, rotation, roadsParent);
+                } else {
+                    if (roadGridComponent.roadCells.Contains(currentCell)) {
+                        continue;
+                    }
+                    Instantiate(roadPrefab, currentPosition, rotation, roadsParent);
+                }
             }
         }
 
         private List<Vector3Int> AStarPath(Vector3Int startCell, Vector3Int endCell)
         {
-            // Priority queue for the open list
+            // Priority queue for the to-explore list
             PriorityQueue<RoadNode> cellsToTraverse = new PriorityQueue<RoadNode>();
             // Closed set to keep track of evaluated nodes
             HashSet<Vector3Int> visited = new HashSet<Vector3Int>();
 
-            RoadNode startRoadNode = new RoadNode(startCell) {
+            RoadNode startRoadNode = new RoadNode(startCell, roadGridComponent.roadCells.Contains(startCell)) {
                 a = 0,
                 h = GetDistance(startCell, endCell)
             };
-            cellsToTraverse.Enqueue(startRoadNode, startRoadNode.f);
+            cellsToTraverse.Enqueue(startRoadNode);
 
             while (cellsToTraverse.count > 0) {
                 RoadNode currentRoadNode = cellsToTraverse.Dequeue();
@@ -75,23 +80,23 @@ namespace PCG.Generators.Roads
 
                     int a = currentRoadNode.a + 1;
 
-                    RoadNode neighborRoadNode = new RoadNode(neighborPosition) {
+                    RoadNode neighborRoadNode = new RoadNode(neighborPosition, roadGridComponent.roadCells.Contains(neighborPosition)) {
                         a = a,
                         h = GetDistance(neighborPosition, endCell),
                         parent = currentRoadNode
                     };
 
-                    // Check if the neighbor is already in the open list with a lower a score
+                    // Check if the neighbor is already in to-explore list with a lower a score
                     if (cellsToTraverse.Contains(neighborRoadNode)) {
                         RoadNode existingRoadNode = cellsToTraverse.GetNode(neighborRoadNode);
                         if (a < existingRoadNode.a) {
                             existingRoadNode.a = a;
                             existingRoadNode.parent = currentRoadNode;
                             // Since the priority (f score) has changed, we need to update its position in the queue
-                            cellsToTraverse.UpdatePriority(existingRoadNode, existingRoadNode.f);
+                            cellsToTraverse.UpdatePriority(existingRoadNode);
                         }
                     } else {
-                        cellsToTraverse.Enqueue(neighborRoadNode, neighborRoadNode.f);
+                        cellsToTraverse.Enqueue(neighborRoadNode);
                     }
                 }
             }
@@ -103,7 +108,7 @@ namespace PCG.Generators.Roads
         private int GetDistance(Vector3Int a, Vector3Int b)
         {
             // Using Manhattan distance as the heuristic
-            return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
+            return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.z - b.z);
         }
 
         private List<Vector3Int> ReconstructPath(RoadNode endRoadNode)

@@ -4,17 +4,17 @@ namespace PCG.Generators.Roads
 {
     public class PriorityQueue<T> where T : System.IComparable<T>
     {
-        private readonly List<(T item, int priority)> elements = new List<(T, int)>();
+        private readonly List<T> elements = new List<T>();
 
         public int count
         {
             get { return elements.Count; }
         }
 
-        public void Enqueue(T item, int priority)
+        public void Enqueue(T item)
         {
-            elements.Add((item, priority));
-            HeapifyUp(elements.Count - 1);
+            elements.Add(item);
+            BubbleUp(elements.Count - 1);
         }
 
         public T Dequeue()
@@ -23,68 +23,69 @@ namespace PCG.Generators.Roads
                 throw new System.InvalidOperationException("The queue is empty.");
             }
 
-            T item = elements[0].item;
+            T item = elements[0];
             elements[0] = elements[elements.Count - 1];
             elements.RemoveAt(elements.Count - 1);
-            HeapifyDown(0);
+            BubbleDown(0);
             return item;
         }
 
         public bool Contains(T item)
         {
-            return elements.Exists(element => element.item.Equals(item));
+            return elements.Exists(element => element.Equals(item));
         }
 
         public T GetNode(T item)
         {
-            int index = elements.FindIndex(element => element.item.Equals(item));
+            int index = elements.FindIndex(element => element.Equals(item));
             if (index >= 0) {
-                return elements[index].item;
+                return elements[index];
             }
             return default(T);
         }
 
-        public void UpdatePriority(T item, int newPriority)
+        public void UpdatePriority(T item)
         {
-            int index = elements.FindIndex(element => element.item.Equals(item));
+            int index = elements.FindIndex(element => element.Equals(item));
             if (index >= 0) {
-                elements[index] = (item, newPriority);
-                HeapifyUp(index);
-                HeapifyDown(index);
+                elements[index] = item;
+                BubbleUp(index);
+                BubbleDown(index);
             }
         }
 
-        private void HeapifyUp(int index)
+        private void BubbleUp(int index)
         {
             while (index > 0) {
                 int parentIndex = (index - 1) / 2;
-                if (elements[index].priority >= elements[parentIndex].priority) {
+                if (elements[index].CompareTo(elements[parentIndex]) < 0) {
+                    Swap(index, parentIndex);
+                    index = parentIndex;
+                } else {
                     break;
                 }
-                Swap(index, parentIndex);
-                index = parentIndex;
             }
         }
 
-        private void HeapifyDown(int index)
+        private void BubbleDown(int index)
         {
             int lastIndex = elements.Count - 1;
             while (true) {
                 int leftChildIndex = 2 * index + 1;
                 int rightChildIndex = 2 * index + 2;
-                int smallestIndex = index;
+                int newIndex = index;
 
-                if (leftChildIndex <= lastIndex && elements[leftChildIndex].priority < elements[smallestIndex].priority) {
-                    smallestIndex = leftChildIndex;
+                if (leftChildIndex <= lastIndex && elements[newIndex].CompareTo(elements[leftChildIndex]) > 0) {
+                    newIndex = leftChildIndex;
                 }
-                if (rightChildIndex <= lastIndex && elements[rightChildIndex].priority < elements[smallestIndex].priority) {
-                    smallestIndex = rightChildIndex;
+                if (rightChildIndex <= lastIndex && elements[newIndex].CompareTo(elements[rightChildIndex]) > 0) {
+                    newIndex = rightChildIndex;
                 }
-                if (smallestIndex == index) {
+                if (newIndex == index) {
                     break;
                 }
-                Swap(index, smallestIndex);
-                index = smallestIndex;
+                Swap(index, newIndex);
+                index = newIndex;
             }
         }
 

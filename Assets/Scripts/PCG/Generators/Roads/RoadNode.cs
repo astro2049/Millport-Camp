@@ -8,25 +8,38 @@ namespace PCG.Generators.Roads
         public RoadNode parent;
         public int a; // Actual cost from start node
         public int h; // Heuristic cost to end node
+        private readonly bool isRoadCell; // Indicates if this node is a road cell
+
         public int f
         {
             get { return a + h; } // Total estimated cost
         }
 
-        public RoadNode(Vector3Int position)
+        public RoadNode(Vector3Int position, bool isRoadCell)
         {
             this.position = position;
             a = int.MaxValue; // Initialize with a high value
             h = 0;
             parent = null;
+            this.isRoadCell = isRoadCell;
         }
 
         public int CompareTo(RoadNode other)
         {
             int compare = f.CompareTo(other.f);
             if (compare == 0) {
-                // Break ties by h value
+                // Always advancing towards destination
                 compare = h.CompareTo(other.h);
+                if (compare == 0) {
+                    // Prefer nodes that are road cells
+                    if (isRoadCell && !other.isRoadCell) {
+                        return -1;
+                    } else if (!isRoadCell && other.isRoadCell) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
             }
             return compare;
         }

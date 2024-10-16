@@ -18710,9 +18710,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roadGrid: {fileID: 4954013918862856300}
   roadPrefab: {fileID: 945234207020681840, guid: fbc1511f4444e8c41a7dfadfa02b3ffc, type: 3}
+  debugRoadPrefab: {fileID: 2240311144616729697, guid: 8455ceb1481c5a54291a9ac71b950ba7, type: 3}
+  debugRoadPrefab1: {fileID: 2240311144616729697, guid: f8f469fca17c5ef4c97b57a715a4feeb, type: 3}
   roadsParent: {fileID: 1487806363}
   roadGridComponent: {fileID: 9116310719171609630}
-  mapFeatures: {fileID: 9116310719171609626}
+  showDebugColors: 1
 --- !u!224 &7522907993966439544
 RectTransform:
   m_ObjectHideFlags: 0
