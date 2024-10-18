@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PCG.Generators.Roads
+namespace PCG.Generators.Roads.Highways
 {
     public class PriorityQueue<T> where T : System.IComparable<T>
     {

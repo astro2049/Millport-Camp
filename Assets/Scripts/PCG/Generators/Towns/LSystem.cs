@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace PCG.Generators.POIs
+namespace PCG.Generators.Towns
 {
     [CreateAssetMenu(fileName = "LSystem", menuName = "Procedural Generation/L-System")]
     public class LSystem : ScriptableObject

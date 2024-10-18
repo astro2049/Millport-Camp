@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using Entities.Ocean;
 using Managers.UI.Map;
-using PCG.Generators.POIs;
 using PCG.Generators.Roads;
+using PCG.Generators.Roads.Highways;
 using PCG.Generators.Terrain;
+using PCG.Generators.Towns;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.Events;
@@ -33,8 +34,8 @@ namespace PCG.Generators
         private TerrainGenerator terrainGenerator;
         private ActorsPlacer actorsPlacer;
         private TownGenerator townGenerator;
-        private RoadNetGenerator roadNetGenerator;
-        private TownRoadsPlacer townRoadsPlacer;
+        private HighwaysGenerator highwaysGenerator;
+        private RoadGridComponent roadGridComponent;
 
         [SerializeField] private GridComponent grid;
         [SerializeField] private NavMeshSurface navMeshSurface;
@@ -53,8 +54,8 @@ namespace PCG.Generators
             terrainGenerator = GetComponent<TerrainGenerator>();
             actorsPlacer = GetComponent<ActorsPlacer>();
             townGenerator = GetComponent<TownGenerator>();
-            roadNetGenerator = GetComponent<RoadNetGenerator>();
-            townRoadsPlacer = GetComponent<TownRoadsPlacer>();
+            highwaysGenerator = GetComponent<HighwaysGenerator>();
+            roadGridComponent = GetComponent<RoadGridComponent>();
             minimapGenerator = GetComponent<MinimapGenerator>();
 
             // Initialize components
@@ -81,8 +82,8 @@ namespace PCG.Generators
             terrainGenerator.GenerateTerrainAndBiomes();
             actorsPlacer.PlaceBases();
             townGenerator.GenerateTowns(actorsPlacer.basePositions);
-            roadNetGenerator.PlaceRoadNet(actorsPlacer.basePositions);
-            townRoadsPlacer.PlaceRoadSegments();
+            highwaysGenerator.CalculateHighwayNet(actorsPlacer.basePositions);
+            roadGridComponent.PlaceRoadSegments();
             actorsPlacer.PlacePlants();
 
             // Wait for the current frame to finish. This is because there are Destroy() calls in Generate()

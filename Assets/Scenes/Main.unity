@@ -18708,13 +18708,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c67eaf611ded4fb6bbccb254fe63b907, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roadGrid: {fileID: 4954013918862856300}
-  roadPrefab: {fileID: 945234207020681840, guid: fbc1511f4444e8c41a7dfadfa02b3ffc, type: 3}
-  debugRoadPrefab: {fileID: 2240311144616729697, guid: 8455ceb1481c5a54291a9ac71b950ba7, type: 3}
-  debugRoadPrefab1: {fileID: 2240311144616729697, guid: f8f469fca17c5ef4c97b57a715a4feeb, type: 3}
-  roadsParent: {fileID: 1487806363}
   roadGridComponent: {fileID: 9116310719171609630}
-  showDebugColors: 1
 --- !u!224 &7522907993966439544
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21309,7 +21303,6 @@ GameObject:
   - component: {fileID: 9116310719171609628}
   - component: {fileID: 7520274118895196884}
   - component: {fileID: 9116310719171609630}
-  - component: {fileID: 9116310719171609629}
   m_Layer: 0
   m_Name: Level Generator
   m_TagString: Untagged
@@ -22106,22 +22099,6 @@ MonoBehaviour:
   buildingPrefab: {fileID: 195682, guid: 6e1b6bb6069c8c446bf14668e5eda0b4, type: 3}
   initialLength: 4
   roadGridComponent: {fileID: 9116310719171609630}
---- !u!114 &9116310719171609629
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8777457652649854530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 528b82462d5042d8ae66051a192b2ee8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roadPrefab: {fileID: 945234207020681840, guid: fbc1511f4444e8c41a7dfadfa02b3ffc, type: 3}
-  crossroadPrefab: {fileID: 8971062154802808910, guid: fd87ea39721ce2e4e9f8d0ff8256ef8a, type: 3}
-  roadsParent: {fileID: 1487806363}
-  roadGridComponent: {fileID: 9116310719171609630}
 --- !u!114 &9116310719171609630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22134,7 +22111,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f304f93cd6c24682a10d0e1c9cc68b2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roadGrid: {fileID: 4954013918862856300}
+  grid: {fileID: 4954013918862856299}
+  roadPrefab: {fileID: 945234207020681840, guid: fbc1511f4444e8c41a7dfadfa02b3ffc, type: 3}
+  crossroadPrefab: {fileID: 8971062154802808910, guid: fd87ea39721ce2e4e9f8d0ff8256ef8a, type: 3}
+  debugHighwayPrefab: {fileID: 2240311144616729697, guid: 8455ceb1481c5a54291a9ac71b950ba7, type: 3}
+  debugHighwayPrefab1: {fileID: 2240311144616729697, guid: f8f469fca17c5ef4c97b57a715a4feeb, type: 3}
+  roadsParent: {fileID: 1487806363}
+  showHighwayDebugColors: 1
 --- !u!114 &9122935031491421135
 MonoBehaviour:
   m_ObjectHideFlags: 0

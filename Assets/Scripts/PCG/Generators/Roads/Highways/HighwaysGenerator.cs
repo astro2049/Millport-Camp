@@ -1,51 +1,28 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace PCG.Generators.Roads
+namespace PCG.Generators.Roads.Highways
 {
-    public class RoadNetGenerator : MonoBehaviour
+    public class HighwaysGenerator : MonoBehaviour
     {
-        [SerializeField] private GridComponent roadGrid;
-        [SerializeField] private GameObject roadPrefab, debugRoadPrefab, debugRoadPrefab1;
-        [SerializeField] private Transform roadsParent;
-
         [SerializeField] private RoadGridComponent roadGridComponent;
-        [SerializeField] private bool showDebugColors = false;
 
-        public void PlaceRoadNet(List<Vector3> basePositions)
+        public void CalculateHighwayNet(List<Vector3> basePositions)
         {
-            for (int i = 0; i < basePositions.Count - 1; i++) {
-                GenerateRoadBetween2Towns(basePositions[i], basePositions[i + 1]);
-            }
-        }
-
-        private void GenerateRoadBetween2Towns(Vector3 startPoint, Vector3 endPoint)
-        {
-            Vector3Int startCell = roadGrid.grid.WorldToCell(startPoint);
-            Vector3Int endCell = roadGrid.grid.WorldToCell(endPoint);
-            // Debug.Log(startCell + " " + endCell);
-            List<Vector3Int> roadCells = AStarPath(startCell, endCell);
-
-            for (int i = 1; i < roadCells.Count - 1; i++) {
-                Vector3Int currentCell = roadCells[i];
-                Vector3Int previousCell = roadCells[i - 1];
-
-                Vector3 currentPosition = roadGrid.grid.GetCellCenterWorld(currentCell);
-                Vector3 previousPosition = roadGrid.grid.GetCellCenterWorld(previousCell);
-
-                Vector3 direction = (currentPosition - previousPosition).normalized;
-                Quaternion rotation = Quaternion.LookRotation(direction);
-                // "Snap" the road to the ground
-                // TODO: Slightly above town roads atm...
-                currentPosition.y = 0.015f;
-
-                if (showDebugColors) {
-                    Instantiate(!roadGridComponent.roadCells.Contains(currentCell) ? debugRoadPrefab : debugRoadPrefab1, currentPosition, rotation, roadsParent);
-                } else {
-                    if (roadGridComponent.roadCells.Contains(currentCell)) {
-                        continue;
+            for (int i = 1; i < basePositions.Count; i++) {
+                Vector3Int startCell = roadGridComponent.grid.WorldToCell(basePositions[i - 1]);
+                Vector3Int endCell = roadGridComponent.grid.WorldToCell(basePositions[i]);
+                // Debug.Log(startCell + " " + endCell);
+                List<Vector3Int> roadCells = AStarPath(startCell, endCell);
+                foreach (Vector3Int roadCell in roadCells) {
+                    if (roadGridComponent.roadCells.Contains(roadCell)) {
+                        // Existing road segment, might also belong to a highway(s) so it's a tryadd
+                        roadGridComponent.highwayCells.TryAdd(roadCell, false); // Just for debugging
+                    } else {
+                        // A new road segment
+                        roadGridComponent.roadCells.Add(roadCell);
+                        roadGridComponent.highwayCells.Add(roadCell, true); // Just for debugging
                     }
-                    Instantiate(roadPrefab, currentPosition, rotation, roadsParent);
                 }
             }
         }

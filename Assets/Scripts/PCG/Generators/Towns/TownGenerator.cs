@@ -2,7 +2,7 @@
 using PCG.Generators.Roads;
 using UnityEngine;
 
-namespace PCG.Generators.POIs
+namespace PCG.Generators.Towns
 {
     public class TownGenerator : MonoBehaviour
     {
@@ -29,7 +29,7 @@ namespace PCG.Generators.POIs
         private void ParseSentence(string sentence, Vector3 center)
         {
             Stack<TransformInfo> transformStack = new Stack<TransformInfo>();
-            Vector3Int position = roadGridComponent.roadGrid.grid.WorldToCell(center);
+            Vector3Int position = roadGridComponent.grid.WorldToCell(center);
             Quaternion rotation = Quaternion.identity;
             rotation *= Quaternion.Euler(Vector3.up * 90 * Random.Range(0, 4));
             int length = initialLength;

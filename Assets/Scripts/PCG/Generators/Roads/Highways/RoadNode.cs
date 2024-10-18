@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace PCG.Generators.Roads
+namespace PCG.Generators.Roads.Highways
 {
     public class RoadNode : System.IComparable<RoadNode>
     {

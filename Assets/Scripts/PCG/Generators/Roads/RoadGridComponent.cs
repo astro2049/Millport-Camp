@@ -5,8 +5,15 @@ namespace PCG.Generators.Roads
 {
     public class RoadGridComponent : MonoBehaviour
     {
-        public GridComponent roadGrid;
-        public readonly HashSet<Vector3Int> roadCells = new HashSet<Vector3Int>();
+        public Grid grid;
+        public readonly HashSet<Vector3Int> roadCells = new HashSet<Vector3Int>(); // Contains both town roads and highways
+
+        [SerializeField] private GameObject roadPrefab, crossroadPrefab, debugHighwayPrefab, debugHighwayPrefab1;
+        [SerializeField] private Transform roadsParent;
+
+        [Header("Debug")]
+        public readonly Dictionary<Vector3Int, bool> highwayCells = new Dictionary<Vector3Int, bool>(); // Highway cells dictionary: true - new segment, false - existing segment
+        [SerializeField] private bool showHighwayDebugColors = false;
 
         private readonly Vector3Int[] directions = {
             new Vector3Int(1, 0, 0),
@@ -36,7 +43,7 @@ namespace PCG.Generators.Roads
 
             // 0. Land
             // Get the center of the cell in world coordinates
-            Vector3 cellWorldPosition = roadGrid.grid.GetCellCenterWorld(cell);
+            Vector3 cellWorldPosition = grid.GetCellCenterWorld(cell);
 
             // Start 1 unit above the center of the cell; Direction of the raycast is downwards
             Ray ray = new Ray(cellWorldPosition + Vector3.up * 1f, Vector3.down);
@@ -64,6 +71,47 @@ namespace PCG.Generators.Roads
             }
 
             return neighbors;
+        }
+
+        public void PlaceRoadSegments()
+        {
+            foreach (Vector3Int roadCell in roadCells) {
+                List<Vector3Int> neighbors = GetNeighborRoadCells(roadCell);
+
+                GameObject roadSegment;
+                Vector3 position = grid.GetCellCenterWorld(roadCell);
+                position.y = 0.01f;
+                Quaternion rotation = Quaternion.identity;
+                if (neighbors.Count == 1) {
+                    roadSegment = roadPrefab;
+                    rotation = Quaternion.LookRotation(Vector3.Normalize(roadCell - neighbors[0]));
+                } else if (neighbors.Count == 2) {
+                    if (roadCell - neighbors[0] == neighbors[1] - roadCell) {
+                        roadSegment = roadPrefab;
+                        rotation = Quaternion.LookRotation(Vector3.Normalize(roadCell - neighbors[0]));
+                    } else {
+                        roadSegment = crossroadPrefab;
+                    }
+                } else {
+                    roadSegment = crossroadPrefab;
+                }
+                Instantiate(roadSegment, position, rotation, roadsParent);
+            }
+
+            if (showHighwayDebugColors) {
+                ShowDebugHighways();
+            }
+        }
+
+        private void ShowDebugHighways()
+        {
+            foreach (KeyValuePair<Vector3Int, bool> highwayCell in highwayCells) {
+                Vector3 position = grid.GetCellCenterWorld(highwayCell.Key);
+                // "Snap" the road to the ground.
+                // TODO: Caveat - This is slightly above town roads
+                position.y = 0.015f;
+                Instantiate(highwayCell.Value ? debugHighwayPrefab : debugHighwayPrefab1, position, Quaternion.identity, roadsParent);
+            }
         }
     }
 }
