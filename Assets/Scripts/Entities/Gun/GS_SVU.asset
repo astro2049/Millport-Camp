@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: GS_SVU
   m_EditorClassIdentifier: 
   name: SVU
-  mesh: {fileID: -6322301886240935113, guid: 1f2bd1c22d3be4c468a13bca7f4a129c, type: 3}
-  material: {fileID: -7126193129781715291, guid: 1f2bd1c22d3be4c468a13bca7f4a129c, type: 3}
+  icon: {fileID: 0}
+  description: 
+  modelPrefab: {fileID: 898354119946347381, guid: 40abe4c028d1d164aaaaa3b993a823d1, type: 3}
   damage: 55
   rpm: 78
   fireInterval: 0.7692308

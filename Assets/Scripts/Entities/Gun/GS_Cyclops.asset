@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: GS_Cyclops
   m_EditorClassIdentifier: 
   name: Cyclops
-  mesh: {fileID: -805959276040964406, guid: 4e98271e1c60ef549b3240179519b7bf, type: 3}
+  icon: {fileID: 0}
+  description: 
+  modelPrefab: {fileID: 5248292506004001506, guid: c75ee678dab58624ca92d70858fc66c8, type: 3}
   material: {fileID: -7126193129781715291, guid: 4e98271e1c60ef549b3240179519b7bf, type: 3}
   damage: 45
   rpm: 156

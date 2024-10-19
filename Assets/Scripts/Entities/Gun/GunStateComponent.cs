@@ -3,6 +3,8 @@ using Entities.Abilities.Health;
 using Entities.Abilities.Observer;
 using UnityEngine;
 using EventType = Entities.Abilities.Observer.EventType;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Entities.Gun
 {
@@ -37,6 +39,7 @@ namespace Entities.Gun
         private bool isBoltInPosition = true;
 
         // Muzzle
+        [SerializeField] private Transform meshTransform;
         [SerializeField] private Transform muzzleTransform;
 
         // Components
@@ -49,20 +52,15 @@ namespace Entities.Gun
             subjectComponent = GetComponent<SubjectComponent>();
             audioSource = GetComponent<AudioSource>();
             damageDealerComponent = GetComponent<DamageDealerComponent>();
-
-            Init();
         }
 
-        public void Init(GunStats gunStats = null)
+        public void Init(GunStats gunStats)
         {
-            if (gunStats != null) {
-                stats = gunStats;
-            }
+            stats = gunStats;
 
             // Initialize appearance (mesh and material) according to gunData (scriptable object)
-            Transform meshTransform = transform.Find("Mesh");
-            meshTransform.GetComponent<MeshFilter>().mesh = stats.mesh;
-            meshTransform.GetComponent<MeshRenderer>().material = stats.material;
+            GameObject model = Instantiate(gunStats.modelPrefab, meshTransform);
+            model.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
 
             // Initialize fields
             // magAmmo
