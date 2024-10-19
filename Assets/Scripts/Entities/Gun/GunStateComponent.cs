@@ -52,22 +52,27 @@ namespace Entities.Gun
             subjectComponent = GetComponent<SubjectComponent>();
             audioSource = GetComponent<AudioSource>();
             damageDealerComponent = GetComponent<DamageDealerComponent>();
+
+            Init();
         }
 
-        public void Init(GunStats gunStats)
+        public void Init(GunStats stats = null)
         {
-            stats = gunStats;
+            if (stats != null) {
+                this.stats = stats;
+                Destroy(meshTransform.GetChild(0).gameObject);
+            }
 
             // Initialize appearance (mesh and material) according to gunData (scriptable object)
-            GameObject model = Instantiate(gunStats.modelPrefab, meshTransform);
+            GameObject model = Instantiate(this.stats.modelPrefab, meshTransform);
             model.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
 
             // Initialize fields
             // magAmmo
-            SetMagAmmo(stats.magSize);
+            SetMagAmmo(this.stats.magSize);
 
             // Calculate when to play chargingBoltSound
-            chargingBoltSoundPlayTimestamp = stats.reloadTime - chargingBoltSound.length;
+            chargingBoltSoundPlayTimestamp = this.stats.reloadTime - chargingBoltSound.length;
         }
 
         // Start is called before the first frame update
