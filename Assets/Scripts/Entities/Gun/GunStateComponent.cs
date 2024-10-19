@@ -108,7 +108,7 @@ namespace Entities.Gun
                     }
                 } else {
                     // Mag empty SFX
-                    audioSource.PlayOneShot(magEmptySound, 0.6f);
+                    audioSource.PlayOneShot(magEmptySound, 0.3f);
                 }
             }
         }
@@ -152,11 +152,11 @@ namespace Entities.Gun
             // SFX
             if (magAmmo > 0) {
                 // Normal shot SFX
-                audioSource.PlayOneShot(fireSound, 0.35f);
+                audioSource.PlayOneShot(fireSound, 0.5f);
             }
             if (magAmmo == 0) {
                 // Mag empty SFX
-                audioSource.PlayOneShot(magEmptySound, 0.6f);
+                audioSource.PlayOneShot(magEmptySound, 0.3f);
                 // Additionally, tell UI manager / turret that mag is empty
                 subjectComponent.NotifyObservers(new MCEvent(EventType.MagEmpty));
             }
@@ -206,7 +206,7 @@ namespace Entities.Gun
         public IEnumerator StartReloading()
         {
             // SFX
-            audioSource.PlayOneShot(releaseMagSound, 0.35f);
+            audioSource.PlayOneShot(releaseMagSound, 0.2f);
             yield return new WaitForSeconds(stats.reloadTime);
             // TODO: Use this. However, need to trim down the audio length first...
             // yield return new WaitForSeconds(chargingBoltSoundPlayTimestamp);
@@ -215,7 +215,7 @@ namespace Entities.Gun
 
         private IEnumerator StartChargingBolt()
         {
-            audioSource.PlayOneShot(chargingBoltSound, 0.4f);
+            audioSource.PlayOneShot(chargingBoltSound, 0.2f);
             yield return new WaitForSeconds(0f);
             // TODO: Use this. However, need to trim down the audio length first...
             // yield return new WaitForSeconds(chargingBoltSound.length);

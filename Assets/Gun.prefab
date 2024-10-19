@@ -88,10 +88,10 @@ MonoBehaviour:
   damageLayers:
     serializedVersion: 2
     m_Bits: 2432
-  fireSound: {fileID: 8300000, guid: 65201ddabb4144f6a8fb9480120b7656, type: 3}
+  fireSound: {fileID: 8300000, guid: e00797bb3cdc1424bb8cc457a6a0e458, type: 3}
   releaseMagSound: {fileID: 8300000, guid: e7632c6401c09437e83de45d33c5858e, type: 3}
   chargingBoltSound: {fileID: 8300000, guid: cef0fa03af5b747f0abe82cde0b2bccc, type: 3}
-  magEmptySound: {fileID: 8300000, guid: 2dc35d77cfe164a2eab57d08500740e2, type: 3}
+  magEmptySound: {fileID: 8300000, guid: f0e561914ddd74b36b07b7040b6126d4, type: 3}
   tracerPrefab: {fileID: 7439804929337980566, guid: 71d264ba3b99c334cb98e1b0b32f3d45, type: 3}
   tracerSpeed: 150
   meshTransform: {fileID: 4312775616049083306}
