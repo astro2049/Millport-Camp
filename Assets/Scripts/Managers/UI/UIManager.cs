@@ -23,6 +23,7 @@ namespace Managers.UI
         [SerializeField] private GameObject interactPrompt;
         [SerializeField] private GameObject reloadPrompt;
         [SerializeField] private TextMeshProUGUI magAmmoText;
+        [SerializeField] private Image equippedGunIconImage;
         [SerializeField] private TextMeshProUGUI equippedGunNameText;
 
         [Header("Build Mode")]
@@ -54,6 +55,7 @@ namespace Managers.UI
                 // Player
                 case EventType.WeaponChanged:
                     GunStateComponent gun = (mcEvent as MCEventWEntity)!.entity.GetComponent<GunStateComponent>();
+                    equippedGunIconImage.sprite = gun.stats.icon;
                     equippedGunNameText.text = gun.stats.name;
                     magAmmoText.text = gun.magAmmo.ToString();
                     break;

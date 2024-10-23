@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: GS_AK-42
   m_EditorClassIdentifier: 
   name: AK-42
-  icon: {fileID: 0}
-  description: 
+  icon: {fileID: 21300000, guid: bec825266c44cea4aa86177a35c76967, type: 3}
+  description: The classic.
   modelPrefab: {fileID: 925908716614716047, guid: 24455d0526b6052479160f0df7b2fb94, type: 3}
-  material: {fileID: -7126193129781715291, guid: 7ee290c88843d2c49be639ef4dea8a73, type: 3}
   damage: 18
   rpm: 600
   fireInterval: 0.1

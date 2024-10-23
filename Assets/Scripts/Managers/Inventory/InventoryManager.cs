@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Entities.Abilities.InventoryItem;
 using Entities.Gun;
 using Entities.Player;
 using Managers.GameManager;
@@ -10,13 +11,13 @@ namespace Managers.Inventory
 {
     public class Item
     {
-        public Item(string aName, GameObject aGo)
+        public Item(InventoryItem data, GameObject go)
         {
-            name = aName;
-            go = aGo;
+            this.data = data;
+            this.go = go;
         }
 
-        public readonly string name;
+        public readonly InventoryItem data;
         public readonly GameObject go;
     }
 
@@ -43,7 +44,7 @@ namespace Managers.Inventory
         /*
          * - Inventory -
          */
-        private bool AddItem(string itemName, GameObject go)
+        private bool AddItem(InventoryItem data, GameObject go)
         {
             if (items.Count == inventorySize) {
                 return false;
@@ -52,7 +53,7 @@ namespace Managers.Inventory
                 if (items.ContainsKey(i)) {
                     continue;
                 }
-                Item item = new Item(itemName, go);
+                Item item = new Item(data, go);
                 items.Add(i, item);
                 TeleportUnderground(go);
                 break;
@@ -116,13 +117,9 @@ namespace Managers.Inventory
         /*
          * - Crafting -
          */
-        public List<string> GetCraftingOptions()
+        public GunStats[] GetCraftingOptions()
         {
-            List<string> optionNames = new List<string>();
-            foreach (GunStats gunStats in gunStatsList) {
-                optionNames.Add(gunStats.name);
-            }
-            return optionNames;
+            return gunStatsList;
         }
 
         public bool CraftItem(string itemName)
@@ -136,7 +133,7 @@ namespace Managers.Inventory
                 }
                 GameObject gun = Instantiate(gunPrefab);
                 gun.GetComponent<GunStateComponent>().Init(gunStats);
-                AddItem(itemName, gun);
+                AddItem(gunStats, gun);
                 return true;
             }
             throw new Exception("Crafting: didn't find a match in fabrication list");
@@ -151,7 +148,7 @@ namespace Managers.Inventory
         {
             string info = "Inventory:\n- " + items.Count + " items -\n";
             foreach (KeyValuePair<int, Item> kv in items) {
-                info += "slot " + kv.Key + ": " + kv.Value.name;
+                info += "slot " + kv.Key + ": " + kv.Value.data.name;
                 info += kv.Key == equippedItemSlotNum ? " [Equipped]\n" : "\n";
             }
             Debug.Log(info);

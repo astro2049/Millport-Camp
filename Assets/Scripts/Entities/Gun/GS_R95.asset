@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: GS_R95
   m_EditorClassIdentifier: 
   name: R95
-  icon: {fileID: 0}
-  description: 
+  icon: {fileID: 21300000, guid: a79b19da037fa304986c1d54fffa00ea, type: 3}
+  description: Rapid-fire automatic SMG.
   modelPrefab: {fileID: 6341736656809691700, guid: f809c9bdc71b7ec40b1767a29b0713a0, type: 3}
   damage: 11
   rpm: 1080
   fireInterval: 0.055555556
   magSize: 17
   fireMode: 0
-  reloadTime: 1.8
+  reloadTime: 1.62

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Managers.Inventory.UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Managers.Inventory
@@ -9,10 +10,12 @@ namespace Managers.Inventory
     public class InventoryUIManager : MonoBehaviour
     {
         // Data
-        private readonly List<InventorySlotUI> slots = new List<InventorySlotUI>();
-        private GameObject selectedItem;
+        private readonly List<InventoryUISlot> slots = new List<InventoryUISlot>();
+        private GameObject toEquipItem;
 
         [Header("UI")]
+        [SerializeField] private InventoryUIItemDetailsCard equippedItemDetailsCard;
+        [SerializeField] private InventoryUIItemDetailsCard toEquipItemDetailsCard;
         [SerializeField] private GameObject slotsTable;
         [SerializeField] private Button equipButton;
         [SerializeField] private Transform dragTransform;
@@ -24,11 +27,14 @@ namespace Managers.Inventory
 
         public void Initialize()
         {
+            equippedItemDetailsCard.DisplayNothing();
+            toEquipItemDetailsCard.DisplayNothing();
+
             InitializeSlots();
             equipButton.interactable = false;
-            inventoryManager.itemsUpdated.AddListener(RefreshItems);
-            inventoryManager.itemEquipped.AddListener(EquipItem);
-            inventoryManager.itemUnequipped.AddListener(UnequipItem);
+            inventoryManager.itemsUpdated.AddListener(RefreshUIItems);
+            inventoryManager.itemEquipped.AddListener(EquipUIItem);
+            inventoryManager.itemUnequipped.AddListener(UnequipUIItem);
         }
 
         /*
@@ -38,9 +44,9 @@ namespace Managers.Inventory
         {
             for (int i = 0; i < inventoryManager.inventorySize; i++) {
                 GameObject slot = Instantiate(slotUIPrefab, slotsTable.transform);
-                slot.GetComponent<InventorySlotUI>().Init(i);
-                slot.GetComponent<InventorySlotUI>().slotChanged.AddListener(ChangeItemSlot);
-                slots.Add(slot.GetComponent<InventorySlotUI>());
+                slot.GetComponent<InventoryUISlot>().Init(i);
+                slot.GetComponent<InventoryUISlot>().slotChanged.AddListener(ChangeItemSlot);
+                slots.Add(slot.GetComponent<InventoryUISlot>());
             }
         }
 
@@ -49,30 +55,36 @@ namespace Managers.Inventory
             inventoryManager.ChangeItemSlot(slotNum, newSlotNum);
         }
 
-        private void RefreshItems()
+        private void RefreshUIItems()
         {
             // inventoryManager.PrintInventoryInfo();
 
             // Clear slots
-            foreach (InventorySlotUI slot in slots) {
-                if (slot.item) {
-                    Destroy(slot.item.gameObject);
+            foreach (InventoryUISlot slot in slots) {
+                if (slot.uiItem) {
+                    Destroy(slot.uiItem.gameObject);
                 }
             }
 
             // Put in items
             foreach (KeyValuePair<int, Item> kv in inventoryManager.items) {
-                InventorySlotUI slot = slots[kv.Key];
+                InventoryUISlot uiSlot = slots[kv.Key];
                 GameObject item = Instantiate(itemUIPrefab);
-                slot.AssignItem(item.GetComponent<InventoryItemUI>());
-                item.GetComponent<InventoryItemUI>().Init(kv.Key, kv.Value.name);
-                item.GetComponent<ButtonComponent>().buttonClickedEvent.AddListener(SelectItem);
+                uiSlot.AssignItem(item.GetComponent<InventoryUIItem>());
+                item.GetComponent<InventoryUIItem>().Init(kv.Key, kv.Value.data);
+
+                // Subscribe to events
+                ButtonComponent buttonComponent = item.GetComponent<ButtonComponent>();
+                buttonComponent.clickedEvent.AddListener(SelectNewUIItemToEquip);
+                buttonComponent.startHoveringEvent.AddListener(HoverOverUIItem);
+                buttonComponent.endHoveringEvent.AddListener(EndHoverOverUIItem);
+
                 item.GetComponent<DragNDropComponent>().Init(dragTransform);
             }
 
-            // Equip item (...?)
+            // Equip item ...?
             if (inventoryManager.equippedItemSlotNum != -1) {
-                GameObject item = slots[inventoryManager.equippedItemSlotNum].item.gameObject;
+                GameObject item = slots[inventoryManager.equippedItemSlotNum].uiItem.gameObject;
 
                 // Disable item button's color fading temporarily
                 Button button = item.GetComponent<Button>();
@@ -80,7 +92,7 @@ namespace Managers.Inventory
                 colors.fadeDuration = 0f;
                 button.colors = colors;
 
-                EquipItem(inventoryManager.equippedItemSlotNum);
+                EquipUIItem(inventoryManager.equippedItemSlotNum);
 
                 // Reenable color fading
                 colors.fadeDuration = 0.1f;
@@ -88,28 +100,55 @@ namespace Managers.Inventory
             }
         }
 
-        private void SelectItem(GameObject item)
+        private void EquipUIItem(int slotNum)
         {
-            if (selectedItem) {
-                selectedItem.GetComponent<ButtonComponent>().Unselect();
+            slots[slotNum].uiItem.Equip();
+            equippedItemDetailsCard.DisplayInfo(slots[slotNum].uiItem.data);
+            toEquipItem = null;
+            toEquipItemDetailsCard.DisplayNothing();
+            equipButton.interactable = false;
+        }
+
+        private void UnequipUIItem(int slotNum)
+        {
+            slots[slotNum].uiItem.UnEquip();
+        }
+
+        public void EquipItem()
+        {
+            inventoryManager.EquipItem(toEquipItem.GetComponent<InventoryUIItem>().slotNum);
+        }
+
+        private void SelectNewUIItemToEquip(GameObject item)
+        {
+            // This actually shouldn't happen, but just in case
+            if (inventoryManager.equippedItemSlotNum == item.GetComponent<InventoryUIItem>().slotNum) {
+                return;
             }
-            selectedItem = item;
-            equipButton.interactable = selectedItem.GetComponent<InventoryItemUI>().slotNum != inventoryManager.equippedItemSlotNum;
+
+            if (toEquipItem) {
+                toEquipItem.GetComponent<ButtonComponent>().Unselect();
+            }
+            toEquipItem = item;
+            equipButton.interactable = true;
         }
 
-        public void RequestToEquipItem()
+        private void HoverOverUIItem(GameObject item)
         {
-            inventoryManager.EquipItem(selectedItem.GetComponent<InventoryItemUI>().slotNum);
+            InventoryUIItem uiItem = item.GetComponent<InventoryUIItem>();
+            if (inventoryManager.equippedItemSlotNum == uiItem.slotNum) {
+                return;
+            }
+            toEquipItemDetailsCard.DisplayInfo(uiItem.data);
         }
 
-        private void EquipItem(int slotNum)
+        private void EndHoverOverUIItem(GameObject item)
         {
-            slots[slotNum].item.Equip();
-        }
-
-        private void UnequipItem(int slotNum)
-        {
-            slots[slotNum].item.UnEquip();
+            if (toEquipItem) {
+                toEquipItemDetailsCard.DisplayInfo(toEquipItem.GetComponent<InventoryUIItem>().data);
+            } else {
+                toEquipItemDetailsCard.DisplayNothing();
+            }
         }
     }
 }

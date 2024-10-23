@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: GS_SVU
   m_EditorClassIdentifier: 
   name: SVU
-  icon: {fileID: 0}
-  description: 
+  icon: {fileID: 21300000, guid: e2e0f6561303ff24a867ba55d8c677bf, type: 3}
+  description: Semi-auto sniper rifle.
   modelPrefab: {fileID: 898354119946347381, guid: 40abe4c028d1d164aaaaa3b993a823d1, type: 3}
   damage: 55
   rpm: 78
   fireInterval: 0.7692308
   magSize: 6
   fireMode: 2
-  reloadTime: 0.66
+  reloadTime: 2.39

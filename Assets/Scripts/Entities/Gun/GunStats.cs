@@ -1,14 +1,11 @@
+using Entities.Abilities.InventoryItem;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Entities.Gun
 {
     [CreateAssetMenu(fileName = "Gun Data", menuName = "Scriptable Objects/Gun Data", order = 1)]
-    public class GunStats : ScriptableObject
+    public class GunStats : InventoryItem
     {
-        public new string name;
-        public Image icon;
-        public string description;
         public GameObject modelPrefab;
         public float damage;
         public int rpm;

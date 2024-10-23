@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: GS_Archangel
   m_EditorClassIdentifier: 
   name: Archangel
-  icon: {fileID: 0}
-  description: 
+  icon: {fileID: 21300000, guid: 3d0e8e2f13043c143bc544741e636ff6, type: 3}
+  description: Powerful bolt-action sniper rifle.
   modelPrefab: {fileID: 4165770523757623383, guid: 0cfec39762c8fc74fb963dc5b592ba43, type: 3}
   damage: 140
   rpm: 25

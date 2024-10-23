@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: GS_Ivy
   m_EditorClassIdentifier: 
   name: Ivy
-  icon: {fileID: 0}
-  description: 
+  icon: {fileID: 21300000, guid: 33dd69394d6bb2646b13840803d6a1eb, type: 3}
+  description: 3-round burst assault rifle.
   modelPrefab: {fileID: 634377152918338774, guid: 468a663f424cacf4d9c12a6d4851667d, type: 3}
   damage: 20
   rpm: 384

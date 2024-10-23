@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using Entities.Gun;
 using Managers.Inventory.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,9 +8,10 @@ namespace Managers.Inventory
     public class CraftingUIManager : MonoBehaviour
     {
         // Data
-        private GameObject selectedOptionUI;
+        private GameObject selectedUIOption;
 
         // UI
+        [SerializeField] private InventoryUIItemDetailsCard selectedUIOptionDetailsCard;
         [SerializeField] private GameObject optionsUITable;
         [SerializeField] private Button craftButton;
 
@@ -22,30 +23,48 @@ namespace Managers.Inventory
         {
             GetCraftingOptions();
             craftButton.interactable = false;
+            selectedUIOptionDetailsCard.DisplayNothing();
         }
 
         private void GetCraftingOptions()
         {
-            List<string> craftingOptionNames = inventoryManager.GetCraftingOptions();
-            foreach (string optionName in craftingOptionNames) {
+            GunStats[] craftingOptionNames = inventoryManager.GetCraftingOptions();
+            foreach (GunStats option in craftingOptionNames) {
                 GameObject optionUI = Instantiate(optionUIPrefab, optionsUITable.transform);
-                optionUI.GetComponent<CraftingOptionUI>().Init(optionName);
-                optionUI.GetComponent<ButtonComponent>().buttonClickedEvent.AddListener(SelectCraftingOption);
+                optionUI.GetComponent<InventoryUIItem>().Init(-1, option);
+                ButtonComponent buttonComponent = optionUI.GetComponent<ButtonComponent>();
+                buttonComponent.clickedEvent.AddListener(SelectCraftingOption);
+                buttonComponent.startHoveringEvent.AddListener(HoverOverCraftingOption);
+                buttonComponent.endHoveringEvent.AddListener(EndHoverOverCraftingOption);
+            }
+        }
+
+        private void HoverOverCraftingOption(GameObject option)
+        {
+            selectedUIOptionDetailsCard.DisplayInfo(option.GetComponent<InventoryUIItem>().data);
+        }
+
+        private void EndHoverOverCraftingOption(GameObject option)
+        {
+            if (selectedUIOption) {
+                selectedUIOptionDetailsCard.DisplayInfo(selectedUIOption.GetComponent<InventoryUIItem>().data);
+            } else {
+                selectedUIOptionDetailsCard.DisplayNothing();
             }
         }
 
         private void SelectCraftingOption(GameObject option)
         {
-            if (selectedOptionUI) {
-                selectedOptionUI.GetComponent<ButtonComponent>().Unselect();
+            if (selectedUIOption) {
+                selectedUIOption.GetComponent<ButtonComponent>().Unselect();
             }
-            selectedOptionUI = option;
+            selectedUIOption = option;
             craftButton.interactable = true;
         }
 
         public void CraftItem()
         {
-            inventoryManager.CraftItem(selectedOptionUI.GetComponent<CraftingOptionUI>().optionName);
+            inventoryManager.CraftItem(selectedUIOption.GetComponent<InventoryUIItem>().data.name);
         }
     }
 }

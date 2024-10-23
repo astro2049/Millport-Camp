@@ -9,10 +9,10 @@ namespace Managers.Inventory.UI
      * Coco Code (2022) 'Unity INVENTORY: A Definitive Tutorial', YouTube, 29 Sept
      * Available at: https://youtu.be/oJAE6CbsQQA?si=GVPbgh6AO7kSig4U (Accessed 29 June 2024).
      */
-    public class InventorySlotUI : MonoBehaviour, IDropHandler
+    public class InventoryUISlot : MonoBehaviour, IDropHandler
     {
         public int slotNum;
-        public InventoryItemUI item;
+        public InventoryUIItem uiItem;
 
         [HideInInspector] public UnityEvent<int, int> slotChanged = new UnityEvent<int, int>();
 
@@ -21,17 +21,17 @@ namespace Managers.Inventory.UI
             slotNum = aSlotNum;
         }
 
-        public void AssignItem(InventoryItemUI aItem)
+        public void AssignItem(InventoryUIItem aUIItem)
         {
-            item = aItem;
-            item.transform.SetParent(transform, false);
-            item.GetComponent<DragNDropComponent>().UpdateParentSlot();
+            uiItem = aUIItem;
+            uiItem.transform.SetParent(transform, false);
+            uiItem.GetComponent<DragNDropComponent>().UpdateParentSlot();
         }
 
         public void OnDrop(PointerEventData eventData)
         {
             GameObject dropItem = eventData.pointerDrag;
-            slotChanged.Invoke(dropItem.GetComponent<InventoryItemUI>().slotNum, slotNum);
+            slotChanged.Invoke(dropItem.GetComponent<InventoryUIItem>().slotNum, slotNum);
         }
     }
 }

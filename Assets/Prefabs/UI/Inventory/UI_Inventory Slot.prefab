@@ -37,7 +37,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 300, y: 65}
+  m_SizeDelta: {x: 420, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3971302743677333140
 CanvasRenderer:
@@ -97,7 +97,7 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 265, y: 65}
+  m_CellSize: {x: 420, y: 65}
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotNum: 0
-  item: {fileID: 0}
-  swapItemSlot:
+  uiItem: {fileID: 0}
+  slotChanged:
     m_PersistentCalls:
       m_Calls: []

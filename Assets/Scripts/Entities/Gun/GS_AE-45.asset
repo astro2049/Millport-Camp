@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: GS_AE-45
   m_EditorClassIdentifier: 
   name: AE-45
-  icon: {fileID: 0}
-  description: 
+  icon: {fileID: 21300000, guid: d7da01bf6bf5c154e9358200683e2468, type: 3}
+  description: Full-auto pistol.
   modelPrefab: {fileID: 4115301380646426663, guid: 6da48e12352e7ed4ea10882bcdbe6f9a, type: 3}
-  material: {fileID: -7126193129781715291, guid: e3e075655de3a9d4cb885cccfd042991, type: 3}
   damage: 12
   rpm: 780
   fireInterval: 0.07692308

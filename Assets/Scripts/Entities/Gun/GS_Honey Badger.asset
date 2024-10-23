@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: GS_Honey Badger
   m_EditorClassIdentifier: 
   name: Honey Badger
-  icon: {fileID: 0}
-  description: 
+  icon: {fileID: 21300000, guid: 4be5304841a3be54c8215a35edaeddf2, type: 3}
+  description: A powerful SMG.
   modelPrefab: {fileID: 6423153652963056310, guid: 1595f860906eb894aaca302eba274ac2, type: 3}
   damage: 15
   rpm: 627
