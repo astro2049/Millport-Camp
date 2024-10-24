@@ -39,8 +39,15 @@ namespace Entities.Player
             equippedGun = gun.GetComponent<GunStateComponent>();
 
             // Attach gun to hand
-            equippedGun.transform.parent = handTransform;
-            equippedGun.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            // Step 0. Set hand as parent
+            Transform gunTransform = equippedGun.transform;
+            gunTransform.parent = handTransform;
+            // Step 1. Adjust local position to be at hand
+            // TODO: Kind of hacky. Make sure the prefab hierarchy conforms.
+            Transform rigParentTransform = gunTransform.GetChild(0).GetChild(0).GetChild(0);
+            Transform rigTransform = rigParentTransform.GetChild(rigParentTransform.childCount - 1);
+            Vector3 rigOffset = gunTransform.InverseTransformPoint(rigTransform.position);
+            gunTransform.SetLocalPositionAndRotation(-rigOffset, Quaternion.identity);
 
             // Subscribe to equipped gun's events: Reloaded
             equippedGun.GetComponent<SubjectComponent>().AddObserver(playerObserverComponent,
