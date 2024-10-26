@@ -40,7 +40,7 @@ Material:
     m_Floats:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
-    - _RippleDensity: 5
+    - _RippleDensity: 80
     - _RippleSpeed: 2
     m_Colors:
     - _Base_Color: {r: 0.3025988, g: 0.665782, b: 0.754717, a: 0}
