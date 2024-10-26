@@ -17,35 +17,16 @@ namespace Entities.Abilities.Buildable
 
         private void Awake()
         {
+            subjectComponent = GetComponent<SubjectComponent>();
+        }
+
+        public void EnterBuildMode()
+        {
             // Pre-store mesh renderers and their materials
             foreach (MeshRenderer meshRenderer in transform.GetComponentsInChildren<MeshRenderer>()) {
                 partMaterials.Add(meshRenderer, meshRenderer.material);
             }
 
-            subjectComponent = GetComponent<SubjectComponent>();
-        }
-
-        public void SetIsOkToPlace(bool yes)
-        {
-            isOkToPlace = yes;
-            if (isOkToPlace) {
-                ApplyMaterialToParts(placeholderMaterial);
-                subjectComponent.NotifyObservers(new MCEvent(EventType.CanPlace));
-            } else {
-                ApplyMaterialToParts(invalidPositionMaterial);
-                subjectComponent.NotifyObservers(new MCEvent(EventType.CannotPlace));
-            }
-        }
-
-        private void ApplyMaterialToParts(Material material)
-        {
-            foreach (MeshRenderer meshRenderer in transform.GetComponentsInChildren<MeshRenderer>()) {
-                meshRenderer.material = material;
-            }
-        }
-
-        public void EnterBuildMode()
-        {
             //  Assign build mode material
             ApplyMaterialToParts(placeholderMaterial);
             // Set body's collider to isTrigger and add Build Mode exclusive component BuildableColliderComponent
@@ -62,10 +43,33 @@ namespace Entities.Abilities.Buildable
             }
         }
 
+        private void ApplyMaterialToParts(Material material)
+        {
+            foreach (MeshRenderer meshRenderer in transform.GetComponentsInChildren<MeshRenderer>()) {
+                meshRenderer.material = material;
+            }
+        }
+
+        public void SetIsOkToPlace(bool yes)
+        {
+            isOkToPlace = yes;
+            if (isOkToPlace) {
+                ApplyMaterialToParts(placeholderMaterial);
+                subjectComponent.NotifyObservers(new MCEvent(EventType.CanPlace));
+            } else {
+                ApplyMaterialToParts(invalidPositionMaterial);
+                subjectComponent.NotifyObservers(new MCEvent(EventType.CannotPlace));
+            }
+        }
+
         public void Place()
         {
             // Assign back material
             foreach (MeshRenderer meshRenderer in transform.GetComponentsInChildren<MeshRenderer>()) {
+                // TODO: Very hacky fix to work with gun->Init() (change of meshes) after EnterBuildMode()
+                if (!partMaterials.ContainsKey(meshRenderer)) {
+                    continue;
+                }
                 meshRenderer.material = partMaterials[meshRenderer];
             }
             // Set body's collider back to original and remove Build Mode exclusive component BuildableColliderComponent
