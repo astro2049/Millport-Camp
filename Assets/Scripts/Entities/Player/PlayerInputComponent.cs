@@ -220,7 +220,7 @@ namespace Entities.Player
             playerStateComponent.isReloading = true;
             // Broadcast event
             subjectComponent.NotifyObservers(new MCEvent(EventType.IsReloading));
-            StartCoroutine(playerStateComponent.equippedGun.StartReloading());
+            playerStateComponent.reloadCoroutine = StartCoroutine(playerStateComponent.equippedGun.StartReloading());
         }
 
         private void OnInteract(InputAction.CallbackContext context)

@@ -20,6 +20,7 @@ namespace Entities.Player
         [SerializeField] private Transform handTransform;
         public GunStateComponent equippedGun;
         public bool isReloading;
+        public Coroutine reloadCoroutine;
 
         private PlayerObserverComponent playerObserverComponent;
         private SubjectComponent subjectComponent;
@@ -33,6 +34,11 @@ namespace Entities.Player
         public void EquipGun(GameObject gun)
         {
             if (equippedGun) {
+                // If it's reloading, interrupts
+                if (isReloading) {
+                    StopCoroutine(reloadCoroutine);
+                    isReloading = false;
+                }
                 UnEquipGun();
             }
 
