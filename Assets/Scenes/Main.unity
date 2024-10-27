@@ -4465,7 +4465,7 @@ Transform:
   m_GameObject: {fileID: 5624242526635342921}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 12.8, y: 12.8, z: 12.8}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -5244,28 +5244,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 457215934ccf691448c078624b66b26f, type: 3}
---- !u!64 &7708215916156790767
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8629567276483374395}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &7720112009565583922
 GameObject:
   m_ObjectHideFlags: 0
@@ -5483,7 +5461,6 @@ GameObject:
   - component: {fileID: 3976349951375777971}
   - component: {fileID: 7146222805986215378}
   - component: {fileID: 5205645794629772470}
-  - component: {fileID: 7708215916156790767}
   - component: {fileID: 195504331091772525}
   m_Layer: 0
   m_Name: Ocean
