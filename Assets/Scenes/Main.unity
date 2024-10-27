@@ -5605,12 +5605,10 @@ MonoBehaviour:
   gameplayData: {fileID: 11400000, guid: fa82f7286e7febc4dba488877fe21ac4, type: 2}
   worldData: {fileID: 11400000, guid: c9c24757134e4be4f9f7125a7e7688f4, type: 2}
   gridComponent: {fileID: 3350106247459623281}
-  basesParent: {fileID: 2558762853398283126}
   foliageParent: {fileID: 5705758149425305104}
   combatRobotsParent: {fileID: 667227987238295553}
   vehiclesParent: {fileID: 5447698899444220757}
   zombiesParent: {fileID: 233220123529598928}
-  basePositions: []
   combatRobotPrefab: {fileID: 219742794102494621, guid: 26eede86fc0761e449aa1be595cd53c9, type: 3}
   combatRobotSectorMinCount: 8
   combatRobotSectorMaxCount: 15
@@ -5666,9 +5664,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lSystem: {fileID: 11400000, guid: 12db6115721904341b8c053f30df87d2, type: 2}
-  buildingPrefab: {fileID: 195682, guid: 6e1b6bb6069c8c446bf14668e5eda0b4, type: 3}
   initialLength: 4
   roadGridComponent: {fileID: 9116310719171609630}
+  basesParent: {fileID: 2558762853398283126}
+  questsManager: {fileID: 3710164336539464053}
 --- !u!114 &9116310719171609630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5687,7 +5686,7 @@ MonoBehaviour:
   debugHighwayPrefab: {fileID: 2240311144616729697, guid: 8455ceb1481c5a54291a9ac71b950ba7, type: 3}
   debugHighwayPrefab1: {fileID: 2240311144616729697, guid: f8f469fca17c5ef4c97b57a715a4feeb, type: 3}
   roadsParent: {fileID: 1487806363}
-  showHighwayDebugColors: 1
+  showHighwayDebugColors: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

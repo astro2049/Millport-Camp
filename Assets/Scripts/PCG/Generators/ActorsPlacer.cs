@@ -23,14 +23,12 @@ namespace PCG.Generators
         private Biome[] biomes;
 
         [Header("Environment")]
-        [SerializeField] private Transform basesParent;
         [SerializeField] private Transform foliageParent;
         [SerializeField] private Transform combatRobotsParent;
         [SerializeField] private Transform vehiclesParent;
         [SerializeField] private Transform zombiesParent;
 
         private readonly HashSet<Chunk> humanActivityChunks = new HashSet<Chunk>();
-        public List<Vector3> basePositions;
 
         private readonly float navmeshPlacementSampleDistance = 1f;
         [Header("Combat Robots")]
@@ -62,9 +60,9 @@ namespace PCG.Generators
             PlaceZombies();
         }
 
-        public void PlaceBases()
+        public List<Vector3> SelectTownPositions()
         {
-            int i = 0;
+            List<Vector3> townCenters = new List<Vector3>();
             foreach (Quest quest in questsManager.quests) {
                 List<Chunk> chunks = biomes[quest.baseBiome.GetHashCode()].chunks;
                 Chunk chunk = chunks[Random.Range(0, chunks.Count)];
@@ -72,22 +70,9 @@ namespace PCG.Generators
 
                 // Get chunk center world coordinate
                 Vector3 chunkCenter = gridComponent.GetChunkCenterWorld(chunk);
-
-                // Place base in the center
-                GameObject researchBase = Instantiate(quest.basePrefab, chunkCenter, Quaternion.identity, basesParent);
-                if (i == 1) {
-                    researchBase.transform.rotation = Quaternion.Euler(0, 120, 0);
-                } else if (i == 2) {
-                    researchBase.transform.Translate(new Vector3(-2.5f, 0, -2.5f));
-                    researchBase.transform.rotation = Quaternion.Euler(0, 180, 0);
-                }
-                basePositions.Add(researchBase.transform.position);
-
-                // Assign this research base to the corresponding quest
-                quest.AssignDestinationGo(researchBase);
-
-                i++;
+                townCenters.Add(chunkCenter);
             }
+            return townCenters;
         }
 
         public void PlacePlants()
@@ -128,7 +113,7 @@ namespace PCG.Generators
                         Ray ray = new Ray(position + Vector3.up * 1f, Vector3.down);
                         // Draw the debug ray
                         // Debug.DrawRay(position + Vector3.up * 1f, Vector3.down * 2f, Color.blue, 10f);
-                        if (Physics.Raycast(ray, out RaycastHit hitInfo, 2f, LayerMask.GetMask("Road"), QueryTriggerInteraction.Collide)) {
+                        if (Physics.Raycast(ray, out RaycastHit hitInfo, 2f, LayerMask.GetMask("Road", "Structure"), QueryTriggerInteraction.Collide)) {
                             continue;
                         }
 

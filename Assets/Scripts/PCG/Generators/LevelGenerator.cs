@@ -80,9 +80,10 @@ namespace PCG.Generators
 
             // Generate the world map
             terrainGenerator.GenerateTerrainAndBiomes();
-            actorsPlacer.PlaceBases();
-            townGenerator.GenerateTowns(actorsPlacer.basePositions);
-            highwaysGenerator.CalculateHighwayNet(actorsPlacer.basePositions);
+            List<Vector3> townPositions = actorsPlacer.SelectTownPositions();
+            townGenerator.GenerateTownsRoads(townPositions);
+            highwaysGenerator.CalculateHighwayNet(townPositions);
+            townGenerator.PlaceTownsBuildings(townPositions);
             roadGridComponent.PlaceRoadSegments();
             actorsPlacer.PlacePlants();
 
