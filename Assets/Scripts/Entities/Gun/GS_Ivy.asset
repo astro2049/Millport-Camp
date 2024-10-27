@@ -17,8 +17,9 @@ MonoBehaviour:
   description: 3-round burst assault rifle.
   modelPrefab: {fileID: 634377152918338774, guid: 468a663f424cacf4d9c12a6d4851667d, type: 3}
   damage: 20
-  rpm: 384
+  rpm: 930
   fireInterval: 0.15625
   magSize: 18
-  fireMode: 2
+  fireMode: 1
+  shotsPerBurst: 3
   reloadTime: 2.16

@@ -8,18 +8,12 @@ using Vector3 = UnityEngine.Vector3;
 
 namespace Entities.Gun
 {
-    public enum FireMode
-    {
-        Auto = 0,
-        Burst = 1,
-        Single = 2
-    }
-
     public class GunStateComponent : MonoBehaviour
     {
         // Properties and Configurations
         public GunStats stats;
         public int magAmmo;
+        private int shotNumInBurst = 0;
         [SerializeField] private LayerMask raycastLayers;
         [SerializeField] private LayerMask damageLayers;
 
@@ -75,18 +69,6 @@ namespace Entities.Gun
             chargingBoltSoundPlayTimestamp = this.stats.reloadTime - chargingBoltSound.length;
         }
 
-        // Start is called before the first frame update
-        private void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
-
-        }
-
         private void SetMagAmmo(int ammo)
         {
             magAmmo = ammo;
@@ -103,6 +85,9 @@ namespace Entities.Gun
                 if (magAmmo > 0) {
                     if (isBoltInPosition) {
                         Fire();
+                        if (stats.fireMode == FireMode.Burst) {
+                            shotNumInBurst = 1;
+                        }
                     } else {
                         // nothing happens, currently in cycle
                     }
@@ -116,19 +101,26 @@ namespace Entities.Gun
         private void SetIsBoltInPosition(bool status)
         {
             isBoltInPosition = status;
-            // A shot is fired
             if (isBoltInPosition) {
+                // A cycle just completed
                 // If on Auto, after shot cycle is completed, the trigger gets reset automatically after cycling,
-                // so a next shot will be fired if trigger is held down 
+                // so a next shot will be fired if trigger is held down
                 if (stats.fireMode == FireMode.Auto) {
                     if (isTriggerDown) {
                         Fire();
+                    }
+                } else if (stats.fireMode == FireMode.Burst) {
+                    // If on Burst, after shot cycle is completed, the trigger gets reset if burst limit is not reached,
+                    // and a next shot will be fired
+                    if (shotNumInBurst < stats.shotsPerBurst) {
+                        Fire();
+                        shotNumInBurst++;
                     }
                 }
             } else {
                 // Just fired a shot
                 // If there's still ammo, start cycle
-                // When cycle is complete, the bolt return to ready position
+                // When cycle is complete, the bolt returns to ready position
                 if (magAmmo > 0) {
                     StartCoroutine(Cycle());
                 }
