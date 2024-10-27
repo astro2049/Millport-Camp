@@ -19,6 +19,7 @@ MonoBehaviour:
   damage: 12
   rpm: 780
   fireInterval: 0.07692308
-  magSize: 16
+  magSize: 19
   fireMode: 0
+  shotsPerBurst: 0
   reloadTime: 1.5

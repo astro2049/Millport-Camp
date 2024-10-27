@@ -4072,31 +4072,31 @@ PrefabInstance:
     - target: {fileID: 7226759215965852352, guid: bfe0b52059b12d54ea5dfefee6ca3f7b, type: 3}
       propertyPath: gunStatsList.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 3a3a94d55b8030942b3296461f0d332d, type: 2}
+      objectReference: {fileID: 11400000, guid: 8a7c38d0f48b4324cb4d7af0b5e46370, type: 2}
     - target: {fileID: 7226759215965852352, guid: bfe0b52059b12d54ea5dfefee6ca3f7b, type: 3}
       propertyPath: gunStatsList.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: f50c9decaa8a0984d8289ba634093a26, type: 2}
+      objectReference: {fileID: 11400000, guid: 3a3a94d55b8030942b3296461f0d332d, type: 2}
     - target: {fileID: 7226759215965852352, guid: bfe0b52059b12d54ea5dfefee6ca3f7b, type: 3}
       propertyPath: gunStatsList.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: efeacb96c6d1f3a439f027f6fa4eab12, type: 2}
+      objectReference: {fileID: 11400000, guid: de39f499e77c9c54b81205f0e5fd3b4b, type: 2}
     - target: {fileID: 7226759215965852352, guid: bfe0b52059b12d54ea5dfefee6ca3f7b, type: 3}
       propertyPath: gunStatsList.Array.data[3]
       value: 
-      objectReference: {fileID: 11400000, guid: f3d66234bb6b0fc41a1bd3d7c6773500, type: 2}
+      objectReference: {fileID: 11400000, guid: f50c9decaa8a0984d8289ba634093a26, type: 2}
     - target: {fileID: 7226759215965852352, guid: bfe0b52059b12d54ea5dfefee6ca3f7b, type: 3}
       propertyPath: gunStatsList.Array.data[4]
       value: 
-      objectReference: {fileID: 11400000, guid: 8a7c38d0f48b4324cb4d7af0b5e46370, type: 2}
+      objectReference: {fileID: 11400000, guid: f3d66234bb6b0fc41a1bd3d7c6773500, type: 2}
     - target: {fileID: 7226759215965852352, guid: bfe0b52059b12d54ea5dfefee6ca3f7b, type: 3}
       propertyPath: gunStatsList.Array.data[5]
       value: 
-      objectReference: {fileID: 11400000, guid: de39f499e77c9c54b81205f0e5fd3b4b, type: 2}
+      objectReference: {fileID: 11400000, guid: 52d3af4929b6e124587e12fd7070d8e1, type: 2}
     - target: {fileID: 7226759215965852352, guid: bfe0b52059b12d54ea5dfefee6ca3f7b, type: 3}
       propertyPath: gunStatsList.Array.data[6]
       value: 
-      objectReference: {fileID: 11400000, guid: 52d3af4929b6e124587e12fd7070d8e1, type: 2}
+      objectReference: {fileID: 11400000, guid: efeacb96c6d1f3a439f027f6fa4eab12, type: 2}
     - target: {fileID: 7226759215965852352, guid: bfe0b52059b12d54ea5dfefee6ca3f7b, type: 3}
       propertyPath: gunStatsList.Array.data[7]
       value: 

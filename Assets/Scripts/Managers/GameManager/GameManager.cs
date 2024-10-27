@@ -119,7 +119,7 @@ namespace Managers.GameManager
 
             // 3. Add a default weapon for the player
             inventoryUIManager.Initialize();
-            inventoryManager.CraftItem("Cyclops");
+            inventoryManager.CraftItem("AE-45");
             inventoryManager.EquipItem(0);
         }
 
