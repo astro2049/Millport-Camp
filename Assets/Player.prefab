@@ -307,6 +307,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI_Crosshair Ground Marker
       objectReference: {fileID: 0}
+    - target: {fileID: 235417687629241486, guid: 312317b6a5dde6c4a9e59c2b7449184c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7273465425893980620, guid: 312317b6a5dde6c4a9e59c2b7449184c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

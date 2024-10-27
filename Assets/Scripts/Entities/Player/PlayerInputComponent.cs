@@ -5,7 +5,6 @@ using Entities.Abilities.Observer;
 using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 using EventType = Entities.Abilities.Observer.EventType;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
