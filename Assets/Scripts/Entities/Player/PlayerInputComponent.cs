@@ -5,6 +5,7 @@ using Entities.Abilities.Observer;
 using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 using EventType = Entities.Abilities.Observer.EventType;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
@@ -22,6 +23,7 @@ namespace Entities.Player
         [Header("Mouse Look At")]
         [SerializeField] private LayerMask lookAtCombatModeLayers;
         [SerializeField] private LayerMask lookAtBuildModeLayers;
+        [SerializeField] private GameObject crosshairGroundMarker;
 
         // movement
         private Vector2 moveInput;
@@ -183,6 +185,9 @@ namespace Entities.Player
                 if (!playerStateComponent.equippedGun) {
                     return;
                 }
+                // Update crosshair indicator's position
+                crosshairGroundMarker.transform.position = new Vector3(lookPoint.x, 0f, lookPoint.z);
+                // Point gun to look point
                 playerStateComponent.equippedGun.transform.rotation = Quaternion.LookRotation(lookPoint - playerStateComponent.equippedGun.transform.position);
             }
         }

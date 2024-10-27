@@ -157,7 +157,7 @@ namespace Entities.Gun
             Vector3 forward = transform.forward;
             Ray ray = new Ray(muzzlePosition, forward);
             TrailRenderer tracerTrail = Instantiate(tracerPrefab, muzzlePosition, Quaternion.LookRotation(forward)).GetComponent<TrailRenderer>();
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, raycastLayers)) {
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, raycastLayers, QueryTriggerInteraction.Ignore)) {
                 GameObject hitGo = hit.collider.gameObject;
                 // Debug: DrawLine - Green if hit NPC or Player, otherwise cyan
                 Debug.DrawLine(muzzlePosition, hit.point, hitGo.layer == damageLayers ? Color.green : Color.cyan, 5f);
