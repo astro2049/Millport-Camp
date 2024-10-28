@@ -178,17 +178,17 @@ GameObject:
   - component: {fileID: 969636473451461646}
   - component: {fileID: 6242690048254560862}
   - component: {fileID: 8630967237516376293}
-  - component: {fileID: 3672842546452482896}
   - component: {fileID: 8522748956120357048}
+  - component: {fileID: 3672842546452482896}
   - component: {fileID: 3047691621056426939}
   - component: {fileID: 5669342938681799256}
   - component: {fileID: 7781335179084916253}
   - component: {fileID: 837457553520312742}
   - component: {fileID: 4030381257286816625}
-  - component: {fileID: 7685822321185290537}
   - component: {fileID: 4247653625734385515}
   - component: {fileID: 8316903611540663039}
   - component: {fileID: 8890432012263328516}
+  - component: {fileID: 7685822321185290537}
   m_Layer: 11
   m_Name: SUV
   m_TagString: Untagged
@@ -281,18 +281,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveInput: {x: 0, y: 0}
---- !u!114 &3672842546452482896
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2255594628750372080}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be2a0c424f1d6c9448b834a24cfa18aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8522748956120357048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,6 +300,18 @@ MonoBehaviour:
   regenLag: 3
   regenHealthPerTime: 20
   regenInterval: 1
+--- !u!114 &3672842546452482896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2255594628750372080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be2a0c424f1d6c9448b834a24cfa18aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3047691621056426939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -381,18 +381,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f157a2c798354fc09f7729a27b9bf1e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7685822321185290537
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2255594628750372080}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 715e7e76ffdb41d9a259ae690d50e0e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!64 &4247653625734385515
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -458,6 +446,18 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 1.065, z: 0.05}
   m_TimeToStationary: 0.5
+--- !u!114 &7685822321185290537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2255594628750372080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 715e7e76ffdb41d9a259ae690d50e0e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2366593399013699178
 GameObject:
   m_ObjectHideFlags: 0
