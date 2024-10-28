@@ -8,7 +8,7 @@ Download: [Millport.Camp.Windows.zip](https://github.com/astro2049/Millport-Camp
 
 Paper (up to date @0.30.0): [Millport Camp: Developing an Open-World Zombie Shooter Game with Unity ](Millport_Camp__Developing_an_Open_World_Zombie_Shooter_Game_with_Unity.pdf)
 
-![Millport Camp](Millport Camp Cover.png)
+![Millport Camp](Millport%20Camp%20Cover.png)
 
 ## Patch Notes
 
